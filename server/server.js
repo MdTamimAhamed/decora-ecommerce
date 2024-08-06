@@ -1,0 +1,41 @@
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+
+const {
+	notFoundErrorHandler,
+	defaultErrorHandler,
+} = require('./middlewares/error-handler/errorHandler');
+
+const {} = require('./routes/admin/adminRoutes');
+
+const app = express();
+dotenv.config();
+const port = process.env.PORT;
+
+//db
+const database = mongoose
+	.connect(process.env.CONNECTION_STRING)
+	.then(() => {
+		console.log('Databased connected!');
+	})
+	.catch((err) => {
+		console.log(err);
+	});
+
+app.use(express.json());
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+
+//routes
+
+//error handle
+app.use(notFoundErrorHandler);
+app.use(defaultErrorHandler);
+
+//listen
+app.listen(process.env.PORT, () => {
+	console.log(`Server listening on port: ${port}`);
+});
