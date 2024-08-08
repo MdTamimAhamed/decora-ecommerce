@@ -1,8 +1,8 @@
-import Navbar from './Navbar';
+import Navbar from './SellerNavbar';
 import Sidebar from './Sidebar';
 import { Outlet } from 'react-router-dom';
 
-function AdminRoot() {
+function SellerRoot() {
 	return (
 		<>
 			<Navbar />
@@ -14,4 +14,4 @@ function AdminRoot() {
 	);
 }
 
-export default AdminRoot;
+export default SellerRoot;

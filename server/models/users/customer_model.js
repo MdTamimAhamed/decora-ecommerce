@@ -37,10 +37,6 @@ const customerSchema = new mongoose.Schema({
 		type: String,
 		required: [true, 'Password is required!'],
 	},
-	confirmPassword: {
-		type: String,
-		required: [true, 'Please re-type password!'],
-	},
 });
 
 const customers = mongoose.model('customer', customerSchema);

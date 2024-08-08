@@ -8,7 +8,8 @@ const {
 	defaultErrorHandler,
 } = require('./middlewares/error-handler/errorHandler');
 
-const {} = require('./routes/admin/adminRoutes');
+const sellerRoutes = require('./routes/seller/sellerRoutes');
+const authRoutes = require('./routes/seller/authRoutes');
 
 const app = express();
 dotenv.config();
@@ -30,6 +31,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 //routes
+app.use('/seller', sellerRoutes);
+app.use('/api', authRoutes);
 
 //error handle
 app.use(notFoundErrorHandler);

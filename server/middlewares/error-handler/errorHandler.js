@@ -7,7 +7,10 @@ function notFoundErrorHandler(req, res, next) {
 
 //default
 function defaultErrorHandler(err, req, res, next) {
-	res.status(500).json({ error: `Internal server error: ${err}` });
+	res.status(err.status || 500).json({
+		error: err.message || `Internal server error: ${err}`,
+		details: err.details,
+	});
 }
 
 module.exports = {
