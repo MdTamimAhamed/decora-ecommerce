@@ -1,0 +1,23 @@
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TextField } from '@mui/material';
+
+function DateHandler({ label }) {
+	return (
+		<>
+			<LocalizationProvider dateAdapter={AdapterDayjs}>
+				<DatePicker
+					label={label}
+					slots={{
+						textField: (params) => (
+							<TextField size='small' margin='dense' fullWidth {...params} />
+						),
+					}}
+				/>
+			</LocalizationProvider>
+		</>
+	);
+}
+
+export default DateHandler;
