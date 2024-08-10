@@ -4,7 +4,7 @@ const customerSchema = new mongoose.Schema({
 	userName: {
 		type: String,
 		required: [true, 'Username is required!'],
-		minLength: 1,
+		minLength: [4, 'Username must be at least 4 characters long'],
 		trim: true,
 	},
 	email: {
@@ -30,15 +30,16 @@ const customerSchema = new mongoose.Schema({
 		required: true,
 	},
 	birthday: {
-		type: Date,
+		type: String,
 		required: [true, 'Birthday is required'],
 	},
 	password: {
 		type: String,
 		required: [true, 'Password is required!'],
+		minLength: [6, 'Password must be atleast 6 characters!'],
 	},
 });
 
-const customers = mongoose.model('customer', customerSchema);
+const CustomerModel = mongoose.model('customer', customerSchema);
 
-module.exports = customers;
+module.exports = CustomerModel;

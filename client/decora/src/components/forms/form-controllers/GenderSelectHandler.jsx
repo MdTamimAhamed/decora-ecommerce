@@ -1,4 +1,4 @@
-import { TextField, MenuItem, Select } from '@mui/material';
+import { TextField, MenuItem } from '@mui/material';
 import React from 'react';
 
 function GenderSelectHandler({ state, setState }) {
@@ -7,15 +7,13 @@ function GenderSelectHandler({ state, setState }) {
 			<TextField
 				label='Gender'
 				variant='outlined'
-				placeholder='Gender'
+				defaultValue='Select'
 				size='small'
 				fullWidth
 				margin='dense'
 				value={state}
 				onChange={(e) => setState(e.target.value)}
-				InputLabelProps={{
-					shrink: true,
-				}}
+				sx={{ my: '10px' }}
 				select>
 				<MenuItem value='Male'>Male</MenuItem>
 				<MenuItem value='Female'>Female</MenuItem>

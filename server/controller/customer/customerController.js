@@ -2,11 +2,11 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
-const { SellerModel } = require('../../models/users/seller_model');
+const CustomerModel = require('../../models/users/customer_model');
 
-//--------------------seller-signup-----------------//
-async function sellerSignup(req, res, next) {
-	const { password, confirmPassword } = req.body;
+//--------------------customer-signup-----------------//
+async function customerSignup(req, res, next) {
+	const { email, password, confirmPassword } = req.body;
 
 	if (confirmPassword !== password) {
 		next(createError(400, 'Password do not match!'));
@@ -15,18 +15,18 @@ async function sellerSignup(req, res, next) {
 	try {
 		const salt = await bcrypt.genSalt(10);
 		const hashPassword = await bcrypt.hash(password, salt);
-		const isUserExist = await SellerModel.findOne({ email });
+		const isUserExist = await CustomerModel.findOne({ email });
 
 		if (isUserExist) {
 			return res.status(400).json({ message: 'Email is already in use!' });
 		}
 
-		const newSeller = SellerModel({
+		const newCustomer = CustomerModel({
 			...req.body,
 			password: hashPassword,
 		});
 
-		await newSeller.save();
+		await newCustomer.save();
 		res.status(200).json({
 			message: 'Signup successful!',
 		});
@@ -35,25 +35,24 @@ async function sellerSignup(req, res, next) {
 	}
 }
 
-//------------------seller-login---------------------//
-async function sellerLogin(req, res, next) {
+//------------------customer-login---------------------//
+async function customerLogin(req, res, next) {
 	try {
 		const { email, password } = req.body;
-		const isUserExist = await SellerModel.findOne({ email: email });
+		const isUserExist = await CustomerModel.findOne({ email: email });
 
 		if (isUserExist) {
 			const isPassValid = await bcrypt.compare(password, isUserExist.password);
 			if (isPassValid) {
-				const sellerInfo = {
-					accountType: isUserExist.accountType,
+				const customerInfo = {
+					userName: isUserExist.userName,
 					email: isUserExist.email,
-					contactNumber: isUserExist.contactNumber,
 					_id: isUserExist._id,
-					role: 'seller',
+					role: 'customer',
 				};
 
 				//token
-				const token = jwt.sign(sellerInfo, process.env.SECRETE_STRING, {
+				const token = jwt.sign(customerInfo, process.env.SECRETE_STRING, {
 					expiresIn: '10m',
 				});
 
@@ -78,6 +77,6 @@ async function sellerLogin(req, res, next) {
 }
 
 module.exports = {
-	sellerSignup,
-	sellerLogin,
+	customerSignup,
+	customerLogin,
 };

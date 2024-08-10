@@ -8,6 +8,7 @@ const {
 	defaultErrorHandler,
 } = require('./middlewares/error-handler/errorHandler');
 
+const customerRoutes = require('./routes/customer/customerRoutes');
 const sellerRoutes = require('./routes/seller/sellerRoutes');
 const authRoutes = require('./routes/seller/authRoutes');
 
@@ -31,6 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 //routes
+app.use('/customer', customerRoutes);
 app.use('/seller', sellerRoutes);
 app.use('/api', authRoutes);
 

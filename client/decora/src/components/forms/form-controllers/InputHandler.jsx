@@ -1,7 +1,14 @@
 import { TextField } from '@mui/material';
 import React from 'react';
 
-function InputHandler({ labelName, type, state, setState, placeholder }) {
+function InputHandler({
+	labelName,
+	type,
+	state,
+	setState,
+	placeholder,
+	autoComplete,
+}) {
 	return (
 		<>
 			<TextField
@@ -16,6 +23,7 @@ function InputHandler({ labelName, type, state, setState, placeholder }) {
 				margin='dense'
 				value={state}
 				onChange={(e) => setState(e.target.value)}
+				autoComplete={autoComplete}
 				InputLabelProps={{
 					shrink: true,
 				}}

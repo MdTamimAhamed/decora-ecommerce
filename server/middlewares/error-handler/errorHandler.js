@@ -6,10 +6,10 @@ function notFoundErrorHandler(req, res, next) {
 }
 
 //default
-function defaultErrorHandler(err, req, res, next) {
-	res.status(err.status || 500).json({
-		error: err.message || `Internal server error: ${err}`,
-		details: err.details,
+function defaultErrorHandler(error, req, res, next) {
+	res.status(error.status || 500).json({
+		error: error.message || `Internal server error: ${err}`,
+		details: error.details,
 	});
 }
 
