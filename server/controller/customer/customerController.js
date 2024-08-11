@@ -6,7 +6,7 @@ const CustomerModel = require('../../models/users/customer_model');
 
 //--------------------customer-signup-----------------//
 async function customerSignup(req, res, next) {
-	const { email, password, confirmPassword } = req.body;
+	const { password, confirmPassword } = req.body;
 
 	if (confirmPassword !== password) {
 		next(createError(400, 'Password do not match!'));
@@ -15,11 +15,6 @@ async function customerSignup(req, res, next) {
 	try {
 		const salt = await bcrypt.genSalt(10);
 		const hashPassword = await bcrypt.hash(password, salt);
-		const isUserExist = await CustomerModel.findOne({ email });
-
-		if (isUserExist) {
-			return res.status(400).json({ message: 'Email is already in use!' });
-		}
 
 		const newCustomer = CustomerModel({
 			...req.body,

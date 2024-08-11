@@ -9,6 +9,8 @@ import axios from 'axios';
 import { baseUrl } from '../../../utils/BaseURL';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ErrorMessage from '../form-controllers/ErrorMessage';
+import { useAuth0 } from '@auth0/auth0-react';
 
 function CustomerSignup() {
 	const [username, setUsername] = useState('');
@@ -19,8 +21,9 @@ function CustomerSignup() {
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 
-	const [success, setSuccess] = useState('');
-	const [errorMsg, setError] = useState('');
+	const [errorMsg, setError] = useState({});
+
+	const { loginWithRedirect } = useAuth0();
 
 	async function handleFormSubmission(e) {
 		e.preventDefault();
@@ -50,13 +53,12 @@ function CustomerSignup() {
 				const { message } = response.data;
 				toast.success(message);
 				setTimeout(() => {
-					window.location.href = '';
+					window.location.href = '/login';
 				}, 1500);
 			}
 		} catch (error) {
-			if (error.response && error.response.data.error) {
+			if (error.response && error.response.data.errors) {
 				setError(error.response.data.errors);
-				toast.error(errorMsg);
 			} else {
 				toast.error('Signup failed!');
 			}
@@ -100,6 +102,7 @@ function CustomerSignup() {
 										autoComplete='nope'
 										type='text'
 									/>
+									<ErrorMessage check={errorMsg.userName} />
 									<InputHandler
 										type='email'
 										state={email}
@@ -108,6 +111,7 @@ function CustomerSignup() {
 										placeholder='Email'
 										autoComplete='email'
 									/>
+									<ErrorMessage check={errorMsg.email} />
 									<InputHandler
 										state={phoneNumber}
 										setState={setPhoneNumber}
@@ -115,8 +119,11 @@ function CustomerSignup() {
 										placeholder='Phone number'
 										autoComplete='nope'
 									/>
+									<ErrorMessage check={errorMsg.phoneNumber} />
 									<GenderSelectHandler state={gender} setState={setGender} />
+									<ErrorMessage check={errorMsg.gender} />
 									<DateHandler label='Date of Birth' setState={setDob} />
+									<ErrorMessage check={errorMsg.birthday} />
 									<InputHandler
 										type='password'
 										state={password}
@@ -124,6 +131,7 @@ function CustomerSignup() {
 										labelName='Password'
 										placeholder='Password'
 									/>
+									<ErrorMessage check={errorMsg.password} />
 									<InputHandler
 										type='password'
 										state={confirmPassword}
@@ -131,6 +139,7 @@ function CustomerSignup() {
 										labelName='Confirm password'
 										placeholder='Confirm password'
 									/>
+									<ErrorMessage check={errorMsg.confirmPassword} />
 									<Button
 										fullWidth
 										type='submit'
@@ -149,7 +158,9 @@ function CustomerSignup() {
 											</Typography>
 										</Box>
 									</Divider>
+
 									<Button
+										onClick={() => loginWithRedirect()}
 										variant='outlined'
 										fullWidth
 										sx={{
@@ -163,6 +174,7 @@ function CustomerSignup() {
 											Google
 										</Typography>
 									</Button>
+
 									<Typography variant='subtitle2' sx={{ mt: '20px' }}>
 										Already have an account?{' '}
 										<Typography

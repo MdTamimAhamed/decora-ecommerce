@@ -13,8 +13,10 @@ import {
 	Typography,
 } from '@mui/material';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Search = styled('div')(({ theme }) => ({
 	position: 'relative',
@@ -41,6 +43,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function CustomerNavbar() {
+	const { isAuthenticated } = useSelector((state) => state.auth);
+
 	return (
 		<Box>
 			<AppBar position='static'>
@@ -59,24 +63,33 @@ function CustomerNavbar() {
 							Become a seller
 						</Button>
 
-						<Button
-							component={Link}
-							to='/login'
-							variant='outlined'
-							size='small'
-							color='inherit'>
-							Login
-						</Button>
+						{isAuthenticated ? (
+							<>
+								<AccountCircleIcon />
+							</>
+						) : (
+							<>
+								<Button
+									component={Link}
+									to='/login'
+									variant='outlined'
+									size='small'
+									color='inherit'>
+									Login
+								</Button>
 
-						<Button
-							component={Link}
-							to='/signup'
-							variant='outlined'
-							size='small'
-							color='inherit'>
-							Signup
-						</Button>
+								<Button
+									component={Link}
+									to='/signup'
+									variant='outlined'
+									size='small'
+									color='inherit'>
+									Signup
+								</Button>
+							</>
+						)}
 					</Box>
+
 					<Toolbar
 						disableGutters
 						sx={{

@@ -12,7 +12,6 @@ function InputHandler({
 	return (
 		<>
 			<TextField
-				required
 				type={type || 'text'}
 				label={labelName}
 				placeholder={placeholder}
