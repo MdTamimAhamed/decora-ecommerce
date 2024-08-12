@@ -8,18 +8,21 @@ import { baseUrl } from '../../../utils/BaseURL';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ErrorMessage from '../form-controllers/ErrorMessage';
-import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth0, User } from '@auth0/auth0-react';
 import { useDispatch } from 'react-redux';
-import { login } from '../../../features/auth/authSlice';
+import { login, user } from '../../../features/auth/authSlice';
+import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 
 function CustomerLogin() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-
 	const [errorMsg, setError] = useState({});
+	console.log(errorMsg);
 
 	const { loginWithRedirect } = useAuth0();
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	async function handleFormSubmission(e) {
 		e.preventDefault();
@@ -38,20 +41,21 @@ function CustomerLogin() {
 
 			if (response.status === 200) {
 				const { message, token } = response.data;
-				toast.success(message);
 
 				if (token) {
-					dispatch(login({ token }));
+					const userInfo = jwtDecode(token);
+					dispatch(user({ userInfo: userInfo }));
+					dispatch(login({ token: token }));
+
+					toast.success(message);
+					navigate('/');
 				}
-				setTimeout(() => {
-					window.location.href = '/';
-				}, 1500);
 			}
 		} catch (error) {
 			if (error.response && error.response.data.errors) {
 				setError(error.response.data.errors);
 			} else {
-				toast.error('Signup failed!');
+				toast.error(error.response.data.message);
 			}
 		}
 	}

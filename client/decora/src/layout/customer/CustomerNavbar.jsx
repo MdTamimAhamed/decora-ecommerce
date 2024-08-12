@@ -17,6 +17,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const Search = styled('div')(({ theme }) => ({
 	position: 'relative',
@@ -43,7 +44,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function CustomerNavbar() {
-	const { isAuthenticated } = useSelector((state) => state.auth);
+	const { isAuthenticated, user } = useAuth0();
+	const { isUserAuthenticated, token, userInfo } = useSelector(
+		(state) => state.auth
+	);
 
 	return (
 		<Box>
@@ -63,9 +67,15 @@ function CustomerNavbar() {
 							Become a seller
 						</Button>
 
-						{isAuthenticated ? (
+						{token && isUserAuthenticated ? (
 							<>
-								<AccountCircleIcon />
+								<Button
+									variant='outlined'
+									color='inherit'
+									sx={{ gap: 1, textTransform: 'capitalize' }}>
+									{userInfo.userName}
+									<AccountCircleIcon />
+								</Button>
 							</>
 						) : (
 							<>
