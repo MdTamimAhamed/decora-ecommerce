@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ErrorMessage from '../form-controllers/ErrorMessage';
 import { useAuth0, User } from '@auth0/auth0-react';
 import { useDispatch } from 'react-redux';
-import { login, user } from '../../../features/auth/authSlice';
+import { userLogin, user } from '../../../features/auth/authSlice';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 
@@ -45,7 +45,7 @@ function CustomerLogin() {
 				if (token) {
 					const userInfo = jwtDecode(token);
 					dispatch(user({ userInfo: userInfo }));
-					dispatch(login({ token: token }));
+					dispatch(userLogin({ token: token }));
 
 					toast.success(message);
 					navigate('/');

@@ -1,15 +1,14 @@
-import Navbar from './SellerNavbar';
-import Sidebar from './Sidebar';
+import { Box } from '@mui/material';
+import SellerNavbar from './SellerNavbar';
 import { Outlet } from 'react-router-dom';
 
 function SellerRoot() {
 	return (
 		<>
-			<Navbar />
-			<div>
-				<Sidebar />
+			<SellerNavbar />
+			<Box>
 				<Outlet />
-			</div>
+			</Box>
 		</>
 	);
 }

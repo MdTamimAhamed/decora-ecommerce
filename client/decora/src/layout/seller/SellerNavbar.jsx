@@ -5,39 +5,33 @@ import {
 	AppBar,
 	Badge,
 	Box,
+	Button,
 	Container,
 	IconButton,
-	makeStyles,
 	Toolbar,
+	Typography,
 } from '@mui/material';
 
-function Navbar() {
+function SellerNavbar() {
 	return (
-		<div>
-			<figure>Logo</figure>
-			<AppBar>
-				<Container maxWidth=''>
+		<Box>
+			<AppBar sx={{ bgcolor: 'white' }} position='static'>
+				<Container maxWidth='xl'>
 					<Toolbar
+						disableGutters
 						sx={{
 							display: 'flex',
 							justifyContent: 'space-between',
 							alignItems: 'center',
 						}}>
-						<h3>Decora</h3>
-						<Box sx={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-							<IconButton>
-								<Badge badgeContent={0} color=''>
-									<NotificationsOutlinedIcon color='' />
-								</Badge>
-							</IconButton>
-							<SettingsIcon />
-							<AccountCircleIcon />
-						</Box>
+						<Typography color='primary' variant='h5' fontWeight='600'>
+							Decora
+						</Typography>
 					</Toolbar>
 				</Container>
 			</AppBar>
-		</div>
+		</Box>
 	);
 }
 
-export default Navbar;
+export default SellerNavbar;

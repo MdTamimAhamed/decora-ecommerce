@@ -9,8 +9,11 @@ import CustomerRoot from '../layout/customer/CustomerRoot.jsx';
 import CustomerSignup from '../components/forms/signup/CustomerSignup.jsx';
 import CustomerLogin from '../components/forms/login/CustomerLogin.jsx';
 
+import SellerRoot from '../layout/seller/SellerRoot.jsx';
+import SellerSignup from '../components/forms/signup/SellerSignup.jsx';
+
 import Home from '../pages/customer/Home.jsx';
-import PublicRoute from '../components/auth-route/PublicRoute.jsx';
+import PublicRoute from '../components/authGuard/PublicRoute.jsx';
 
 import {
 	createBrowserRouter,
@@ -51,7 +54,9 @@ const router = createBrowserRouter(
 			</Route>
 
 			{/* seller routes */}
-			<Route path='/seller/signup' element={''} />
+			<Route element={<SellerRoot />}>
+				<Route path='/seller/signup' element={<SellerSignup />} />
+			</Route>
 		</>
 	)
 );
