@@ -2,49 +2,10 @@ const mongoose = require('mongoose');
 const { validate } = require('./customer_model');
 
 const sellerSignupSchema = new mongoose.Schema({
-	accountType: {
-		type: String,
-		required: true,
-		enum: ['individual', 'company'],
-	},
-	storeName: {
-		type: String,
-		required: true,
-		trim: true,
-		unique: true,
-	},
-	businessType: {
-		type: String,
-		required: true,
-	},
-	contactNumber: {
-		type: String,
-		required: [true, 'Contact number is required!'],
-		minLength: 11,
-		maxLength: 13,
-		validate: {
-			validator: function (value) {
-				return /^(?:\+88|88)?01[3-9]\d{8}$/.test(value);
-			},
-			message: 'Enter a valid phone number!',
-		},
-	},
 	email: {
 		type: String,
-		required: [true, 'Email is required!'],
 		unique: true,
-		match: [/.+@.+\..+/, 'Please provide a valid email address!'],
-		trim: true,
 	},
-	birthday: {
-		type: Date,
-		required: [true, 'Birthday is required'],
-	},
-	password: {
-		type: String,
-		required: [true, 'Password is required!'],
-	},
-
 	otp: {
 		otpValue: {
 			type: String,
@@ -58,6 +19,18 @@ const sellerSignupSchema = new mongoose.Schema({
 			type: Boolean,
 			default: false,
 		},
+	},
+	accountType: {
+		type: String,
+		required: true,
+	},
+	contactNumber: {
+		type: String,
+		required: true,
+	},
+	password: {
+		type: String,
+		required: true,
 	},
 });
 

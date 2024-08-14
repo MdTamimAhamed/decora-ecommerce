@@ -98,7 +98,7 @@ function CustomerNavbar() {
 						</Button>
 						<Button
 							component={Link}
-							to='/seller/signup'
+							to='/seller/login'
 							size='small'
 							color='inherit'>
 							Become a seller

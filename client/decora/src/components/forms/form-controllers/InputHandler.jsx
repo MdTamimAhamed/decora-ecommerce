@@ -28,7 +28,7 @@ function InputHandler({
 				}}
 				sx={{
 					'& .MuiInputBase-input::placeholder': {
-						fontSize: '0.95rem',
+						fontSize: '1rem',
 					},
 					my: '10px',
 				}}

@@ -24,8 +24,14 @@ function SellerNavbar() {
 							justifyContent: 'space-between',
 							alignItems: 'center',
 						}}>
-						<Typography color='primary' variant='h5' fontWeight='600'>
-							Decora
+						<Typography
+							sx={{ textDecoration: 'none' }}
+							component='a'
+							href='/'
+							color='primary'
+							variant='h5'
+							fontWeight='600'>
+							Decora Seller
 						</Typography>
 					</Toolbar>
 				</Container>

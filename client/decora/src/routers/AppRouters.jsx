@@ -11,6 +11,7 @@ import CustomerLogin from '../components/forms/login/CustomerLogin.jsx';
 
 import SellerRoot from '../layout/seller/SellerRoot.jsx';
 import SellerSignup from '../components/forms/signup/SellerSignup.jsx';
+import SellerLogin from '../components/forms/login/SellerLogin.jsx';
 
 import Home from '../pages/customer/Home.jsx';
 import PublicRoute from '../components/authGuard/PublicRoute.jsx';
@@ -54,8 +55,9 @@ const router = createBrowserRouter(
 			</Route>
 
 			{/* seller routes */}
-			<Route element={<SellerRoot />}>
-				<Route path='/seller/signup' element={<SellerSignup />} />
+			<Route path='/seller' element={<SellerRoot />} replace>
+				<Route path='login' element={<SellerLogin />} />
+				<Route path='register' element={<SellerSignup />} />
 			</Route>
 		</>
 	)
