@@ -17,13 +17,15 @@ function CustomerSignup() {
 	const [email, setEmail] = useState('');
 	const [phoneNumber, setPhoneNumber] = useState('');
 	const [gender, setGender] = useState('');
-	const [dob, setDob] = useState('');
+	const [dob, setDob] = useState(null);
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 
 	const [errorMsg, setError] = useState({});
 
 	const { loginWithRedirect } = useAuth0();
+
+	console.log('date of birth: ' + dob);
 
 	async function handleFormSubmission(e) {
 		e.preventDefault();

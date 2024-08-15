@@ -62,9 +62,7 @@ function CustomerNavbar() {
 	};
 
 	const { isAuthenticated, user, logout } = useAuth0();
-	const { isUserAuthenticated, token, userInfo } = useSelector(
-		(state) => state.auth
-	);
+	const { isUserAuthenticated, userInfo } = useSelector((state) => state.auth);
 
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -104,7 +102,7 @@ function CustomerNavbar() {
 							Become a seller
 						</Button>
 
-						{(token && isUserAuthenticated) || (isAuthenticated && user) ? (
+						{isUserAuthenticated || (isAuthenticated && user) ? (
 							<>
 								<Button
 									onClick={handleClick}
@@ -114,7 +112,7 @@ function CustomerNavbar() {
 										gap: 1,
 										textTransform: 'capitalize',
 									}}>
-									{(token && isUserAuthenticated && userInfo.userName) ||
+									{(isUserAuthenticated && userInfo.userName) ||
 										(isAuthenticated && user && user.name)}
 									<AccountCircleIcon />
 								</Button>

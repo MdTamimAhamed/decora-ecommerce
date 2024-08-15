@@ -15,7 +15,7 @@ const sellerSignupSchema = new mongoose.Schema({
 			type: Date,
 			required: true,
 		},
-		isVarified: {
+		isVerified: {
 			type: Boolean,
 			default: false,
 		},

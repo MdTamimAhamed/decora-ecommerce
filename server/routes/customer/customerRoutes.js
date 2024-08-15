@@ -1,4 +1,6 @@
 const express = require('express');
+const router = express.Router();
+
 const {
 	customerLogin,
 	customerSignup,
@@ -11,8 +13,6 @@ const {
 	customerLoginValidators,
 	customerLoginValidatorErrorHandler,
 } = require('../../validation/customerLoginValidator');
-
-const router = express.Router();
 
 router.post(
 	'/signup',

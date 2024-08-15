@@ -9,7 +9,7 @@ function DateHandler({ label, setState }) {
 			<LocalizationProvider dateAdapter={AdapterDayjs}>
 				<DatePicker
 					label={label}
-					onChange={(date) => setState(date.format('YYYY-MM-DD, dddd'))}
+					onChange={(date) => setState(date.toISOString())}
 					sx={{ my: '10px' }}
 					slots={{
 						textField: (params) => (
