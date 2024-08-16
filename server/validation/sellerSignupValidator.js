@@ -1,23 +1,34 @@
 const { check, validationResult } = require('express-validator');
 const createError = require('http-errors');
+const { SellerModel } = require('../models/users/seller_model');
 
-const EmailValidate = [
+const emailValidate = [
 	check('email')
 		.notEmpty()
 		.withMessage('Email is required!')
 		.isEmail()
 		.withMessage('Enter a valid email address!')
-		.trim(),
+		.trim()
+		.custom(async (email) => {
+			try {
+				const isEmailExist = await SellerModel.findOne({ email: email });
+				if (isEmailExist) {
+					throw createError('Email already registered!');
+				}
+			} catch (error) {
+				throw createError(error.message);
+			}
+		}),
 ];
 
-const OTPAndPasswordValidate = [
+const otpAndPasswordValidate = [
 	check('otpValue').notEmpty().withMessage('Enter OTP vlaue!'),
 	check('otpExpire')
 		.isISO8601()
 		.toDate()
 		.withMessage('Invalid OTP expiry date!'),
 	check('isVerified').isBoolean().withMessage('isVerified must be a boolean.'),
-	check('phoneNumber')
+	check('contactNumber')
 		.notEmpty()
 		.withMessage('Phone number is required!')
 		.matches(/^(?:\+88|88)?01[3-9]\d{8}$/)
@@ -37,7 +48,7 @@ const OTPAndPasswordValidate = [
 	}),
 ];
 
-function EmailValidateErrorHandler(req, res, next) {
+function emailValidateErrorHandler(req, res, next) {
 	const errors = validationResult(req);
 	const errorArr = errors.mapped();
 
@@ -50,7 +61,7 @@ function EmailValidateErrorHandler(req, res, next) {
 		});
 	}
 }
-function OTPAndPasswordValidateErrorHandler(req, res, next) {
+function otpAndPasswordValidateErrorHandler(req, res, next) {
 	const errors = validationResult(req);
 	const errorArr = errors.mapped();
 
@@ -65,8 +76,8 @@ function OTPAndPasswordValidateErrorHandler(req, res, next) {
 }
 
 module.exports = {
-	EmailValidate,
-	EmailValidateErrorHandler,
-	OTPAndPasswordValidate,
-	OTPAndPasswordValidateErrorHandler,
+	emailValidate,
+	emailValidateErrorHandler,
+	otpAndPasswordValidate,
+	otpAndPasswordValidateErrorHandler,
 };

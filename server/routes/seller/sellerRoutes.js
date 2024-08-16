@@ -1,12 +1,19 @@
 const express = require('express');
-const {
-	sellerSignup,
-	sellerLogin,
-} = require('../../controller/seller/sellerController');
-
 const router = express.Router();
 
-router.post('/signup', sellerSignup);
-router.post('/login', sellerLogin);
+const {
+	emailValidate,
+	emailValidateErrorHandler,
+	otpAndPasswordValidate,
+	otpAndPasswordValidateErrorHandler,
+} = require('../../validation/sellerSignupValidator');
+const { emailVerify } = require('../../controller/seller/sellerController');
+
+router.post(
+	'/verify-email',
+	emailValidate,
+	emailValidateErrorHandler,
+	emailVerify
+);
 
 module.exports = router;

@@ -18,7 +18,6 @@ function CustomerLogin() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [errorMsg, setError] = useState({});
-	console.log(errorMsg);
 
 	const { loginWithRedirect } = useAuth0();
 	const dispatch = useDispatch();

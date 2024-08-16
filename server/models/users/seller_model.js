@@ -1,19 +1,17 @@
 const mongoose = require('mongoose');
-const { validate } = require('./customer_model');
 
 const sellerSignupSchema = new mongoose.Schema({
 	email: {
 		type: String,
 		unique: true,
+		required: true,
 	},
 	otp: {
 		otpValue: {
 			type: String,
-			required: true,
 		},
 		otpExpire: {
 			type: Date,
-			required: true,
 		},
 		isVerified: {
 			type: Boolean,
@@ -22,15 +20,12 @@ const sellerSignupSchema = new mongoose.Schema({
 	},
 	accountType: {
 		type: String,
-		required: true,
 	},
 	contactNumber: {
 		type: String,
-		required: true,
 	},
 	password: {
 		type: String,
-		required: true,
 	},
 });
 

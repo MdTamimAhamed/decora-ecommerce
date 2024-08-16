@@ -27,6 +27,4 @@ function authMiddleware(role) {
 	};
 }
 
-module.exports = {
-	authMiddleware,
-};
+module.exports = { authMiddleware };

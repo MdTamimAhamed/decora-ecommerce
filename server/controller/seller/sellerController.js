@@ -1,34 +1,17 @@
-const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const createError = require('http-errors');
 const { SellerModel } = require('../../models/users/seller_model');
 
-//--------------------seller-signup-----------------//
-async function sellerSignup(req, res, next) {
-	const { password, confirmPassword } = req.body;
-
-	if (confirmPassword !== password) {
-		next(createError(400, 'Password do not match!'));
-	}
-
+//--------------------seller-signup-step:1-----------------//
+async function emailVerify(req, res, next) {
+	const { email } = req.body;
 	try {
-		const salt = await bcrypt.genSalt(10);
-		const hashPassword = await bcrypt.hash(password, salt);
-		const isUserExist = await SellerModel.findOne({ email });
-
-		if (isUserExist) {
-			return res.status(400).json({ message: 'Email is already in use!' });
-		}
-
-		const newSeller = SellerModel({
-			...req.body,
-			password: hashPassword,
-		});
+		const newSeller = new SellerModel({ email });
 
 		await newSeller.save();
+
 		res.status(200).json({
-			message: 'Signup successful!',
+			message: 'A verification code has been sent to your email!',
 		});
 	} catch (error) {
 		next(error);
@@ -78,6 +61,6 @@ async function sellerLogin(req, res, next) {
 }
 
 module.exports = {
-	sellerSignup,
+	emailVerify,
 	sellerLogin,
 };

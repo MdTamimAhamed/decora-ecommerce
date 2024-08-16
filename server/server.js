@@ -34,7 +34,7 @@ app.use(express.static('public'));
 //routes
 app.use('/customer', customerRoutes);
 app.use('/seller', sellerRoutes);
-app.use('/api', authRoutes);
+// app.use('/api', authRoutes);
 
 //error handle
 app.use(notFoundErrorHandler);

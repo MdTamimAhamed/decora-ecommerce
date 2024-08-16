@@ -1,6 +1,7 @@
 const { check, validationResult } = require('express-validator');
-const CustomerModel = require('../models/users/customer_model');
+
 const createError = require('http-errors');
+const CustomerModel = require('../models/users/customer_model');
 
 const customerSignupValidators = [
 	check('userName')

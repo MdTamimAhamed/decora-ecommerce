@@ -1,41 +1,44 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import SellerSignupEmailForm from './SellerSignupEmailForm';
 import { useTheme } from '@mui/material';
 import axios from 'axios';
 import { baseUrl } from '../../../utils/BaseURL';
 import { toast, ToastContainer } from 'react-toastify';
+import InputHandler from '../form-controllers/InputHandler';
 
 function SellerSignup() {
 	const theme = useTheme();
 
 	const [step, setStep] = useState(1);
 	const [email, setEmail] = useState('');
+	const [contactNumber, setContactNumber] = useState('');
 
-	async function handleEmailFormSubmission(e) {
+	async function handleVerifyEmail(e) {
 		e.preventDefault();
 
 		try {
-			const response = await axios.post(
-				`${baseUrl}/seller/verify-email`,
-				email
-			);
-			if (response.status === '200') {
-				setStep(2);
+			const response = await axios.post(`${baseUrl}/seller/verify-email`, {
+				email,
+			});
+			if (response.status === 200) {
+				const { message } = response.data;
+				toast.success(message);
+				setTimeout(() => {
+					setStep(2);
+				}, 3000);
 			} else {
-				return re;
+				console.log('Verification failed!');
 			}
-		} catch (error) {}
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	return (
 		<>
 			<Box sx={{ bgcolor: 'white', p: '30px' }}>
-				<Box
-					component='form'
-					onSubmit={handleEmailFormSubmission}
-					sx={{ mb: 2 }}>
+				<Box sx={{ mb: 2 }}>
 					<Typography variant='h6'>Signup as Decora Seller</Typography>
 					<Typography
 						variant='subtitle2'
@@ -48,7 +51,68 @@ function SellerSignup() {
 						signup in 2 steps.
 					</Typography>
 				</Box>
-				<Box>{step === 1 && <SellerSignupEmailForm />}</Box>
+				<Box>
+					{/* <---------------------step:1---------------------> */}
+					{step === 1 && (
+						<Box component='form' onSubmit={handleVerifyEmail}>
+							<InputHandler
+								labelName='Email'
+								type='email'
+								state={email}
+								setState={setEmail}
+								placeholder='Enter your email'
+							/>
+							<Button
+								type='submit'
+								variant='contained'
+								fullWidth
+								sx={{ py: 1, mt: 2 }}>
+								Verify Email
+							</Button>
+						</Box>
+					)}
+				</Box>
+
+				{/* <---------------------step:2---------------------> */}
+				<Box>
+					{step === 2 && (
+						<Box component='form'>
+							<InputHandler
+								labelName='Email'
+								type='email'
+								state={email}
+								setState={setEmail}
+								placeholder='Enter your email'
+							/>
+							<InputHandler
+								labelName='Contact Number'
+								type='text'
+								state={contactNumber}
+								setState={setContactNumber}
+								placeholder='Enter your email'
+							/>
+							<Button
+								type='submit'
+								variant='contained'
+								fullWidth
+								sx={{ py: 1, mt: 2 }}>
+								Verify Email
+							</Button>
+						</Box>
+					)}
+				</Box>
+				<ToastContainer
+					position='top-center'
+					autoClose={1500}
+					hideProgressBar
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable={false}
+					pauseOnHover
+					theme='dark'
+				/>
 
 				<Box sx={{ mt: 3 }}>
 					<Typography
