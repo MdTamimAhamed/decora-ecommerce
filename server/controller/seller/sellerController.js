@@ -1,16 +1,20 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { SellerModel } = require('../../models/users/seller_model');
+const Mailjet = require('node-mailjet');
 
 //--------------------seller-signup-step:1-----------------//
 async function emailVerify(req, res, next) {
 	const { email } = req.body;
 	try {
-		const newSeller = new SellerModel({ email });
+		const otp = Math.floor(Math.random() * 900000);
+		const otpExpire = new Date.now() * 1 * 60 * 1000;
+		const newSeller = new SellerModel({ email, otp: { otpValue: otp } });
 
 		await newSeller.save();
 
 		res.status(200).json({
+			otpExpire,
 			message: 'A verification code has been sent to your email!',
 		});
 	} catch (error) {
