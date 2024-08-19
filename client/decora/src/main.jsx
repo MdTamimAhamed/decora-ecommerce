@@ -10,9 +10,14 @@ import { createTheme } from '@mui/material';
 import { Auth0Provider } from '@auth0/auth0-react';
 
 const theme = createTheme({
+	// palette: {
+	// 	primary: {
+	// 		main: '#F25F1F',
+	// 	},
+	// },
 	typography: {
 		allVariants: {
-			fontFamily: "'Inter', 'sans-serif'",
+			fontFamily: "'Inter','Caveat', 'cursive', 'sans-serif'",
 		},
 	},
 });

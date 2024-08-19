@@ -177,9 +177,17 @@ function CustomerNavbar() {
 							display: 'flex',
 							justifyContent: 'space-between',
 						}}>
-						<Box>
-							<Typography variant='h5' fontWeight='600'>
+						<Box sx={{ textAlign: 'center' }}>
+							<Typography
+								mb={2}
+								sx={{ fontFamily: 'Caveat' }}
+								variant='h2'
+								color='white'
+								fontWeight='800'>
 								Decora
+								<Typography lineHeight='5px' variant='subtitle1'>
+									E-commerce
+								</Typography>
 							</Typography>
 						</Box>
 

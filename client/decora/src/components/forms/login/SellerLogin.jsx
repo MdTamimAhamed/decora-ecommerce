@@ -8,14 +8,18 @@ import { baseUrl } from '../../../utils/BaseURL';
 import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import ErrorMessage from '../form-controllers/ErrorMessage';
+import { useDispatch } from 'react-redux';
+import { sellerLogin, seller } from '../../../features/auth/authSlice';
+import { jwtDecode } from 'jwt-decode';
 
 function SellerLogin() {
 	const navigate = useNavigate();
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-
 	const [errMsg, setError] = useState({});
+
+	const dispatch = useDispatch();
 
 	async function handleSellerLogin(e) {
 		e.preventDefault();
@@ -28,7 +32,11 @@ function SellerLogin() {
 			);
 
 			if (response.status === 200) {
-				const { message } = response.data;
+				const { message, token } = response.data;
+				if (token) {
+					dispatch(sellerLogin({ sellerToken: token }));
+					dispatch(seller({ sellerInfo: jwtDecode(token) }));
+				}
 				toast.success(message);
 				setTimeout(() => {
 					navigate('/products');

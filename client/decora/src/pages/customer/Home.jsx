@@ -7,7 +7,7 @@ function Home() {
 		<>
 			<CustomerNavbar />
 			<Box>
-				<Container>
+				<Container maxWidth='xl'>
 					<Typography>This is public home</Typography>
 				</Container>
 			</Box>

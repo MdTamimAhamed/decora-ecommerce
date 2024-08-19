@@ -1,7 +1,6 @@
 import { Box, Container, Paper, Typography } from '@mui/material';
 import SellerNavbar from './SellerNavbar';
 import { Outlet } from 'react-router-dom';
-import SellerSignup from '../../components/forms/signup/SellerSignup';
 
 import {} from '@mui/material';
 import React from 'react';

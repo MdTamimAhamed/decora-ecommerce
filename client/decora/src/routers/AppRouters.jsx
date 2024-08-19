@@ -1,7 +1,6 @@
 import React from 'react';
 import '../index.css';
 
-import AdminRoot from '../layout/seller/SellerRoot.jsx';
 import Products from '../pages/seller/Products.jsx';
 import Dashboard from '../pages/seller/Dashboard.jsx';
 
@@ -12,6 +11,7 @@ import CustomerLogin from '../components/forms/login/CustomerLogin.jsx';
 import SellerRoot from '../layout/seller/SellerRoot.jsx';
 import SellerSignup from '../components/forms/signup/SellerSignup.jsx';
 import SellerLogin from '../components/forms/login/SellerLogin.jsx';
+import SellerDashboardRoot from '../layout/seller/SellerDashboardRoot.jsx';
 
 import Home from '../pages/customer/Home.jsx';
 import PublicRoute from '../components/authGuard/PublicRoute.jsx';
@@ -48,15 +48,21 @@ const router = createBrowserRouter(
 				/>
 			</Route>
 
-			<Route path='/products' element={<Navigate to='/products' replace />} />
-			<Route path='/' element={<AdminRoot />}>
+			<Route path='/' element={<SellerDashboardRoot />} replace>
 				<Route path='products' element={<Products />} />
 				<Route path='dashboard' element={<Dashboard />} />
 			</Route>
 
 			{/* seller routes */}
 			<Route path='/seller' element={<SellerRoot />} replace>
-				<Route path='login' element={<SellerLogin />} />
+				<Route
+					path='login'
+					element={
+						<PublicRoute>
+							<SellerLogin />
+						</PublicRoute>
+					}
+				/>
 				<Route path='register' element={<SellerSignup />} />
 			</Route>
 		</>
