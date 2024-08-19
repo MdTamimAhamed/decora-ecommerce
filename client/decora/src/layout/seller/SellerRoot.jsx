@@ -75,7 +75,12 @@ function SellerRoot() {
 					</Overlay>
 				</Box>
 				<Box>
-					<Container maxWidth='xl'></Container>
+					<Container maxWidth='xl'>
+						<Typography variant='h3' fontWeight='500' sx={{ mt: 15 }}>
+							Why sell on Decora?
+							<Box></Box>
+						</Typography>
+					</Container>
 				</Box>
 			</Box>
 		</>

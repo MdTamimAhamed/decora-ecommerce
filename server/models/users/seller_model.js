@@ -10,9 +10,6 @@ const sellerSignupSchema = new mongoose.Schema({
 		otpValue: {
 			type: String,
 		},
-		otpExpire: {
-			type: Date,
-		},
 		isVerified: {
 			type: Boolean,
 			default: false,

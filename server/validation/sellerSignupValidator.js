@@ -23,11 +23,11 @@ const emailValidate = [
 
 const otpAndPasswordValidate = [
 	check('otpValue').notEmpty().withMessage('Enter OTP vlaue!'),
-	check('otpExpire')
-		.isISO8601()
-		.toDate()
-		.withMessage('Invalid OTP expiry date!'),
-	check('isVerified').isBoolean().withMessage('isVerified must be a boolean.'),
+	// check('otpExpire')
+	// 	.isISO8601()
+	// 	.toDate()
+	// 	.withMessage('Invalid OTP expiry date!'),
+	// check('isVerified').isBoolean().withMessage('isVerified must be a boolean.'),
 	check('contactNumber')
 		.notEmpty()
 		.withMessage('Phone number is required!')
@@ -35,13 +35,12 @@ const otpAndPasswordValidate = [
 		.withMessage('Invalid phone number!')
 		.trim(),
 	check('accountType')
-		.isIn(['individual', 'company'])
+		.isIn(['Individual', 'Company'])
 		.withMessage('Invalid account type!'),
 	check('password')
-		.notEmpty('Enter password!')
 		.isLength({ min: 6 })
 		.withMessage('Password must be at least 6 characters!'),
-	check('confirmPassword').custom((confirmPassword, { req }) => {
+	check('confirmPassword').custom(async (confirmPassword, { req }) => {
 		if (confirmPassword !== req.body.password) {
 			throw createError('Password do not match!');
 		}

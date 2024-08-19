@@ -33,6 +33,14 @@ function SellerNavbar() {
 							fontWeight='600'>
 							Decora Seller
 						</Typography>
+						<Button
+							component='a'
+							href='/'
+							disableRipple
+							variant='outlined'
+							sx={{ textTransform: 'capitalize' }}>
+							Home
+						</Button>
 					</Toolbar>
 				</Container>
 			</AppBar>
