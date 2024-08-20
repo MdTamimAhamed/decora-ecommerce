@@ -9,10 +9,33 @@ import {
 	Container,
 	IconButton,
 	Toolbar,
+	styled,
 	Typography,
 } from '@mui/material';
 
+import { useDispatch } from 'react-redux';
+import { sellerLogout } from '../../features/auth/authSlice';
+import { useNavigate } from 'react-router-dom';
+
+const StyledBadge = styled(Badge)(({ theme }) => ({
+	'& .MuiBadge-badge': {
+		left: 0,
+		right: 5,
+		top: 3,
+		padding: '0 4px',
+	},
+}));
+
 function DashboardNavbar() {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	function handleLogout() {
+		dispatch(sellerLogout());
+		setTimeout(() => {
+			navigate('/seller/login');
+		}, 1000);
+	}
 	return (
 		<>
 			<Box>
@@ -24,25 +47,21 @@ function DashboardNavbar() {
 							disableGutters
 							sx={{
 								display: 'flex',
-								justifyContent: 'space-between',
+								justifyContent: 'end',
 								alignItems: 'center',
 							}}>
-							<Typography
-								sx={{ textDecoration: 'none' }}
-								component='a'
-								href='/'
-								color='primary'
-								variant='h5'
-								fontWeight='600'>
-								Decora
-							</Typography>
-							<Box>
+							<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
 								<IconButton>
-									<NotificationsOutlinedIcon />
+									<StyledBadge badgeContent={1} color='error'>
+										<NotificationsOutlinedIcon color='primary' />
+									</StyledBadge>
 								</IconButton>
 								<IconButton>
-									<AccountCircleIcon />
+									<AccountCircleIcon color='primary' />
 								</IconButton>
+								<Button variant='outlined' onClick={handleLogout}>
+									Logout
+								</Button>
 							</Box>
 						</Toolbar>
 					</Container>

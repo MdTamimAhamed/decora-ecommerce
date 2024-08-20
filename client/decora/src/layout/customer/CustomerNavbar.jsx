@@ -185,7 +185,7 @@ function CustomerNavbar() {
 								color='white'
 								fontWeight='800'>
 								Decora
-								<Typography lineHeight='5px' variant='subtitle1'>
+								<Typography component='p' lineHeight='5px'>
 									E-commerce
 								</Typography>
 							</Typography>

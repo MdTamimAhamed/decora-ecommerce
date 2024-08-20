@@ -27,6 +27,20 @@ const sellerSignupSchema = new mongoose.Schema({
 });
 
 const sellerSchema = new mongoose.Schema({
+	//---------------------setp0--------------------Store
+	storeName: {
+		type: String,
+		require: true,
+	},
+	storeSubtitle: {
+		type: String,
+		require: true,
+	},
+	profileImage: {
+		type: String,
+		require: true,
+	},
+
 	//---------------------setp1--------------------address
 	address: {
 		country: {
@@ -71,7 +85,7 @@ const sellerSchema = new mongoose.Schema({
 		},
 	},
 
-	//------------------------step2-------------bank information
+	//------------------------step3-------------bank information
 	bankInformation: {
 		bankStatement: {
 			type: String,

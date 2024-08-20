@@ -14,7 +14,7 @@ import SellerLogin from '../components/forms/login/SellerLogin.jsx';
 import SellerDashboardRoot from '../layout/seller/SellerDashboardRoot.jsx';
 
 import Home from '../pages/customer/Home.jsx';
-import PublicRoute from '../components/authGuard/PublicRoute.jsx';
+import PrivateRoute from '../components/authGuard/PrivateRoute.jsx';
 
 import {
 	createBrowserRouter,
@@ -30,40 +30,26 @@ const router = createBrowserRouter(
 			<Route path='/' element={<Home />} />
 
 			<Route element={<CustomerRoot />}>
-				<Route
-					path='/login'
-					element={
-						<PublicRoute>
-							<CustomerLogin />
-						</PublicRoute>
-					}
-				/>
-				<Route
-					path='/signup'
-					element={
-						<PublicRoute>
-							<CustomerSignup />
-						</PublicRoute>
-					}
-				/>
-			</Route>
-
-			<Route path='/' element={<SellerDashboardRoot />} replace>
-				<Route path='products' element={<Products />} />
-				<Route path='dashboard' element={<Dashboard />} />
+				<Route path='/login' element={<CustomerLogin />} />
+				<Route path='/signup' element={<CustomerSignup />} />
 			</Route>
 
 			{/* seller routes */}
 			<Route path='/seller' element={<SellerRoot />} replace>
-				<Route
-					path='login'
-					element={
-						<PublicRoute>
-							<SellerLogin />
-						</PublicRoute>
-					}
-				/>
+				<Route path='login' element={<SellerLogin />} />
 				<Route path='register' element={<SellerSignup />} />
+			</Route>
+
+			<Route
+				path='/'
+				element={
+					<PrivateRoute>
+						<SellerDashboardRoot />
+					</PrivateRoute>
+				}
+				replace>
+				<Route path='products' element={<Products />} />
+				<Route path='dashboard' element={<Dashboard />} />
 			</Route>
 		</>
 	)

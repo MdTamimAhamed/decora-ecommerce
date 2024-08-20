@@ -11,7 +11,7 @@ import { Auth0Provider } from '@auth0/auth0-react';
 
 const theme = createTheme({
 	// palette: {
-	// 	primary: {
+	// 	primary/custom color: {
 	// 		main: '#F25F1F',
 	// 	},
 	// },

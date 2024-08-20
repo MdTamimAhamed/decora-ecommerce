@@ -9,7 +9,7 @@ import {
 import React from 'react';
 import { useTheme } from '@mui/material';
 import SearchBar from '../../components/reuseables/SearchBar';
-import InventoryIcon from '@mui/icons-material/Inventory';
+import WarehouseIcon from '@mui/icons-material/Warehouse';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import PeopleIcon from '@mui/icons-material/People';
@@ -18,19 +18,21 @@ import FlagIcon from '@mui/icons-material/Flag';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import SettingsIcon from '@mui/icons-material/Settings';
+import StoreIcon from '@mui/icons-material/Store';
 
 function Sidebar() {
 	const theme = useTheme();
 
 	const navOptions = [
-		{ id: 1, name: 'Products', icon: <InventoryIcon /> },
+		{ id: 0, name: 'Products', icon: <WarehouseIcon /> },
+		{ id: 1, name: 'My Store', icon: <StoreIcon /> },
 		{ id: 2, name: 'Dashboard', icon: <DashboardIcon /> },
 		{ id: 3, name: 'Orders', icon: <ViewListIcon /> },
 		{ id: 4, name: 'Customers', icon: <PeopleIcon /> },
 		{ id: 5, name: 'Analytics', icon: <BarChartIcon /> },
 		{ id: 6, name: 'Reports', icon: <FlagIcon /> },
 		{ id: 7, name: 'Content Management', icon: <ManageAccountsIcon /> },
-		{ id: 7, name: 'Supports', icon: <SupportAgentIcon /> },
+		{ id: 8, name: 'Supports', icon: <SupportAgentIcon /> },
 		{ id: 9, name: 'Settings', icon: <SettingsIcon /> },
 	];
 	return (
@@ -50,7 +52,7 @@ function Sidebar() {
 					color='white'
 					fontWeight='800'>
 					Decora
-					<Typography lineHeight='5px' variant='subtitle1'>
+					<Typography component='p' lineHeight='5px' variant='subtitle1'>
 						E-commerce
 					</Typography>
 				</Typography>
