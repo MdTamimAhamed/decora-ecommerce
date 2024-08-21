@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
 import { Auth0Provider } from '@auth0/auth0-react';
+import { ToastContainer } from 'react-toastify';
 
 const theme = createTheme({
 	// palette: {
@@ -33,6 +34,18 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 						redirect_uri: window.location.origin,
 					}}>
 					<AppRouters />
+					<ToastContainer
+						position='top-center'
+						autoClose={2500}
+						hideProgressBar
+						newestOnTop={false}
+						closeOnClick
+						rtl={false}
+						pauseOnFocusLoss
+						draggable={false}
+						pauseOnHover
+						theme='dark'
+					/>
 				</Auth0Provider>
 			</Provider>
 		</ThemeProvider>

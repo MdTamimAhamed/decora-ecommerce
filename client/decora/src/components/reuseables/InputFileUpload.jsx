@@ -14,7 +14,7 @@ const VisuallyHiddenInput = styled('input')({
 	width: 1,
 });
 
-export default function InputFileUpload() {
+export default function InputFileUpload({ setState }) {
 	return (
 		<Button
 			component='label'
@@ -23,7 +23,11 @@ export default function InputFileUpload() {
 			tabIndex={-1}
 			startIcon={<CloudUploadIcon />}>
 			Upload file
-			<VisuallyHiddenInput type='file' />
+			<VisuallyHiddenInput
+				type='file'
+				accept='.jpg, .png, .jpeg'
+				onChange={(e) => setState(e.target.files[0])}
+			/>
 		</Button>
 	);
 }

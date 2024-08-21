@@ -109,18 +109,7 @@ function SellerLogin() {
 						to='/seller/register'>
 						Create a new account
 					</Typography>
-					<ToastContainer
-						position='top-center'
-						autoClose={2500}
-						hideProgressBar
-						newestOnTop={false}
-						closeOnClick
-						rtl={false}
-						pauseOnFocusLoss
-						draggable={false}
-						pauseOnHover
-						theme='dark'
-					/>
+					
 				</Box>
 			</Box>
 		</>

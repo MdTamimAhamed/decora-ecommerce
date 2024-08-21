@@ -312,18 +312,6 @@ function SellerSignup() {
 						</Box>
 					)}
 				</Box>
-				<ToastContainer
-					position='top-center'
-					autoClose={2500}
-					hideProgressBar
-					newestOnTop={false}
-					closeOnClick
-					rtl={false}
-					pauseOnFocusLoss
-					draggable={false}
-					pauseOnHover
-					theme='dark'
-				/>
 			</Box>
 		</>
 	);

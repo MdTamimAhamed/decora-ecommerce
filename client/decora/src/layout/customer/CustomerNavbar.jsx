@@ -62,7 +62,9 @@ function CustomerNavbar() {
 	};
 
 	const { isAuthenticated, user, logout } = useAuth0();
-	const { isUserAuthenticated, userInfo } = useSelector((state) => state.auth);
+	const { isUserAuthenticated, isSellerAuthenticated, userInfo } = useSelector(
+		(state) => state.auth
+	);
 
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -94,13 +96,23 @@ function CustomerNavbar() {
 						<Button size='small' color='inherit'>
 							Help & Support
 						</Button>
-						<Button
-							component={Link}
-							to='/seller/login'
-							size='small'
-							color='inherit'>
-							Become a seller
-						</Button>
+						{isSellerAuthenticated ? (
+							<Button
+								component={Link}
+								to='/products'
+								size='small'
+								color='inherit'>
+								Become a seller
+							</Button>
+						) : (
+							<Button
+								component={Link}
+								to='/seller/login'
+								size='small'
+								color='inherit'>
+								Become a seller
+							</Button>
+						)}
 
 						{isUserAuthenticated || (isAuthenticated && user) ? (
 							<>
@@ -205,18 +217,6 @@ function CustomerNavbar() {
 								</Badge>
 							</IconButton>
 						</Box>
-						<ToastContainer
-							position='top-center'
-							autoClose={1500}
-							hideProgressBar
-							newestOnTop={false}
-							closeOnClick
-							rtl={false}
-							pauseOnFocusLoss
-							draggable={false}
-							pauseOnHover
-							theme='dark'
-						/>
 					</Toolbar>
 				</Container>
 			</AppBar>

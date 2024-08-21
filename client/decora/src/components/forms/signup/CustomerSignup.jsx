@@ -188,18 +188,6 @@ function CustomerSignup() {
 											Login
 										</Typography>
 									</Typography>
-									<ToastContainer
-										position='top-center'
-										autoClose={1500}
-										hideProgressBar
-										newestOnTop={false}
-										closeOnClick
-										rtl={false}
-										pauseOnFocusLoss
-										draggable={false}
-										pauseOnHover
-										theme='dark'
-									/>
 								</Box>
 							</Box>
 						</Box>

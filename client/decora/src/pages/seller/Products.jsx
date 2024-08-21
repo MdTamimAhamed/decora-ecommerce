@@ -9,11 +9,11 @@ import {
 	styled,
 	Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTheme } from '@mui/material';
-import InputHandler from '../../components/forms/form-controllers/InputHandler';
-import InputFileUpload from '../../components/reuseables/InputFileUpload';
-import { alpha } from '@mui/material';
+import StoreSetup from '../../components/forms/seller-product-forms/StoreSetup';
+import AddressVerification from '../../components/forms/seller-product-forms/AddressVerification';
+import { useSelector } from 'react-redux';
 
 const StyledBackgroundImage = styled(Box)(() => ({
 	marginTop: '20px',
@@ -36,6 +36,8 @@ const Overlay = styled(Box)(() => ({
 
 function Products() {
 	const theme = useTheme();
+	const { currentStep } = useSelector((state) => state.sellerVerify);
+
 	const steps = [
 		'Store Setup',
 		'Address Verification',
@@ -80,10 +82,10 @@ function Products() {
 					color='error'
 					sx={{ textAlign: 'center', my: '40px', fontWeight: '600' }}>
 					Please complete the following steps to add your first product to the
-					store!
+					store and start selling!
 				</Typography>
 				<Box sx={{ mt: 4 }}>
-					<Stepper activeStep={0} alternativeLabel>
+					<Stepper activeStep={currentStep} alternativeLabel>
 						{steps.map((label) => (
 							<Step key={label}>
 								<Typography
@@ -101,45 +103,8 @@ function Products() {
 					</Stepper>
 
 					<Paper variant='outlined' sx={{ mt: 6 }}>
-						<Box sx={{ maxWidth: '768px', margin: 'auto', padding: '30px' }}>
-							<Typography variant='h6' fontWeight={500}>
-								Store Information
-							</Typography>
-							<Box sx={{ display: 'flex', gap: 3 }}>
-								<InputHandler
-									labelName='Store Name'
-									type='text'
-									placeholder='Enter store name'
-									autoComplete='nope'
-								/>
-								<InputHandler
-									labelName='Store Subtitle'
-									type='text'
-									placeholder='Subtitle/tag/slogun'
-									autoComplete='nope'
-								/>
-							</Box>
-
-							<Typography variant='subtitle2'>
-								Upload Store/Profile Image
-							</Typography>
-							<Paper
-								variant='outlined'
-								sx={{
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center',
-									padding: '40px',
-									bgcolor: alpha(theme.palette.primary.main, 0.1),
-									mt: '2px',
-									borderStyle: 'dashed',
-								}}>
-								<InputFileUpload />
-							</Paper>
-							<Button variant='contained' sx={{ mt: 2 }}>
-								Next
-							</Button>
-						</Box>
+						{currentStep === 0 && <StoreSetup />}
+						{currentStep === 1 && <AddressVerification />}
 					</Paper>
 				</Box>
 			</Box>
