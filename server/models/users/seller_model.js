@@ -45,19 +45,15 @@ const sellerSchema = new mongoose.Schema({
 	address: {
 		country: {
 			type: String,
-			required: [true, 'Country is required!'],
 		},
 		district: {
 			type: String,
-			required: true,
 		},
 		area: {
 			type: String,
-			required: true,
 		},
 		postCode: {
 			type: String,
-			required: true,
 		},
 		address: {
 			type: String,
@@ -69,19 +65,15 @@ const sellerSchema = new mongoose.Schema({
 	nidInformation: {
 		nidFront: {
 			type: String,
-			required: true,
 		},
 		nidBack: {
 			type: String,
-			required: true,
 		},
 		nidName: {
 			type: String,
-			required: true,
 		},
 		nidNumber: {
 			type: String,
-			required: true,
 		},
 	},
 
@@ -89,23 +81,18 @@ const sellerSchema = new mongoose.Schema({
 	bankInformation: {
 		bankStatement: {
 			type: String,
-			required: true,
 		},
 		accountName: {
 			type: String,
-			required: true,
 		},
 		accountNumber: {
 			type: String,
-			required: true,
 		},
 		bankName: {
 			type: String,
-			required: true,
 		},
 		branchName: {
 			type: String,
-			required: true,
 		},
 	},
 });

@@ -23,11 +23,6 @@ const emailValidate = [
 
 const otpAndPasswordValidate = [
 	check('otpValue').notEmpty().withMessage('Enter OTP vlaue!'),
-	// check('otpExpire')
-	// 	.isISO8601()
-	// 	.toDate()
-	// 	.withMessage('Invalid OTP expiry date!'),
-	// check('isVerified').isBoolean().withMessage('isVerified must be a boolean.'),
 	check('contactNumber')
 		.notEmpty()
 		.withMessage('Phone number is required!')

@@ -19,6 +19,13 @@ const {
 	sellerLogin,
 } = require('../../controller/seller/sellerController');
 
+const {
+	handleStoreSetup,
+} = require('../../controller/seller/productsFormController');
+const {
+	profileImageStorage,
+} = require('../../controller/uploads/uploadsControllers');
+
 router.post(
 	'/verify-email',
 	emailValidate,
@@ -39,5 +46,7 @@ router.post(
 	sellerLoginValidatorErrorHandler,
 	sellerLogin
 );
+
+router.post('/products/store-setup', profileImageStorage, handleStoreSetup);
 
 module.exports = router;
