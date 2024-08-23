@@ -21,6 +21,7 @@ const {
 
 const {
 	handleStoreSetup,
+	handleAddressVerification,
 } = require('../../controller/seller/productsFormController');
 const {
 	profileImageStorage,
@@ -52,6 +53,6 @@ router.post(
 	profileImageStorage.single('profileImage'),
 	handleStoreSetup
 );
-router.get('/products/preview-profile/:seller_id');
+router.post('/products/address-verification', handleAddressVerification);
 
 module.exports = router;

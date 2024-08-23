@@ -489,54 +489,33 @@ export const countries = [
 	{ code: 'ZW', label: 'Zimbabwe', phone: '263' },
 ];
 export const areas = [
-	{
-		district: 'Dhaka',
-		cities: [
-			{ label: 'Dhanmondi' },
-			{ label: 'Gulshan' },
-			{ label: 'Banani' },
-			{ label: 'Mirpur' },
-			{ label: 'Uttara' },
-		],
-	},
-	{
-		district: 'Chittagong',
-		cities: [
-			{ label: 'Pahartali' },
-			{ label: 'Agrabad' },
-			{ label: 'Patenga' },
-			{ label: 'Chawkbazar' },
-			{ label: 'Hathazari' },
-		],
-	},
-	{
-		district: 'Rajshahi',
-		cities: [
-			{ label: 'Motihar' },
-			{ label: 'Boalia' },
-			{ label: 'Paba' },
-			{ label: 'Rajpara' },
-			{ label: 'Shah Makhdum' },
-		],
-	},
-	{
-		district: 'Khulna',
-		cities: [
-			{ label: 'Khalishpur' },
-			{ label: 'Sonadanga' },
-			{ label: 'Daulatpur' },
-			{ label: 'Rupsha' },
-			{ label: 'Khan Jahan Ali' },
-		],
-	},
-	{
-		district: 'Sylhet',
-		cities: [
-			{ label: 'Bandar Bazar' },
-			{ label: 'Zindabazar' },
-			{ label: 'Ambarkhana' },
-			{ label: 'Tilagor' },
-			{ label: 'Uposhohor' },
-		],
-	},
+	{ label: 'Dhanmondi' },
+	{ label: 'Gulshan' },
+	{ label: 'Banani' },
+	{ label: 'Mirpur' },
+	{ label: 'Uttara' },
+
+	{ label: 'Pahartali' },
+	{ label: 'Agrabad' },
+	{ label: 'Patenga' },
+	{ label: 'Chawkbazar' },
+	{ label: 'Hathazari' },
+
+	{ label: 'Motihar' },
+	{ label: 'Boalia' },
+	{ label: 'Paba' },
+	{ label: 'Rajpara' },
+	{ label: 'Shah Makhdum' },
+
+	{ label: 'Khalishpur' },
+	{ label: 'Sonadanga' },
+	{ label: 'Daulatpur' },
+	{ label: 'Rupsha' },
+	{ label: 'Khan Jahan Ali' },
+
+	{ label: 'Bandar Bazar' },
+	{ label: 'Zindabazar' },
+	{ label: 'Ambarkhana' },
+	{ label: 'Tilagor' },
+	{ label: 'Uposhohor' },
 ];

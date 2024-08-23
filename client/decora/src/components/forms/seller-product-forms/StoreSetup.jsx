@@ -9,7 +9,6 @@ import { baseUrl } from '../../../utils/BaseURL';
 import { toast, ToastContainer } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { handleSteps } from '../../../features/seller/sellerVerificationSlice';
-import { useParams } from 'react-router-dom';
 
 function StoreSetup() {
 	const theme = useTheme();
@@ -20,12 +19,8 @@ function StoreSetup() {
 	const [profileImage, setProfileImage] = useState({});
 	const [msg, setMsg] = useState([]);
 
-	const { id } = useParams();
-	console.log(id);
-
 	async function handleStoreSetup(e) {
 		e.preventDefault();
-		console.log('Profile Image:', profileImage);
 
 		const formData = new FormData();
 		formData.append('storeName', storeName);

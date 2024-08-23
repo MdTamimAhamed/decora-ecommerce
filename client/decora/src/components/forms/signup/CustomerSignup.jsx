@@ -25,8 +25,6 @@ function CustomerSignup() {
 
 	const { loginWithRedirect } = useAuth0();
 
-	console.log('date of birth: ' + dob);
-
 	async function handleFormSubmission(e) {
 		e.preventDefault();
 
