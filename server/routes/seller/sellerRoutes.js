@@ -47,6 +47,11 @@ router.post(
 	sellerLogin
 );
 
-router.post('/products/store-setup', profileImageStorage, handleStoreSetup);
+router.post(
+	'/products/store-setup',
+	profileImageStorage.single('profileImage'),
+	handleStoreSetup
+);
+router.get('/products/preview-profile/:seller_id');
 
 module.exports = router;

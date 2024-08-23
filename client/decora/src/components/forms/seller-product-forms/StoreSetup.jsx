@@ -9,6 +9,7 @@ import { baseUrl } from '../../../utils/BaseURL';
 import { toast, ToastContainer } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { handleSteps } from '../../../features/seller/sellerVerificationSlice';
+import { useParams } from 'react-router-dom';
 
 function StoreSetup() {
 	const theme = useTheme();
@@ -18,6 +19,9 @@ function StoreSetup() {
 	const [storeSubtitle, setStoreSubtitle] = useState('');
 	const [profileImage, setProfileImage] = useState({});
 	const [msg, setMsg] = useState([]);
+
+	const { id } = useParams();
+	console.log(id);
 
 	async function handleStoreSetup(e) {
 		e.preventDefault();
@@ -38,22 +42,14 @@ function StoreSetup() {
 				const { message } = response.data;
 				setMsg(message[0]);
 				toast.success(message[1]);
-				dispatch(handleSteps({ step: 1 }));
+				setTimeout(() => {
+					dispatch(handleSteps({ step: 1 }));
+				}, 2000);
 			}
 		} catch (error) {
 			console.errorr(error);
 		}
 	}
-
-	useEffect(() => {
-		const fetchProfileImage = async () => {
-			try {
-				const response = await axios.get(
-					`${baseUrl}/seller/products/store-setup`
-				);
-			} catch (error) {}
-		};
-	}, []);
 
 	return (
 		<Box
@@ -93,8 +89,14 @@ function StoreSetup() {
 					mt: '2px',
 					borderStyle: 'dashed',
 				}}>
-				<Box>
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'center',
+					}}>
 					<InputFileUpload setState={setProfileImage} />
+					{profileImage && <Typography>{profileImage.name}</Typography>}
 					<Typography
 						variant='subtitle2'
 						color={alpha(theme.palette.primary.main, 0.5)}>

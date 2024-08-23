@@ -3,7 +3,7 @@ import { createSlice, current } from '@reduxjs/toolkit';
 const sellerVerificationSlice = createSlice({
 	name: 'sellerVerify',
 	initialState: {
-		currentStep: 0,
+		currentStep: 1,
 	},
 	reducers: {
 		handleSteps: (state, action) => {

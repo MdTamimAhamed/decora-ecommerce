@@ -30,15 +30,15 @@ const sellerSchema = new mongoose.Schema({
 	//---------------------setp0--------------------Store
 	storeName: {
 		type: String,
-		require: true,
+		required: true,
 	},
 	storeSubtitle: {
 		type: String,
-		require: true,
+		required: true,
 	},
 	profileImage: {
 		type: String,
-		require: true,
+		required: true,
 	},
 
 	//---------------------setp1--------------------address
@@ -94,6 +94,10 @@ const sellerSchema = new mongoose.Schema({
 		branchName: {
 			type: String,
 		},
+	},
+	sellerId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Seller',
 	},
 });
 
