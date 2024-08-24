@@ -7,7 +7,7 @@ const storage = multer.diskStorage({
 			__dirname,
 			'../..',
 			'/public',
-			'sellerProfiles'
+			'seller_uploads'
 		);
 
 		cb(null, storagePath);
@@ -20,8 +20,8 @@ const storage = multer.diskStorage({
 	},
 });
 
-const profileImageStorage = multer({ storage: storage });
+const sellerUploads = multer({ storage: storage });
 
 module.exports = {
-	profileImageStorage,
+	sellerUploads,
 };

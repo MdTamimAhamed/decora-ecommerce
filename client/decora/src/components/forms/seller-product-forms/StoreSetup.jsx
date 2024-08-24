@@ -8,7 +8,11 @@ import axios from 'axios';
 import { baseUrl } from '../../../utils/BaseURL';
 import { toast, ToastContainer } from 'react-toastify';
 import { useDispatch } from 'react-redux';
-import { handleSteps } from '../../../features/seller/sellerVerificationSlice';
+import {
+	handleSellerDocumentId,
+	handleSteps,
+} from '../../../features/seller/sellerVerificationSlice';
+import { useSelector } from 'react-redux';
 
 function StoreSetup() {
 	const theme = useTheme();
@@ -19,6 +23,9 @@ function StoreSetup() {
 	const [profileImage, setProfileImage] = useState({});
 	const [msg, setMsg] = useState([]);
 
+	const { sellerInfo } = useSelector((state) => state.auth);
+	const sellerId = sellerInfo._id;
+
 	async function handleStoreSetup(e) {
 		e.preventDefault();
 
@@ -26,6 +33,7 @@ function StoreSetup() {
 		formData.append('storeName', storeName);
 		formData.append('storeSubtitle', storeSubtitle);
 		formData.append('profileImage', profileImage);
+		formData.append('sellerId', sellerId);
 
 		try {
 			const response = await axios.post(
@@ -34,7 +42,10 @@ function StoreSetup() {
 				{ headers: { 'Content-Type': 'multipart/form-data' } }
 			);
 			if (response.status === 200) {
-				const { message } = response.data;
+				const { message, sellerDocumentId } = response.data;
+				dispatch(
+					handleSellerDocumentId({ sellerDocumentId: sellerDocumentId })
+				);
 				setMsg(message[0]);
 				toast.success(message[1]);
 				setTimeout(() => {
@@ -42,7 +53,7 @@ function StoreSetup() {
 				}, 2000);
 			}
 		} catch (error) {
-			console.errorr(error);
+			console.error(error);
 		}
 	}
 
@@ -72,7 +83,9 @@ function StoreSetup() {
 				/>
 			</Box>
 
-			<Typography variant='subtitle2'>Upload Store/Profile Image</Typography>
+			<Typography variant='subtitle2' sx={{ color: 'rgba(0,0,0,0.4)' }}>
+				Upload Store/Profile Image
+			</Typography>
 			<Paper
 				variant='outlined'
 				sx={{

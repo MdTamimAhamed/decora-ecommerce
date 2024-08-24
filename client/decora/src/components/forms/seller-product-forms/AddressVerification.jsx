@@ -30,9 +30,7 @@ function AddressVerification() {
 	const [postCode, setPostCode] = useState('');
 	const [address, setAddress] = useState('');
 
-	const { sellerInfo } = useSelector((state) => state.auth);
-	const sellerId = sellerInfo._id;
-	console.log(sellerId);
+	const { sellerDocumentId } = useSelector((state) => state.sellerVerify);
 
 	async function handleAddressVerification(e) {
 		e.preventDefault();
@@ -40,7 +38,7 @@ function AddressVerification() {
 		try {
 			const response = await axios.post(
 				`${baseUrl}/seller/products/address-verification`,
-				{ country, district, area, postCode, address, sellerId },
+				{ country, district, area, postCode, address, sellerDocumentId },
 				{ headers: { 'Content-Type': 'application/json' } }
 			);
 

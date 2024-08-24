@@ -27,6 +27,11 @@ const sellerSignupSchema = new mongoose.Schema({
 });
 
 const sellerSchema = new mongoose.Schema({
+	sellerId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Seller',
+		required: true,
+	},
 	//---------------------setp0--------------------Store
 	storeName: {
 		type: String,
@@ -95,10 +100,9 @@ const sellerSchema = new mongoose.Schema({
 			type: String,
 		},
 	},
-	sellerId: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Seller',
-		required: true,
+	isSellerVerified: {
+		type: Boolean,
+		default: false,
 	},
 });
 

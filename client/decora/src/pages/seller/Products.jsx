@@ -9,11 +9,16 @@ import {
 	styled,
 	Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
 import { useTheme } from '@mui/material';
+import { useSelector } from 'react-redux';
 import StoreSetup from '../../components/forms/seller-product-forms/StoreSetup';
 import AddressVerification from '../../components/forms/seller-product-forms/AddressVerification';
-import { useSelector } from 'react-redux';
+import NIDVerification from '../../components/forms/seller-product-forms/NIDVerification';
+import BankDetails from '../../components/forms/seller-product-forms/BankDetails';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { baseUrl } from '../../utils/BaseURL';
+import AddProducts from './AddProducts';
 
 const StyledBackgroundImage = styled(Box)(() => ({
 	marginTop: '20px',
@@ -36,7 +41,29 @@ const Overlay = styled(Box)(() => ({
 
 function Products() {
 	const theme = useTheme();
-	const { currentStep } = useSelector((state) => state.sellerVerify);
+	const [isSellerVerified, setIsSellerVerified] = useState(false);
+
+	const { currentStep, sellerDocumentId } = useSelector(
+		(state) => state.sellerVerify
+	);
+
+	useEffect(() => {
+		const getUserVerificationConfirmation = async () => {
+			try {
+				const response = await axios.get(
+					`${baseUrl}/seller/confirm-verification`,
+					{ sellerDocumentId }
+				);
+
+				if (response.status === 200) {
+					setIsSellerVerified(true);
+				}
+			} catch (error) {
+				console.error(error);
+			}
+		};
+		getUserVerificationConfirmation();
+	}, [sellerDocumentId]);
 
 	const steps = [
 		'Store Setup',
@@ -75,39 +102,45 @@ function Products() {
 				</Overlay>
 			</Box>
 
-			<Box sx={{ width: '100%' }}>
-				<Divider sx={{ mt: '20px' }} />
-				<Typography
-					variant='h6'
-					color='error'
-					sx={{ textAlign: 'center', my: '40px', fontWeight: '600' }}>
-					Please complete the following steps to add your first product to the
-					store and start selling!
-				</Typography>
-				<Box sx={{ mt: 4 }}>
-					<Stepper activeStep={currentStep} alternativeLabel>
-						{steps.map((label) => (
-							<Step key={label}>
-								<Typography
-									variant='subtitle2'
-									sx={{
-										mt: '2px',
-										lineHeight: '8px',
-										fontSize: '0.8em',
-										color: theme.palette.grey[500],
-									}}>
-									<StepLabel>{label}</StepLabel>
-								</Typography>
-							</Step>
-						))}
-					</Stepper>
+			{isSellerVerified ? (
+				<Box sx={{ width: '100%', mb: 10 }}>
+					<Divider sx={{ mt: '20px' }} />
+					<Typography
+						variant='h6'
+						color='error'
+						sx={{ textAlign: 'center', my: '40px', fontWeight: '600' }}>
+						Please complete the following steps to add your first product to the
+						store and start selling!
+					</Typography>
+					<Box sx={{ mt: 4 }}>
+						<Stepper activeStep={currentStep} alternativeLabel>
+							{steps.map((label) => (
+								<Step key={label}>
+									<Typography
+										variant='subtitle2'
+										sx={{
+											mt: '2px',
+											lineHeight: '8px',
+											fontSize: '0.8em',
+											color: theme.palette.grey[500],
+										}}>
+										<StepLabel>{label}</StepLabel>
+									</Typography>
+								</Step>
+							))}
+						</Stepper>
 
-					<Paper variant='outlined' sx={{ mt: 6 }}>
-						{currentStep === 0 && <StoreSetup />}
-						{currentStep === 1 && <AddressVerification />}
-					</Paper>
+						<Paper variant='outlined' sx={{ mt: 6 }}>
+							{currentStep === 0 && <StoreSetup />}
+							{currentStep === 1 && <AddressVerification />}
+							{currentStep === 2 && <NIDVerification />}
+							{currentStep === 3 && <BankDetails />}
+						</Paper>
+					</Box>
 				</Box>
-			</Box>
+			) : (
+				<AddProducts />
+			)}
 		</>
 	);
 }

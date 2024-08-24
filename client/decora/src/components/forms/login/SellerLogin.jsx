@@ -109,7 +109,6 @@ function SellerLogin() {
 						to='/seller/register'>
 						Create a new account
 					</Typography>
-					
 				</Box>
 			</Box>
 		</>

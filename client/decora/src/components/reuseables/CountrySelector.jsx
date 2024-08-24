@@ -8,6 +8,8 @@ import {
 	areas,
 } from '../../utils/country-district-area-postalcode';
 
+import { bangladeshBanks } from '../../utils/bank-names';
+
 export default function CountrySelector({
 	label,
 	size,
@@ -21,7 +23,8 @@ export default function CountrySelector({
 			options={
 				(selectOption === 'country' && countries) ||
 				(selectOption === 'district' && bangladeshDistricts) ||
-				(selectOption === 'area' && areas)
+				(selectOption === 'area' && areas) ||
+				(selectOption === 'bank' && bangladeshBanks)
 			}
 			autoHighlight
 			getOptionLabel={(option) => option.label}

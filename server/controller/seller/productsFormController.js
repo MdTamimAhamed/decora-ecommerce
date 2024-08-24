@@ -1,7 +1,5 @@
-const {
-	SellerDocumentsModel,
-	SellerModel,
-} = require('../../models/users/seller_model');
+const { SellerDocumentsModel } = require('../../models/users/seller_model');
+const bcrypt = require('bcrypt');
 
 async function handleStoreSetup(req, res, next) {
 	try {
@@ -9,8 +7,9 @@ async function handleStoreSetup(req, res, next) {
 			return res.status(400).json({ message: 'No file uploaded!' });
 		}
 
-		const { storeName, storeSubtitle } = req.body;
+		const { storeName, storeSubtitle, sellerId } = req.body;
 		const storeSetup = new SellerDocumentsModel({
+			sellerId,
 			storeName,
 			storeSubtitle,
 			profileImage: req.file.filename,
@@ -19,7 +18,7 @@ async function handleStoreSetup(req, res, next) {
 		const savedStoreSetup = await storeSetup.save();
 		res.status(200).json({
 			message: ['File uploaded successfully!', 'Saved!'],
-			verificationId: savedStoreSetup._id,
+			sellerDocumentId: savedStoreSetup._id,
 		});
 	} catch (error) {
 		console.error(error);
@@ -29,11 +28,12 @@ async function handleStoreSetup(req, res, next) {
 
 async function handleAddressVerification(req, res, next) {
 	try {
-		const { country, district, area, postCode, address, sellerId } = req.body;
+		const { country, district, area, postCode, address, sellerDocumentId } =
+			req.body;
 
-		await SellerDocumentsModel.findOneAndUpdate(
+		const newAddress = await SellerDocumentsModel.findOneAndUpdate(
 			{
-				sellerId: sellerId,
+				_id: sellerDocumentId,
 			},
 			{
 				address: {
@@ -44,10 +44,113 @@ async function handleAddressVerification(req, res, next) {
 					address,
 				},
 			},
-			{ new: true, upsert: true }
+			{ new: true }
 		);
 
+		if (!newAddress) {
+			res
+				.status(404)
+				.json({ message: 'Something went wrong! Seller not found!' });
+		}
+
 		res.status(200).json({ message: 'Saved!' });
+	} catch (error) {
+		next(error);
+	}
+}
+
+async function handleNIDVerification(req, res, next) {
+	try {
+		if (!req.files) {
+			return res.status(400).json({ message: 'No file uploaded!' });
+		}
+		const { sellerDocumentId, nidName, nidNumber } = req.body;
+		const salt = await bcrypt.genSalt(10);
+		const hashedNidNumber = await bcrypt.hash(nidNumber, salt);
+
+		const newNid = await SellerDocumentsModel.findOneAndUpdate(
+			{ _id: sellerDocumentId },
+			{
+				nidInformation: {
+					nidFront: req.files.nidFront[0].filename,
+					nidBack: req.files.nidBack[0].filename,
+					nidName,
+					nidNumber: hashedNidNumber,
+				},
+			},
+			{ new: true }
+		);
+
+		if (!newNid) {
+			res
+				.status(404)
+				.json({ message: 'Something went wrong! Seller not found!' });
+		}
+		res.status(200).json({ message: 'Saved!' });
+	} catch (error) {
+		next(error);
+	}
+}
+
+async function handleBankDetails(req, res, next) {
+	try {
+		if (!req.file) {
+			return res.status(400).json({ message: 'No file uploaded!' });
+		}
+
+		const {
+			accountName,
+			accountNumber,
+			bankName,
+			branchName,
+			sellerDocumentId,
+		} = req.body;
+		const salt = await bcrypt.genSalt(10);
+		const hashedAccountNumber = await bcrypt.hash(accountNumber, salt);
+
+		const newBankDetails = await SellerDocumentsModel.findOneAndUpdate(
+			{ _id: sellerDocumentId },
+			{
+				bankInformation: {
+					bankStatement: req.file.filename,
+					accountName,
+					accountNumber: hashedAccountNumber,
+					bankName,
+					branchName,
+				},
+				isSellerVerified: true,
+			},
+			{ new: true }
+		);
+
+		if (!newBankDetails) {
+			res
+				.status(404)
+				.json({ message: 'Something went wrong! Seller not found!' });
+		}
+
+		res.status(200).json({ message: 'Saved!', confirmation: true });
+	} catch (error) {
+		next(error);
+	}
+}
+
+async function confirmVerification(req, res, next) {
+	try {
+		const { sellerDocumentId } = req.body;
+		if (!sellerDocumentId) {
+			res.status(404).json({ message: 'Seller is not verified or not found!' });
+		} else {
+			const getConfirmation = await SellerDocumentsModel.findOne({
+				isSellerVerified,
+			});
+
+			if (!getConfirmation) {
+				res.status(400).json({ message: 'Seller is not verified!' });
+			} else {
+				res.status(200);
+			}
+		}
 	} catch (error) {
 		next(error);
 	}
@@ -56,4 +159,7 @@ async function handleAddressVerification(req, res, next) {
 module.exports = {
 	handleStoreSetup,
 	handleAddressVerification,
+	handleNIDVerification,
+	handleBankDetails,
+	confirmVerification,
 };
