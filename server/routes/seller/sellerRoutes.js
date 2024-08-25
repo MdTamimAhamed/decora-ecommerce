@@ -29,6 +29,7 @@ const {
 const {
 	sellerUploads,
 } = require('../../controller/uploads/uploadsControllers');
+const { authMiddleware } = require('../../middlewares/auth/authMiddleware');
 
 //------------------------Routes----------------------------//
 //----------------------------------------------------------//
@@ -87,6 +88,10 @@ router.post(
 );
 
 //----------------------------------------------------------//
-router.get('/confirm-verification', confirmVerification);
+router.get(
+	'/confirm-verification',
+	authMiddleware('seller'),
+	confirmVerification
+);
 
 module.exports = router;

@@ -59,7 +59,11 @@ function DashboardNavbar() {
 								<IconButton>
 									<AccountCircleIcon color='primary' />
 								</IconButton>
-								<Button variant='outlined' onClick={handleLogout}>
+								<Button
+									variant='outlined'
+									color='error'
+									size='small'
+									onClick={handleLogout}>
 									Logout
 								</Button>
 							</Box>

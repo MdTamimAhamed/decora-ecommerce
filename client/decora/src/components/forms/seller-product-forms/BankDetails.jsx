@@ -11,7 +11,7 @@ import axios from 'axios';
 import CountrySelector from '../../reuseables/CountrySelector';
 import { useNavigate } from 'react-router-dom';
 
-function BankDetails() {
+function BankDetails({ setState }) {
 	const theme = useTheme();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -44,11 +44,11 @@ function BankDetails() {
 
 			if (response.status === 200) {
 				const { message } = response.data;
-
 				toast.success(message);
 				setTimeout(() => {
 					navigate('/products');
-				}, 2000);
+					window.location.reload();
+				}, 1500);
 			}
 		} catch (error) {
 			console.error(error);

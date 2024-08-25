@@ -40,7 +40,7 @@ function SellerLogin() {
 				toast.success(message);
 				setTimeout(() => {
 					navigate('/products');
-				}, 2000);
+				}, 1000);
 			}
 		} catch (error) {
 			if (error.response && error.response.data.errors) {

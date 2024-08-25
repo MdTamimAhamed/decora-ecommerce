@@ -1,8 +1,11 @@
 import React from 'react';
 import '../index.css';
 
-import Products from '../pages/seller/Products.jsx';
+import Products from '../pages/seller/Products/Products.jsx';
+import MyStore from '../pages/seller/MyStore.jsx';
 import Dashboard from '../pages/seller/Dashboard.jsx';
+import AddProducts from '../pages/seller/Products/AddProducts.jsx';
+import ManageProducts from '../pages/seller/Products/ManageProducts.jsx';
 
 import CustomerRoot from '../layout/customer/CustomerRoot.jsx';
 import CustomerSignup from '../components/forms/signup/CustomerSignup.jsx';
@@ -48,7 +51,11 @@ const router = createBrowserRouter(
 					</PrivateRoute>
 				}
 				replace>
-				<Route path='products' element={<Products />} />
+				<Route path='products' element={<Products />}>
+					<Route path='add-products' element={<AddProducts />} />
+					<Route path='manage-products' element={<ManageProducts />} />
+				</Route>
+				<Route path='store' element={<MyStore />} />
 				<Route path='dashboard' element={<Dashboard />} />
 			</Route>
 		</>

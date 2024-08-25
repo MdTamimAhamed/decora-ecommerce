@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 function authMiddleware(role) {
 	return (req, res, next) => {
@@ -14,8 +15,9 @@ function authMiddleware(role) {
 		}
 
 		try {
-			const isVerified = jwt.verify(token, process.env.SECRETE_STRING);
-			const userRole = isVerified.role;
+			const decoded = jwt.verify(token, process.env.SECRETE_STRING);
+			req.body.sellerId = decoded._id;
+			const userRole = decoded.role;
 
 			if (role && userRole !== role) {
 				return res.status(403).json({ error: 'Access denied: invalid role. ' });

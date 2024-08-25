@@ -129,7 +129,7 @@ async function handleBankDetails(req, res, next) {
 				.json({ message: 'Something went wrong! Seller not found!' });
 		}
 
-		res.status(200).json({ message: 'Saved!', confirmation: true });
+		res.status(200).json({ message: 'Saved!' });
 	} catch (error) {
 		next(error);
 	}
@@ -137,19 +137,21 @@ async function handleBankDetails(req, res, next) {
 
 async function confirmVerification(req, res, next) {
 	try {
-		const { sellerDocumentId } = req.body;
-		if (!sellerDocumentId) {
-			res.status(404).json({ message: 'Seller is not verified or not found!' });
-		} else {
-			const getConfirmation = await SellerDocumentsModel.findOne({
-				isSellerVerified,
-			});
+		const { sellerId } = req.body;
+		const getConfirmation = await SellerDocumentsModel.findOne(
+			{
+				sellerId: sellerId,
+			},
+			'isSellerVerified'
+		);
 
-			if (!getConfirmation) {
-				res.status(400).json({ message: 'Seller is not verified!' });
-			} else {
-				res.status(200);
-			}
+		if (!getConfirmation) {
+			res.status(400).json({ message: 'Seller document not found!' });
+		} else {
+			res.status(200).json({
+				message: 'Seller is verified!',
+				verified: getConfirmation.isSellerVerified,
+			});
 		}
 	} catch (error) {
 		next(error);

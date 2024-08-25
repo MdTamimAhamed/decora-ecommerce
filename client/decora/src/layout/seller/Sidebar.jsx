@@ -1,12 +1,14 @@
 import {
 	Box,
+	Collapse,
 	Divider,
+	ListItemButton,
 	ListItemText,
 	MenuItem,
 	MenuList,
 	Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material';
 import SearchBar from '../../components/reuseables/SearchBar';
 import WarehouseIcon from '@mui/icons-material/Warehouse';
@@ -19,14 +21,28 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import SettingsIcon from '@mui/icons-material/Settings';
 import StoreIcon from '@mui/icons-material/Store';
+import { useNavigate } from 'react-router-dom';
+import { ExpandLess, ExpandMore, Visibility } from '@mui/icons-material';
 
 function Sidebar() {
 	const theme = useTheme();
+	const navigate = useNavigate();
+	const [activeNav, setActiveNav] = useState(null);
+	const [open, setOpen] = useState(false);
 
 	const navOptions = [
-		{ id: 0, name: 'Products', icon: <WarehouseIcon /> },
-		{ id: 1, name: 'My Store', icon: <StoreIcon /> },
-		{ id: 2, name: 'Dashboard', icon: <DashboardIcon /> },
+		{ id: 0, name: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
+		{
+			id: 1,
+			name: 'Products',
+			path: 'products',
+			icon: <WarehouseIcon />,
+			subNavCategory: [
+				{ id: 0, name: 'Add Products', path: '/products/add-products' },
+				{ id: 1, name: 'Manage Products', path: '/products/manage-products' },
+			],
+		},
+		{ id: 2, name: 'My Store', path: '/store', icon: <StoreIcon /> },
 		{ id: 3, name: 'Orders', icon: <ViewListIcon /> },
 		{ id: 4, name: 'Customers', icon: <PeopleIcon /> },
 		{ id: 5, name: 'Analytics', icon: <BarChartIcon /> },
@@ -35,6 +51,24 @@ function Sidebar() {
 		{ id: 8, name: 'Supports', icon: <SupportAgentIcon /> },
 		{ id: 9, name: 'Settings', icon: <SettingsIcon /> },
 	];
+
+	useEffect(() => {
+		const currentPath = location.pathname;
+		const currentNavItem = navOptions.find((item) => item.path === currentPath);
+		if (currentNavItem) {
+			setActiveNav(currentNavItem.id);
+		}
+	}, [location.pathname]);
+
+	function handleClick(id, path) {
+		setActiveNav(id);
+		navigate(path);
+		setOpen(!open);
+	}
+
+	function subCategoryHandleClick(path) {
+		navigate(path);
+	}
 	return (
 		<Box
 			sx={{
@@ -64,12 +98,64 @@ function Sidebar() {
 			<Box>
 				<MenuList>
 					{navOptions.map((item) => (
-						<MenuItem key={item.id}>
-							<Typography color='white'>{item.icon}</Typography>
-							<ListItemText sx={{ ml: '10px', color: 'white' }}>
-								{item.name}
-							</ListItemText>
-						</MenuItem>
+						<>
+							<MenuItem
+								disableRipple
+								onClick={() => handleClick(item.id, item.path)}
+								key={item.id}
+								sx={{
+									bgcolor: activeNav === item.id && 'white',
+									'&:hover': {
+										bgcolor: activeNav === item.id ? 'white' : '',
+									},
+									transition: 'all',
+									transitionDuration: '100ms',
+									transitionTimingFunction: 'ease-in',
+								}}>
+								<Typography
+									sx={{
+										color:
+											activeNav === item.id
+												? `${theme.palette.primary.main}`
+												: 'white',
+									}}>
+									{item.icon}
+								</Typography>
+								<ListItemText
+									sx={{
+										ml: '10px',
+										color:
+											activeNav === item.id
+												? `${theme.palette.primary.main}`
+												: 'white',
+									}}>
+									{item.name}
+								</ListItemText>
+								<Box
+									sx={{
+										visibility: item.subNavCategory ? 'visible' : 'hidden',
+										color: `${theme.palette.primary.main}`,
+									}}>
+									{open ? <ExpandLess /> : <ExpandMore />}
+								</Box>
+							</MenuItem>
+							{item.subNavCategory && (
+								<Collapse in={activeNav === item.id && open}>
+									{item.subNavCategory.map((subCategory) => (
+										<ListItemButton
+											onClick={() => subCategoryHandleClick(subCategory.path)}
+											sx={{ py: 0, ml: 4 }}
+											key={subCategory.id}>
+											<ListItemText sx={{ color: 'white' }}>
+												<Typography fontWeight={300} variant='subtitle2'>
+													{subCategory.name}
+												</Typography>
+											</ListItemText>
+										</ListItemButton>
+									))}
+								</Collapse>
+							)}
+						</>
 					))}
 				</MenuList>
 			</Box>

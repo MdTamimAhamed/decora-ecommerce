@@ -191,7 +191,7 @@ async function sellerLogin(req, res, next) {
 
 				//token
 				const token = jwt.sign(sellerInfo, process.env.SECRETE_STRING, {
-					expiresIn: '10m',
+					expiresIn: '7d',
 				});
 
 				//response

@@ -11,14 +11,17 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material';
 import { useSelector } from 'react-redux';
-import StoreSetup from '../../components/forms/seller-product-forms/StoreSetup';
-import AddressVerification from '../../components/forms/seller-product-forms/AddressVerification';
-import NIDVerification from '../../components/forms/seller-product-forms/NIDVerification';
-import BankDetails from '../../components/forms/seller-product-forms/BankDetails';
+import StoreSetup from '../../../components/forms/seller-product-forms/StoreSetup';
+import AddressVerification from '../../../components/forms/seller-product-forms/AddressVerification';
+import NIDVerification from '../../../components/forms/seller-product-forms/NIDVerification';
+import BankDetails from '../../../components/forms/seller-product-forms/BankDetails';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { baseUrl } from '../../utils/BaseURL';
+import { baseUrl } from '../../../utils/BaseURL';
 import AddProducts from './AddProducts';
+import ReactLoading from 'react-loading';
+import { toast } from 'react-toastify';
+import { Outlet } from 'react-router-dom';
 
 const StyledBackgroundImage = styled(Box)(() => ({
 	marginTop: '20px',
@@ -42,28 +45,37 @@ const Overlay = styled(Box)(() => ({
 function Products() {
 	const theme = useTheme();
 	const [isSellerVerified, setIsSellerVerified] = useState(false);
-
-	const { currentStep, sellerDocumentId } = useSelector(
-		(state) => state.sellerVerify
-	);
+	const [loading, setLoading] = useState(true);
+	const { currentStep } = useSelector((state) => state.sellerVerify);
 
 	useEffect(() => {
 		const getUserVerificationConfirmation = async () => {
+			const token = localStorage.getItem('sellerToken');
 			try {
 				const response = await axios.get(
 					`${baseUrl}/seller/confirm-verification`,
-					{ sellerDocumentId }
+					{ headers: { Authorization: `Bearer ${token}` } }
 				);
 
 				if (response.status === 200) {
-					setIsSellerVerified(true);
+					const { verified } = response.data;
+					setIsSellerVerified(verified);
 				}
 			} catch (error) {
-				console.error(error);
+				if (error.response && error.response.data.error === 'jwt expired') {
+					toast.error('Session expired! Please log in again!');
+					setInterval(() => {
+						localStorage.removeItem('sellerToken');
+					}, 1000);
+				} else {
+					console.error('Something went wrong!', error.message);
+				}
+			} finally {
+				setLoading(false);
 			}
 		};
 		getUserVerificationConfirmation();
-	}, [sellerDocumentId]);
+	}, []);
 
 	const steps = [
 		'Store Setup',
@@ -102,7 +114,17 @@ function Products() {
 				</Overlay>
 			</Box>
 
-			{isSellerVerified ? (
+			{loading ? (
+				<Box
+					sx={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						height: '50vh',
+					}}>
+					<ReactLoading type='bubbles' color={theme.palette.primary.main} />
+				</Box>
+			) : !isSellerVerified ? (
 				<Box sx={{ width: '100%', mb: 10 }}>
 					<Divider sx={{ mt: '20px' }} />
 					<Typography
@@ -134,12 +156,14 @@ function Products() {
 							{currentStep === 0 && <StoreSetup />}
 							{currentStep === 1 && <AddressVerification />}
 							{currentStep === 2 && <NIDVerification />}
-							{currentStep === 3 && <BankDetails />}
+							{currentStep === 3 && (
+								<BankDetails setState={setIsSellerVerified} />
+							)}
 						</Paper>
 					</Box>
 				</Box>
 			) : (
-				<AddProducts />
+				<Outlet />
 			)}
 		</>
 	);

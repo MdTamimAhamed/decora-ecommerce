@@ -100,8 +100,8 @@ function NIDVerification() {
 
 				{/* nidback */}
 				<Box sx={{ flex: 1, minWidth: 0 }}>
-					<Typography variant='subtitle1' sx={{ color: 'rgba(0,0,0,0.4)' }}>
-						Upload NID Back
+					<Typography variant='subtitle' sx={{ color: 'rgba(0,0,0,0.4)' }}>
+						Upload NID Front
 					</Typography>
 					<Paper
 						variant='outlined'
