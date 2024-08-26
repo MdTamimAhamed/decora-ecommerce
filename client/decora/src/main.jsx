@@ -11,11 +11,11 @@ import { Auth0Provider } from '@auth0/auth0-react';
 import { ToastContainer } from 'react-toastify';
 
 const theme = createTheme({
-	// palette: {
-	// 	primary/custom color: {
-	// 		main: '#F25F1F',
-	// 	},
-	// },
+	palette: {
+		custom: {
+			dark_red: '#c30010',
+		},
+	},
 	typography: {
 		allVariants: {
 			fontFamily: "'Inter','Caveat', 'cursive', 'sans-serif'",

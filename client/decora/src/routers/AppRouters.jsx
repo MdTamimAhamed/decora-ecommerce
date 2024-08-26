@@ -6,6 +6,8 @@ import MyStore from '../pages/seller/MyStore.jsx';
 import Dashboard from '../pages/seller/Dashboard.jsx';
 import AddProducts from '../pages/seller/Products/AddProducts.jsx';
 import ManageProducts from '../pages/seller/Products/ManageProducts.jsx';
+import Orders from '../pages/seller/Orders/Orders.jsx';
+import ManageOrders from '../pages/seller/Orders/ManageOrders.jsx';
 
 import CustomerRoot from '../layout/customer/CustomerRoot.jsx';
 import CustomerSignup from '../components/forms/signup/CustomerSignup.jsx';
@@ -51,9 +53,12 @@ const router = createBrowserRouter(
 					</PrivateRoute>
 				}
 				replace>
-				<Route path='products' element={<Products />}>
-					<Route path='add-products' element={<AddProducts />} />
-					<Route path='manage-products' element={<ManageProducts />} />
+				<Route path='products' element={<Products />} />
+				<Route path='products/manage-products' element={<ManageProducts />} />
+				<Route path='products/add-products' element={<AddProducts />} />
+
+				<Route path='orders' element={<Orders />}>
+					<Route path='manage-orders' element={<ManageOrders />} />
 				</Route>
 				<Route path='store' element={<MyStore />} />
 				<Route path='dashboard' element={<Dashboard />} />

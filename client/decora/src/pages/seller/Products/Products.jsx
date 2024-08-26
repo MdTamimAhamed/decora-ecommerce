@@ -1,4 +1,5 @@
 import {
+	alpha,
 	Box,
 	Button,
 	Divider,
@@ -21,7 +22,7 @@ import { baseUrl } from '../../../utils/BaseURL';
 import AddProducts from './AddProducts';
 import ReactLoading from 'react-loading';
 import { toast } from 'react-toastify';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 
 const StyledBackgroundImage = styled(Box)(() => ({
 	marginTop: '20px',
@@ -44,8 +45,10 @@ const Overlay = styled(Box)(() => ({
 
 function Products() {
 	const theme = useTheme();
+	const navigate = useNavigate();
 	const [isSellerVerified, setIsSellerVerified] = useState(false);
 	const [loading, setLoading] = useState(true);
+
 	const { currentStep } = useSelector((state) => state.sellerVerify);
 
 	useEffect(() => {
@@ -77,6 +80,14 @@ function Products() {
 		getUserVerificationConfirmation();
 	}, []);
 
+	const handleAddProductsClick = () => {
+		if (!isSellerVerified) {
+			toast.error('Please complete the following 4 steps to add products!');
+		} else {
+			navigate('/products/add-products');
+		}
+	};
+
 	const steps = [
 		'Store Setup',
 		'Address Verification',
@@ -98,6 +109,7 @@ function Products() {
 						<Button
 							disableElevation={true}
 							variant='contained'
+							onClick={handleAddProductsClick}
 							sx={{
 								bgcolor: 'white',
 								color: 'black',
@@ -113,7 +125,6 @@ function Products() {
 					</Box>
 				</Overlay>
 			</Box>
-
 			{loading ? (
 				<Box
 					sx={{
@@ -125,45 +136,75 @@ function Products() {
 					<ReactLoading type='bubbles' color={theme.palette.primary.main} />
 				</Box>
 			) : !isSellerVerified ? (
-				<Box sx={{ width: '100%', mb: 10 }}>
-					<Divider sx={{ mt: '20px' }} />
-					<Typography
-						variant='h6'
-						color='error'
-						sx={{ textAlign: 'center', my: '40px', fontWeight: '600' }}>
-						Please complete the following steps to add your first product to the
-						store and start selling!
-					</Typography>
-					<Box sx={{ mt: 4 }}>
-						<Stepper activeStep={currentStep} alternativeLabel>
-							{steps.map((label) => (
-								<Step key={label}>
-									<Typography
-										variant='subtitle2'
-										sx={{
-											mt: '2px',
-											lineHeight: '8px',
-											fontSize: '0.8em',
-											color: theme.palette.grey[500],
-										}}>
-										<StepLabel>{label}</StepLabel>
-									</Typography>
-								</Step>
-							))}
-						</Stepper>
+				<>
+					<Box sx={{ width: '100%', mb: 10 }}>
+						<Divider sx={{ mt: '20px' }} />
+						<Typography
+							variant='h6'
+							color='error'
+							sx={{ textAlign: 'center', my: '40px', fontWeight: '600' }}>
+							Please complete the following steps to add your first product to
+							the store and start selling!
+						</Typography>
+						<Box sx={{ mt: 4 }}>
+							<Stepper activeStep={currentStep} alternativeLabel>
+								{steps.map((label) => (
+									<Step key={label}>
+										<Typography
+											variant='subtitle2'
+											sx={{
+												mt: '2px',
+												lineHeight: '8px',
+												fontSize: '0.8em',
+												color: theme.palette.grey[500],
+											}}>
+											<StepLabel>{label}</StepLabel>
+										</Typography>
+									</Step>
+								))}
+							</Stepper>
 
-						<Paper variant='outlined' sx={{ mt: 6 }}>
-							{currentStep === 0 && <StoreSetup />}
-							{currentStep === 1 && <AddressVerification />}
-							{currentStep === 2 && <NIDVerification />}
-							{currentStep === 3 && (
-								<BankDetails setState={setIsSellerVerified} />
-							)}
+							<Paper variant='outlined' sx={{ mt: 6 }}>
+								{currentStep === 0 && <StoreSetup />}
+								{currentStep === 1 && <AddressVerification />}
+								{currentStep === 2 && <NIDVerification />}
+								{currentStep === 3 && (
+									<BankDetails setState={setIsSellerVerified} />
+								)}
+							</Paper>
+						</Box>
+					</Box>
+				</>
+			) : (
+				<>
+					<Box>
+						<Paper
+							variant='outlined'
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								justifyContent: 'center',
+								alignItems: 'center',
+								minHeight: '150px',
+								borderStyle: 'dashed',
+								borderWidth: '2px',
+								bgcolor: alpha(theme.palette.primary.main, 0.1),
+								borderColor: alpha(theme.palette.primary.main, 0.5),
+								mt: 3,
+							}}>
+							<Button
+								variant='outlined'
+								sx={{ padding: '10px' }}
+								onClick={handleAddProductsClick}>
+								Add Products +
+							</Button>
 						</Paper>
 					</Box>
-				</Box>
-			) : (
-				<Outlet />
+
+					<Box sx={{ height: '200px' }}>
+						<Outlet />
+					</Box>
+				</>
 			)}
 		</>
 	);

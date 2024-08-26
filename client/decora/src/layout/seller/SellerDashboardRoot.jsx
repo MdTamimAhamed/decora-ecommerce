@@ -14,7 +14,7 @@ function SellerDashboardRoot() {
 			<Sidebar />
 			<Box sx={{ width: '100%' }}>
 				<DashboardNavbar />
-				<Container maxWidth='xl'>
+				<Container maxWidth='xl' sx={{ height: '95vh', overflowY: 'auto' }}>
 					<Outlet />
 				</Container>
 			</Box>

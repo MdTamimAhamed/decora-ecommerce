@@ -28,6 +28,7 @@ function Sidebar() {
 	const theme = useTheme();
 	const navigate = useNavigate();
 	const [activeNav, setActiveNav] = useState(null);
+	const [activeSubNav, setActiveSubNav] = useState(null);
 	const [open, setOpen] = useState(false);
 
 	const navOptions = [
@@ -35,7 +36,7 @@ function Sidebar() {
 		{
 			id: 1,
 			name: 'Products',
-			path: 'products',
+			path: '/products',
 			icon: <WarehouseIcon />,
 			subNavCategory: [
 				{ id: 0, name: 'Add Products', path: '/products/add-products' },
@@ -43,7 +44,21 @@ function Sidebar() {
 			],
 		},
 		{ id: 2, name: 'My Store', path: '/store', icon: <StoreIcon /> },
-		{ id: 3, name: 'Orders', icon: <ViewListIcon /> },
+		{
+			id: 3,
+			name: 'Orders',
+			path: '/orders',
+			icon: <ViewListIcon />,
+			subNavCategory: [
+				{ id: 0, name: 'Manage Orders', path: '/orders/manage-orders' },
+				{ id: 1, name: 'Customer Returns', path: '/products/manage-products' },
+				{
+					id: 2,
+					name: 'Schedule Drop-offs',
+					path: '/products/manage-products',
+				},
+			],
+		},
 		{ id: 4, name: 'Customers', icon: <PeopleIcon /> },
 		{ id: 5, name: 'Analytics', icon: <BarChartIcon /> },
 		{ id: 6, name: 'Reports', icon: <FlagIcon /> },
@@ -57,6 +72,15 @@ function Sidebar() {
 		const currentNavItem = navOptions.find((item) => item.path === currentPath);
 		if (currentNavItem) {
 			setActiveNav(currentNavItem.id);
+		} else {
+			navOptions.forEach((item) => {
+				const subNav = item.subNavCategory?.find(
+					(subItem) => subItem.path === currentPath
+				);
+				if (subNav) {
+					setActiveSubNav(subNav.id);
+				}
+			});
 		}
 	}, [location.pathname]);
 
@@ -66,8 +90,9 @@ function Sidebar() {
 		setOpen(!open);
 	}
 
-	function subCategoryHandleClick(path) {
+	function subCategoryHandleClick(id, path) {
 		navigate(path);
+		setActiveSubNav(id);
 	}
 	return (
 		<Box
@@ -97,12 +122,12 @@ function Sidebar() {
 			<Divider />
 			<Box>
 				<MenuList>
+					{/* ---------showing nav items------------ */}
 					{navOptions.map((item) => (
-						<>
+						<div key={item.id}>
 							<MenuItem
 								disableRipple
 								onClick={() => handleClick(item.id, item.path)}
-								key={item.id}
 								sx={{
 									bgcolor: activeNav === item.id && 'white',
 									'&:hover': {
@@ -131,31 +156,53 @@ function Sidebar() {
 									}}>
 									{item.name}
 								</ListItemText>
-								<Box
-									sx={{
-										visibility: item.subNavCategory ? 'visible' : 'hidden',
-										color: `${theme.palette.primary.main}`,
-									}}>
-									{open ? <ExpandLess /> : <ExpandMore />}
-								</Box>
+								{/* ---------------------------------------- */}
+
+								{/* ---------showing dropdown arrow------------ */}
+								{item.subNavCategory ? (
+									<Box
+										sx={{
+											color:
+												activeNav === item.id
+													? `${theme.palette.primary.main}`
+													: 'white',
+										}}>
+										{activeNav === item.id && open ? (
+											<ExpandLess />
+										) : (
+											<ExpandMore />
+										)}
+									</Box>
+								) : (
+									''
+								)}
+								{/* ---------------------------------------- */}
 							</MenuItem>
+
+							{/* ---------showing subcategories------------ */}
 							{item.subNavCategory && (
-								<Collapse in={activeNav === item.id && open}>
-									{item.subNavCategory.map((subCategory) => (
+								<Collapse sx={{ mt: '5px' }} in={activeNav === item.id && open}>
+									{item.subNavCategory.map((sub) => (
 										<ListItemButton
-											onClick={() => subCategoryHandleClick(subCategory.path)}
-											sx={{ py: 0, ml: 4 }}
-											key={subCategory.id}>
+											onClick={() => subCategoryHandleClick(sub.id, sub.path)}
+											sx={{
+												py: 0,
+												ml: 4,
+												borderBottom:
+													activeSubNav === sub.id ? '1px solid white' : '',
+											}}
+											key={sub.id}>
 											<ListItemText sx={{ color: 'white' }}>
 												<Typography fontWeight={300} variant='subtitle2'>
-													{subCategory.name}
+													{sub.name}
 												</Typography>
 											</ListItemText>
 										</ListItemButton>
 									))}
 								</Collapse>
 							)}
-						</>
+							{/* ---------------------------------------- */}
+						</div>
 					))}
 				</MenuList>
 			</Box>
