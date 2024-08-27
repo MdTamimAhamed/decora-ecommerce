@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, styled } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
@@ -14,14 +14,23 @@ const VisuallyHiddenInput = styled('input')({
 	width: 2,
 });
 
-function InputFileUploadSmall({ setState, uploadType }) {
+function InputFileUploadSmall({
+	setState,
+	limit,
+	setLimit,
+	uploadType,
+	maxUpload,
+}) {
 	function handleFileUpload(e) {
-		let filesArray = [];
-		console.log(filesArray);
-
 		if (uploadType === 'multiple' || uploadType === 'Multiple') {
-			filesArray = Array.from(e.target.files);
-			setState(filesArray);
+			const filesArray = Array.from(e.target.files);
+
+			filesArray.forEach((file) => {
+				setState((previousFile) => {
+					return [...previousFile, file];
+				});
+				setLimit((prevCount) => prevCount + 1);
+			});
 		} else {
 			setState(e.target.files[0]);
 		}
@@ -32,6 +41,7 @@ function InputFileUploadSmall({ setState, uploadType }) {
 			component='label'
 			role={undefined}
 			variant='outlined'
+			disabled={limit >= maxUpload ? true : false}
 			tabIndex={-1}
 			sx={{
 				my: '10px',

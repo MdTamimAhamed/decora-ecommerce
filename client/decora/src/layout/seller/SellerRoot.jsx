@@ -2,7 +2,6 @@ import { Box, Container, Paper, Typography } from '@mui/material';
 import SellerNavbar from './SellerNavbar';
 import { Outlet } from 'react-router-dom';
 
-import {} from '@mui/material';
 import React from 'react';
 import { styled } from '@mui/material';
 

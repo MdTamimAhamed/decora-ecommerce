@@ -5,6 +5,7 @@ function InputHandler({
 	labelName,
 	type,
 	state,
+	size,
 	setState,
 	placeholder,
 	autoComplete,
@@ -17,7 +18,7 @@ function InputHandler({
 				placeholder={placeholder}
 				id='outlined-basic'
 				variant='outlined'
-				size='small'
+				size={size || 'small'}
 				fullWidth
 				margin='dense'
 				value={state}
