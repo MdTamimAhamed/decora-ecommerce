@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import BasicInformation from './Add-Product-Sections/BasicInformation';
+import PriceStockVarient from './Add-Product-Sections/PriceStockVarient';
 
 function AddProducts() {
 	const theme = useTheme();
@@ -22,15 +23,24 @@ function AddProducts() {
 	];
 
 	return (
-		<Box sx={{ display: 'flex', gap: 5, mt: 5 }}>
-			{/* ----------basic information component--------- */}
-			<BasicInformation />
-			{/* ---------------------------------------------- */}
+		<Box
+			sx={{
+				width: '100%',
+				display: 'flex',
+				justifyContent: 'space-between',
+				gap: 5,
+				my: 5,
+			}}>
+			<Box sx={{ flexBasis: '70%' }}>
+				{/* ----------basic information component--------- */}
+				<BasicInformation />
+				{/* ----------product price-stock-varient--------- */}
+				<PriceStockVarient />
+			</Box>
 
-			<Box>
+			<Box sx={{ width: '250px' }}>
 				<Paper
 					sx={{
-						width: '250px',
 						padding: 3,
 						boxShadow: '0px 3px 10px rgba(0,0,0,0.1)',
 					}}>

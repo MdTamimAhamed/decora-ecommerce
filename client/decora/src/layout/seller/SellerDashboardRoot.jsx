@@ -14,7 +14,26 @@ function SellerDashboardRoot() {
 			<Sidebar />
 			<Box sx={{ width: '100%' }}>
 				<DashboardNavbar />
-				<Container maxWidth='xl' sx={{ height: '95vh', overflowY: 'auto' }}>
+				<Container
+					maxWidth='xl'
+					sx={{
+						height: '95vh',
+						overflowY: 'auto',
+						'&::-webkit-scrollbar': {
+							width: '4px',
+						},
+						'&::-webkit-scrollbar-track': {
+							backgroundColor: '#f1f1f1',
+						},
+						'&::-webkit-scrollbar-thumb': {
+							backgroundColor: '#ccc',
+
+							borderRadius: '0px',
+						},
+						'&::-webkit-scrollbar-thumb:hover': {
+							backgroundColor: '#bbb',
+						},
+					}}>
 					<Outlet />
 				</Container>
 			</Box>

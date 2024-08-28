@@ -28,6 +28,12 @@ function BasicInformation() {
 	const theme = useTheme();
 	const [cover, setCover] = useState(null);
 	const [files, setFiles] = useState([]);
+
+	const [productTitle, setProductTitle] = useState('');
+	const [productBanglaTitle, setProductBanglaTitle] = useState('');
+	const [productCategory, setProductCategory] = useState('');
+	const [materialName, setMaterialName] = useState('');
+
 	const [limit, setLimit] = useState(0);
 
 	function handleFileDelete(index) {
@@ -40,22 +46,12 @@ function BasicInformation() {
 		'Bedroom Furniture',
 		'Dining Room Furniture',
 		'Office Furniture',
-		'Storage Solutions',
-		'Outdoor Furniture',
-		"Children's Furniture",
-		'Sofas & Armchairs',
-		'Coffee Tables',
-		'Shelving Units',
-		'Wardrobes & Closets',
+		'Storage & Shelving Units',
 		'Beds & Mattresses',
-		'Lighting Fixtures',
-		'Rugs & Carpets',
-		'Curtains & Blinds',
-		'Wall Art & Decor',
-		'Kitchen & Dining Accessories',
-		'Bathroom Storage & Accessories',
-		'Home Textiles (Cushions, Throws, etc.)',
-		'Decorative Mirrors',
+		'Wardrobes & Cabinets',
+		'Tables & Desks',
+		'Chairs & Seating',
+		'Home Decor & Accessories',
 	];
 
 	return (
@@ -65,7 +61,7 @@ function BasicInformation() {
 				padding: 4,
 				boxShadow: '0px 3px 10px rgba(0,0,0,0.1)',
 			}}>
-			<Typography variant='h6' fontWeight={600}>
+			<Typography color='primary' variant='h6' fontWeight={600}>
 				Basic Information of Product
 			</Typography>
 			<Paper variant='outlined' sx={{ padding: 3, mt: 3 }}>
@@ -157,22 +153,40 @@ function BasicInformation() {
 				</Typography>
 				<Box sx={{ mt: 2, maxWidth: { xl: '80%', md: '100%' } }}>
 					<InputHandler
+						required
 						labelName='Product Name'
+						state={productTitle}
+						setState={setProductTitle}
 						type='text'
 						placeholder='Enter Product Name (English)'
 						size='medium'
 					/>
 					<InputHandler
+						required
 						labelName='প্রোডাক্টের নাম'
+						state={productBanglaTitle}
+						setState={setProductBanglaTitle}
 						type='text'
 						placeholder='প্রোডাক্টের নাম (বাংলায়)'
 						size='medium'
 					/>
-					<ItemSelector
-						label='Select product category'
-						size='medium'
-						options={furnitureCategories}
-					/>
+					<Box sx={{ display: 'flex', gap: 3 }}>
+						<ItemSelector
+							label='Select product category'
+							state={productCategory}
+							setState={setProductCategory}
+							size='medium'
+							options={furnitureCategories}
+						/>
+						<InputHandler
+							labelName='Product Material'
+							state={materialName}
+							setState={setMaterialName}
+							type='text'
+							placeholder='Material name (Ex. Wood,Glass etc)'
+							size='medium'
+						/>
+					</Box>
 				</Box>
 			</Paper>
 		</Paper>

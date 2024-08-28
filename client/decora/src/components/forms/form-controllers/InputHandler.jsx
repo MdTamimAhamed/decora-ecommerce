@@ -9,10 +9,12 @@ function InputHandler({
 	setState,
 	placeholder,
 	autoComplete,
+	required,
 }) {
 	return (
 		<>
 			<TextField
+				required={required}
 				type={type || 'text'}
 				label={labelName}
 				placeholder={placeholder}
