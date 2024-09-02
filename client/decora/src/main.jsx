@@ -1,6 +1,6 @@
 import React from 'react';
+import './App.css';
 import ReactDOM from 'react-dom/client';
-
 import AppRouters from './routers/AppRouters.jsx';
 
 import store from './app/store.js';
@@ -14,6 +14,9 @@ const theme = createTheme({
 	palette: {
 		custom: {
 			dark_red: '#c30010',
+		},
+		primary: {
+			main: '#a06418',
 		},
 	},
 	typography: {

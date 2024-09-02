@@ -32,7 +32,7 @@ function SearchBar({ placeholder, iconColor }) {
 				<StyledSearchIconWrapper>
 					<SearchIcon color={iconColor || ''} />
 				</StyledSearchIconWrapper>
-				<StyledInputBase placeholder={placeholder} />
+				<StyledInputBase name='search' placeholder={placeholder} />
 			</Search>
 		</Box>
 	);

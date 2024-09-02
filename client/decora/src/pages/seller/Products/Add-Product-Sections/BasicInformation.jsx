@@ -59,7 +59,7 @@ function BasicInformation() {
 			sx={{
 				width: '100%',
 				padding: 4,
-				boxShadow: '0px 3px 10px rgba(0,0,0,0.1)',
+				boxShadow: '0px 3px 10px rgba(0,0,0,0.2)',
 			}}>
 			<Typography color='primary' variant='h6' fontWeight={600}>
 				Basic Information of Product

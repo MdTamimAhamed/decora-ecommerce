@@ -1,4 +1,4 @@
-import { TextField } from '@mui/material';
+import { MenuItem, MenuList, TextField } from '@mui/material';
 import React from 'react';
 
 function InputHandler({
@@ -10,6 +10,8 @@ function InputHandler({
 	placeholder,
 	autoComplete,
 	required,
+	margin,
+	disabled,
 }) {
 	return (
 		<>
@@ -17,8 +19,8 @@ function InputHandler({
 				required={required}
 				type={type || 'text'}
 				label={labelName}
+				disabled={disabled || false}
 				placeholder={placeholder}
-				id='outlined-basic'
 				variant='outlined'
 				size={size || 'small'}
 				fullWidth
@@ -33,7 +35,7 @@ function InputHandler({
 					'& .MuiInputBase-input::placeholder': {
 						fontSize: '1rem',
 					},
-					my: '10px',
+					my: `${margin}px` || '10px',
 				}}
 			/>
 		</>

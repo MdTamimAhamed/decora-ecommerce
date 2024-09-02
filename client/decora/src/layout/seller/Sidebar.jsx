@@ -23,6 +23,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import StoreIcon from '@mui/icons-material/Store';
 import { useNavigate } from 'react-router-dom';
 import { ExpandLess, ExpandMore, Visibility } from '@mui/icons-material';
+import { alpha } from '@mui/system';
 
 function Sidebar() {
 	const theme = useTheme();
@@ -187,13 +188,16 @@ function Sidebar() {
 											onClick={() => subCategoryHandleClick(sub.id, sub.path)}
 											sx={{
 												py: 0,
-												ml: 4,
+												ml: 5,
 												borderBottom:
 													activeSubNav === sub.id ? '1px solid white' : '',
 											}}
 											key={sub.id}>
 											<ListItemText sx={{ color: 'white' }}>
-												<Typography fontWeight={300} variant='subtitle2'>
+												<Typography
+													color={alpha(theme.palette.common.white, 0.8)}
+													fontWeight={300}
+													variant='subtitle2'>
 													{sub.name}
 												</Typography>
 											</ListItemText>

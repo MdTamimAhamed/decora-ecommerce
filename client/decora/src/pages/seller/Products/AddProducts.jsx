@@ -38,7 +38,12 @@ function AddProducts() {
 				<PriceStockVarient />
 			</Box>
 
-			<Box sx={{ width: '250px' }}>
+			<Box
+				sx={{
+					width: '250px',
+					position: 'fixed',
+					right: '5%',
+				}}>
 				<Paper
 					sx={{
 						padding: 3,
