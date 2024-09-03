@@ -56,6 +56,7 @@ function BasicInformation() {
 
 	return (
 		<Paper
+			id='basic-info'
 			sx={{
 				width: '100%',
 				padding: 4,

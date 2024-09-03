@@ -104,6 +104,7 @@ function PriceStockVarient() {
 
 	return (
 		<Paper
+			id='price-stock-varient'
 			sx={{
 				width: '100%',
 				padding: 4,
@@ -382,11 +383,15 @@ function PriceStockVarient() {
 								gap: 3,
 							}}>
 							<FormControlLabel
-								sx={{ color: `${theme.palette.custom.dark_red}` }}
-								label='For custom orders, set the delivery time to double the standard delivery time!'
+								sx={{
+									display: 'flex',
+									alignItems: 'start',
+								}}
+								label='[For custom orders, set the delivery time to double the standard delivery time]'
 								name='custom-order-delivery-time'
 								control={
 									<Checkbox
+										sx={{ paddingY: '4px' }}
 										onChange={() => handleCheckbox('CUSTOM-DELIVERY-TIME')}
 									/>
 								}
