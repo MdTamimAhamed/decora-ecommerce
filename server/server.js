@@ -36,7 +36,7 @@ app.use(express.json());
 app.use(
 	cors({
 		origin: [
-			'',
+			'https://decora-ecommerce-client.vercel.app/',
 		],
 		methods: ['POST', 'GET'],
 		credentials: true,
