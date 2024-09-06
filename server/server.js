@@ -36,7 +36,7 @@ app.use(express.json());
 app.use(
 	cors({
 		origin: [
-			'https://decora-ecommerce-r8329v81b-mdtamimahameds-projects.vercel.app',
+			'',
 		],
 		methods: ['POST', 'GET'],
 		credentials: true,
