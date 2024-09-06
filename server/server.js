@@ -33,15 +33,11 @@ app.get('/', (req, res) => {
 });
 
 app.use(express.json());
-app.use(
-	cors({
-		origin: [
-			'https://decora-ecommerce-client.vercel.app/',
-		],
-		methods: ['POST', 'GET'],
-		credentials: true,
-	})
-);
+app.use(cors({
+  origin: 'https://decora-ecommerce-client.vercel.app', 
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', 
+  credentials: true 
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
