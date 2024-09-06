@@ -22,7 +22,15 @@ const port = process.env.PORT;
 app.use(cors({
   origin: 'https://decora-ecommerce-client.vercel.app',
   methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type']
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'Accept',
+    'Origin',
+    'X-Requested-With',
+    'X-Auth-Token',
+    'X-Custom-Header'
+  ]
 }));
 
 //db
