@@ -32,7 +32,7 @@ app.use(express.json());
 app.use('*', cors());
 app.use(
 	cors({
-		origin: 'https://decora-ecommerce-client.vercel.app',
+		origin: '*',
 		methods: 'GET, HEAD,PUT, PATCH,POST, DELETE',
 		allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
 		credentials: true,
