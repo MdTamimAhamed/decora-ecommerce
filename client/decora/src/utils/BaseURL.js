@@ -1,1 +1,1 @@
-export const baseUrl = 'http://localhost:5003';
+export const baseUrl = 'https://decora-ecommerce-r8329v81b-mdtamimahameds-projects.vercel.app';
