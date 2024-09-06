@@ -17,12 +17,7 @@ dotenv.config();
 const port = process.env.PORT;
 
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
+
 
 app.use(cors({
   origin: 'https://decora-ecommerce-client.vercel.app',
@@ -51,6 +46,12 @@ app.use('/customer', customerRoutes);
 app.use('/seller', sellerRoutes);
 // app.use('/api', authRoutes);
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
 //error handle
 app.use(notFoundErrorHandler);
 app.use(defaultErrorHandler);
