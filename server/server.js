@@ -28,16 +28,13 @@ const database = mongoose
 		console.log(err);
 	});
 
-app.get('/', (req, res) => {
-	res.json('Hello');
-});
-
 app.use(express.json());
+app.use('*', cors());
 app.use(
 	cors({
 		origin: 'https://decora-ecommerce-client.vercel.app',
-		methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-		 allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+		methods: 'GET, HEAD,PUT, PATCH,POST, DELETE',
+		allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
 		credentials: true,
 	})
 );
