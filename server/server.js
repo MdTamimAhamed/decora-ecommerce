@@ -45,7 +45,7 @@ app.use(
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-//routes
+// routes
 // app.use('/customer', customerRoutes);
 // app.use('/seller', sellerRoutes);
 // // app.use('/api', authRoutes);
