@@ -1,1 +1,1 @@
-export const baseUrl = 'decora-ecommerce.vercel.app';
+export const baseUrl = 'https://decora-ecommerce.vercel.app';
