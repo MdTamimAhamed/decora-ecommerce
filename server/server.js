@@ -16,6 +16,11 @@ const app = express();
 dotenv.config();
 const port = process.env.PORT;
 
+app.use(cors({
+		origin: 'https://decora-ecommerce-client.vercel.app',
+		methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
+	}));
+
 //db
 const database = mongoose
 	.connect(
@@ -29,15 +34,6 @@ const database = mongoose
 	});
 
 app.use(express.json());
-app.use('*', cors());
-app.use(
-	cors({
-		origin: '*',
-		methods: 'GET, HEAD,PUT, PATCH,POST, DELETE',
-		allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
-		credentials: true,
-	})
-);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
