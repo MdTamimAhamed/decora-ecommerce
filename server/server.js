@@ -19,7 +19,7 @@ const port = process.env.PORT;
 //db
 const database = mongoose
 	.connect(
-		'mongodb+srv://database_tamim:DB.24_zan_cluster0.1@cluster0.ojxut.mongodb.net/'
+		'mongodb+srv://database_tamim:DB.24_zan_cluster0.1@cluster0.ojxut.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0'
 	)
 	.then(() => {
 		console.log('Database connected!');
@@ -35,9 +35,7 @@ app.get('/', (req, res) => {
 app.use(express.json());
 app.use(
 	cors({
-		origin: [
-			'https://decora-ecommerce-client.vercel.app/',
-		],
+		origin: ['https://decora-ecommerce-client.vercel.app/'],
 		methods: ['POST', 'GET'],
 		credentials: true,
 	})
