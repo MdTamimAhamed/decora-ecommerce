@@ -40,7 +40,7 @@ function CustomerSignup() {
 
 		try {
 			const response = await axios.post(
-				`${baseUrl}/customer/signup`,
+				`https://decora-ecommerce-server.vercel.app/customer/signup`,
 				formData,
 				{
 					headers: {
