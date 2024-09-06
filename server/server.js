@@ -46,13 +46,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // routes
-// app.use('/customer', customerRoutes);
-// app.use('/seller', sellerRoutes);
-// // app.use('/api', authRoutes);
+app.use('/customer', customerRoutes);
+app.use('/seller', sellerRoutes);
+// app.use('/api', authRoutes);
 
-// //error handle
-// app.use(notFoundErrorHandler);
-// app.use(defaultErrorHandler);
+//error handle
+app.use(notFoundErrorHandler);
+app.use(defaultErrorHandler);
 
 //listen
 app.listen(process.env.PORT, () => {
