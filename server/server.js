@@ -19,19 +19,10 @@ const port = process.env.PORT;
 
 
 
-// app.use(cors({
-//   origin: 'https://decora-ecommerce-client.vercel.app',
-//   methods: ['GET', 'POST', 'OPTIONS'],
-//   allowedHeaders: [
-//     'Content-Type',
-//     'Authorization',
-//     'Accept',
-//     'Origin',
-//     'X-Requested-With',
-//     'X-Auth-Token',
-//     'X-Custom-Header'
-//   ]
-// }));
+app.use(cors({
+  origin: 'https://decora-ecommerce-client.vercel.app',
+  methods: ['GET', 'POST', 'OPTIONS'],
+}));
 
 //db
 const database = mongoose
@@ -50,9 +41,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 
-app.use('/hello, (req, res) => {
+app.use('/hello', (req, res) => {
 	res.send('Backend is working on vercel');
-})
+});
+
 // routes
 // app.use('/customer', customerRoutes);
 // app.use('/seller', sellerRoutes);
