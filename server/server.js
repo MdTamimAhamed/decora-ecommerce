@@ -49,9 +49,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+
+app.use('/hello, (req, res) => {
+	res.send('Backend is working on vercel');
+})
 // routes
-app.use('/customer', customerRoutes);
-app.use('/seller', sellerRoutes);
+// app.use('/customer', customerRoutes);
+// app.use('/seller', sellerRoutes);
 // app.use('/api', authRoutes);
 
 
