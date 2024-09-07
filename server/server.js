@@ -46,8 +46,8 @@ app.use('/hello', (req, res) => {
 });
 
 // routes
-// app.use('/customer', customerRoutes);
-// app.use('/seller', sellerRoutes);
+app.use('/customer', customerRoutes);
+app.use('/seller', sellerRoutes);
 // app.use('/api', authRoutes);
 
 
