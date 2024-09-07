@@ -10,7 +10,7 @@ const {
 
 const customerRoutes = require('./routes/customer/customerRoutes');
 const sellerRoutes = require('./routes/seller/sellerRoutes');
-const authRoutes = require('./routes/seller/authRoutes');
+// const authRoutes = require('./routes/seller/authRoutes');
 
 const app = express();
 dotenv.config();
