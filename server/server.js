@@ -19,19 +19,19 @@ const port = process.env.PORT;
 
 
 
-app.use(cors({
-  origin: 'https://decora-ecommerce-client.vercel.app',
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: [
-    'Content-Type',
-    'Authorization',
-    'Accept',
-    'Origin',
-    'X-Requested-With',
-    'X-Auth-Token',
-    'X-Custom-Header'
-  ]
-}));
+// app.use(cors({
+//   origin: 'https://decora-ecommerce-client.vercel.app',
+//   methods: ['GET', 'POST', 'OPTIONS'],
+//   allowedHeaders: [
+//     'Content-Type',
+//     'Authorization',
+//     'Accept',
+//     'Origin',
+//     'X-Requested-With',
+//     'X-Auth-Token',
+//     'X-Custom-Header'
+//   ]
+// }));
 
 //db
 const database = mongoose
@@ -54,12 +54,7 @@ app.use('/customer', customerRoutes);
 app.use('/seller', sellerRoutes);
 // app.use('/api', authRoutes);
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://decora-ecommerce-client.vercel.app');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
+
 //error handle
 app.use(notFoundErrorHandler);
 app.use(defaultErrorHandler);
