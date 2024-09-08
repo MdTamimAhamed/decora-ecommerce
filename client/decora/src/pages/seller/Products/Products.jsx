@@ -19,6 +19,7 @@ import BankDetails from '../../../components/forms/seller-product-forms/BankDeta
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { baseUrl } from '../../../utils/BaseURL';
+
 import AddProducts from './AddProducts';
 import ReactLoading from 'react-loading';
 import { toast } from 'react-toastify';

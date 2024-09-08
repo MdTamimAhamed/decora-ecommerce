@@ -18,14 +18,19 @@ const port = process.env.PORT;
 
 app.use(
 	cors({
-		origin: 'https://decora-ecommerce-client.vercel.app',
+		origin: [
+			'https://decora-ecommerce-client.vercel.app',
+			'http://localhost:5173',
+		],
 		methods: ['GET', 'POST', 'OPTIONS'],
 	})
 );
 
 //db
 const database = mongoose
-	.connect(process.env.CONNECTION_STRING)
+	.connect(
+		process.env.CONNECTION_STRING || 'mongodb://localhost:27017/decoraDB'
+	)
 	.then(() => {
 		console.log('Database connected!');
 	})
