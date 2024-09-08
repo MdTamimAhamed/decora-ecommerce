@@ -17,10 +17,11 @@ dotenv.config();
 const port = process.env.PORT;
 
 app.use(
-	cors({
-		origin: 'https://decora-ecommerce-client.vercel.app',
-		methods: ['GET', 'POST', 'OPTIONS'],
-	})
+	cors()
+	// cors({
+	// 	origin: 'https://decora-ecommerce-client.vercel.app',
+	// 	methods: ['GET', 'POST', 'OPTIONS'],
+	// })
 );
 
 //db
