@@ -1,1 +1,1 @@
-export const baseUrl = 'mongodb://localhost:27017/decoraDB';
+export const baseUrl = 'https://decora-ecommerce-server.vercel.app';

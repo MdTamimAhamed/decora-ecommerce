@@ -17,18 +17,15 @@ dotenv.config();
 const port = process.env.PORT;
 
 app.use(
-	cors()
-	// cors({
-	// 	origin: 'https://decora-ecommerce-client.vercel.app',
-	// 	methods: ['GET', 'POST', 'OPTIONS'],
-	// })
+	cors({
+		origin: 'https://decora-ecommerce-client.vercel.app',
+		methods: ['GET', 'POST', 'OPTIONS'],
+	})
 );
 
 //db
 const database = mongoose
-	.connect(
-		'mongodb+srv://database_tamim:DB.24_zan_cluster0.1@cluster0.ojxut.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0'
-	)
+	.connect(process.env.CONNECTION_STRING)
 	.then(() => {
 		console.log('Database connected!');
 	})
