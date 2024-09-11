@@ -13,6 +13,7 @@ import {
 	handleSteps,
 } from '../../../features/seller/sellerVerificationSlice';
 import { useSelector } from 'react-redux';
+import ErrorMessage from '../form-controllers/ErrorMessage';
 
 function StoreSetup() {
 	const theme = useTheme();
@@ -22,6 +23,7 @@ function StoreSetup() {
 	const [storeSubtitle, setStoreSubtitle] = useState('');
 	const [profileImage, setProfileImage] = useState({});
 	const [msg, setMsg] = useState([]);
+	const [errorMsg, setError] = useState({});
 
 	const { sellerInfo } = useSelector((state) => state.auth);
 	const sellerId = sellerInfo._id;
@@ -54,6 +56,11 @@ function StoreSetup() {
 			}
 		} catch (error) {
 			console.error(error);
+			if (error.response && error.response.data.errors) {
+				setError(error.response.data.errors);
+			} else {
+				toast.error('Signup failed!');
+			}
 		}
 	}
 
@@ -64,21 +71,24 @@ function StoreSetup() {
 			<Typography variant='h6' fontWeight={500}>
 				Store Information
 			</Typography>
-			<Box sx={{ display: 'flex', gap: 3 }}>
-				<InputHandler
-					labelName='Store Name'
-					type='text'
-					state={storeName}
-					setState={setStoreName}
-					placeholder='Enter store name'
-					autoComplete='nope'
-				/>
+			<Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 3 }}>
+				<Box sx={{ flex: '0 1 100%' }}>
+					<InputHandler
+						labelName='Store Name'
+						type='text'
+						state={storeName}
+						setState={setStoreName}
+						placeholder='Enter store name'
+						autoComplete='nope'
+					/>
+					<ErrorMessage check={errorMsg.storeName} mt='0px' />
+				</Box>
 				<InputHandler
 					labelName='Store Subtitle'
 					type='text'
 					state={storeSubtitle}
 					setState={setStoreSubtitle}
-					placeholder='Subtitle/tag/slogun'
+					placeholder='Subtitle/tag/slogun (optional)'
 					autoComplete='nope'
 				/>
 			</Box>

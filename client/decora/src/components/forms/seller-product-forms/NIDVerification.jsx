@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import InputHandler from '../form-controllers/InputHandler';
 import InputFileUpload from '../../reuseables/InputFileUpload';
 import axios from 'axios';
+import ErrorMessage from '../form-controllers/ErrorMessage';
 
 function NIDVerification() {
 	const theme = useTheme();
@@ -18,6 +19,8 @@ function NIDVerification() {
 	const [nidBack, setNidBack] = useState(null);
 	const [nidName, setNidName] = useState('');
 	const [nidNumber, setNidNumber] = useState('');
+
+	const [errorMsg, setError] = useState({});
 
 	const { sellerDocumentId } = useSelector((state) => state.sellerVerify);
 
@@ -47,6 +50,11 @@ function NIDVerification() {
 			}
 		} catch (error) {
 			console.error(error);
+			if (error.response && error.response.data.errors) {
+				setError(error.response.data.errors);
+			} else {
+				toast.error('Signup failed!');
+			}
 		}
 	}
 
@@ -101,7 +109,7 @@ function NIDVerification() {
 				{/* nidback */}
 				<Box sx={{ flex: 1, minWidth: 0 }}>
 					<Typography variant='subtitle' sx={{ color: 'rgba(0,0,0,0.4)' }}>
-						Upload NID Front
+						Upload NID Back
 					</Typography>
 					<Paper
 						variant='outlined'
@@ -139,12 +147,14 @@ function NIDVerification() {
 					setState={setNidName}
 					placeholder='Enter NID Name'
 				/>
+				<ErrorMessage check={errorMsg.nidName} />
 				<InputHandler
 					labelName='NID Number'
 					state={nidNumber}
 					setState={setNidNumber}
 					placeholder='Enter NID Number'
 				/>
+				<ErrorMessage check={errorMsg.nidNumber} />
 			</Box>
 
 			<Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>

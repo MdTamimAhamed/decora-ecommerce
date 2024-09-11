@@ -10,6 +10,7 @@ import InputFileUpload from '../../reuseables/InputFileUpload';
 import axios from 'axios';
 import CountrySelector from '../../reuseables/CountrySelector';
 import { useNavigate } from 'react-router-dom';
+import ErrorMessage from '../form-controllers/ErrorMessage';
 
 function BankDetails({ setState }) {
 	const theme = useTheme();
@@ -21,6 +22,8 @@ function BankDetails({ setState }) {
 	const [accountNumber, setAccountNumber] = useState('');
 	const [bankName, setBankName] = useState('');
 	const [branchName, setBranchName] = useState('');
+
+	const [errorMsg, setError] = useState({});
 
 	const { sellerDocumentId } = useSelector((state) => state.sellerVerify);
 
@@ -52,6 +55,11 @@ function BankDetails({ setState }) {
 			}
 		} catch (error) {
 			console.error(error);
+			if (error.response && error.response.data.errors) {
+				setError(error.response.data.errors);
+			} else {
+				toast.error('Signup failed!');
+			}
 		}
 	}
 
@@ -66,7 +74,7 @@ function BankDetails({ setState }) {
 			{/* bank statement upload */}
 			<Box sx={{ flex: 1, minWidth: 0 }}>
 				<Typography variant='subtitle' sx={{ color: 'rgba(0,0,0,0.4)' }}>
-					Upload Bank Statement (ex: electricity bills,tax paper)
+					Upload Bank Statement (ex: electricity bills,tax paper,check)
 				</Typography>
 				<Paper
 					variant='outlined'
@@ -104,24 +112,28 @@ function BankDetails({ setState }) {
 					setState={setAccountName}
 					placeholder='Enter Account Name'
 				/>
+				<ErrorMessage check={errorMsg.accountName} />
 				<InputHandler
 					labelName='Bank account number'
 					state={accountNumber}
 					setState={setAccountNumber}
 					placeholder='Enter Account Number'
 				/>
+				<ErrorMessage check={errorMsg.accountNumber} />
 				<CountrySelector
 					size='small'
 					selectOption='bank'
 					setState={setBankName}
 					label='Select Bank Name'
 				/>
+				<ErrorMessage check={errorMsg.bankName} />
 				<InputHandler
 					labelName='Branch name'
 					state={branchName}
 					setState={setBranchName}
 					placeholder='Enter Branch Name'
 				/>
+				<ErrorMessage check={errorMsg.branchName} />
 			</Box>
 
 			<Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>

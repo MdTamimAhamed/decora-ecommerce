@@ -35,11 +35,9 @@ const sellerSchema = new mongoose.Schema({
 	//---------------------setp0--------------------Store
 	storeName: {
 		type: String,
-		required: true,
 	},
 	storeSubtitle: {
 		type: String,
-		required: true,
 	},
 	profileImage: {
 		type: String,

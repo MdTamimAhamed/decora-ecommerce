@@ -10,7 +10,6 @@ const {
 
 const {
 	sellerLoginValidators,
-	sellerLoginValidatorErrorHandler,
 } = require('../../validation/sellerLoginValidation');
 const {
 	emailVerify,
@@ -26,10 +25,20 @@ const {
 	handleBankDetails,
 	confirmVerification,
 } = require('../../controller/seller/productsFormController');
+
+const { authMiddleware } = require('../../middlewares/auth/authMiddleware');
 const {
 	sellerUploads,
-} = require('../../controller/uploads/uploadsControllers');
-const { authMiddleware } = require('../../middlewares/auth/authMiddleware');
+} = require('../../middlewares/multer/uploadsControllers');
+const {
+	storeSetupValidators,
+	addressValidators,
+	nidValidators,
+	bankDetailsValidators,
+} = require('../../validation/customer-verification-validators/validationRules');
+const {
+	validationErrorHandler,
+} = require('../../middlewares/error-handler/validationErrorHandler');
 
 //------------------------Routes----------------------------//
 //----------------------------------------------------------//
@@ -55,7 +64,7 @@ router.post(
 router.post(
 	'/login',
 	sellerLoginValidators,
-	sellerLoginValidatorErrorHandler,
+	validationErrorHandler,
 	sellerLogin
 );
 
@@ -63,11 +72,18 @@ router.post(
 router.post(
 	'/products/store-setup',
 	sellerUploads.single('profileImage'),
+	storeSetupValidators,
+	validationErrorHandler,
 	handleStoreSetup
 );
 
 //----------------------------------------------------------//
-router.post('/products/address-verification', handleAddressVerification);
+router.post(
+	'/products/address-verification',
+	addressValidators,
+	validationErrorHandler,
+	handleAddressVerification
+);
 
 //----------------------------------------------------------//
 router.post(
@@ -76,6 +92,8 @@ router.post(
 		{ name: 'nidFront', maxCount: 1 },
 		{ name: 'nidBack', maxCount: 1 },
 	]),
+	nidValidators,
+	validationErrorHandler,
 	handleNIDVerification
 );
 
@@ -84,6 +102,8 @@ router.post(
 router.post(
 	'/products/bank-details',
 	sellerUploads.single('bankStatement'),
+	bankDetailsValidators,
+	validationErrorHandler,
 	handleBankDetails
 );
 

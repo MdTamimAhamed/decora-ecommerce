@@ -19,6 +19,7 @@ import { useTheme } from '@emotion/react';
 import axios from 'axios';
 import { baseUrl } from '../../../utils/BaseURL';
 import { useSelector } from 'react-redux';
+import ErrorMessage from '../form-controllers/ErrorMessage';
 
 function AddressVerification() {
 	const theme = useTheme();
@@ -29,6 +30,8 @@ function AddressVerification() {
 	const [area, setArea] = useState('');
 	const [postCode, setPostCode] = useState('');
 	const [address, setAddress] = useState('');
+
+	const [errorMsg, setError] = useState({});
 
 	const { sellerDocumentId } = useSelector((state) => state.sellerVerify);
 
@@ -51,6 +54,11 @@ function AddressVerification() {
 			}
 		} catch (error) {
 			console.error(error);
+			if (error.response && error.response.data.errors) {
+				setError(error.response.data.errors);
+			} else {
+				toast.error('Signup failed!');
+			}
 		}
 	}
 
@@ -68,6 +76,7 @@ function AddressVerification() {
 					label='Choose a country'
 					setState={setCountry}
 				/>
+				<ErrorMessage check={errorMsg.country} />
 				<Box sx={{ display: 'flex', gap: 3 }}>
 					<CountrySelector
 						size='small'
@@ -89,6 +98,9 @@ function AddressVerification() {
 						autoComplete='nope'
 					/>
 				</Box>
+				<ErrorMessage
+					check={errorMsg.district || errorMsg.area || errorMsg.postCode}
+				/>
 				<Box>
 					<TextareaAutosize
 						minRows={5}
@@ -106,6 +118,7 @@ function AddressVerification() {
 						}}
 					/>
 				</Box>
+				<ErrorMessage check={errorMsg.address} />
 
 				<Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
 					<Button

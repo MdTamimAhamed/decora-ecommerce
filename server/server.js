@@ -27,10 +27,13 @@ app.use(
 );
 
 //db
+const isMode = process.env.NODE_ENV === 'development';
+const dbUri = isMode
+	? process.env.CONNECTION_STRING_DEVELOPMENT
+	: process.env.CONNECTION_STRING_PRODUCTION;
+
 const database = mongoose
-	.connect(
-		process.env.CONNECTION_STRING || 'mongodb://localhost:27017/decoraDB'
-	)
+	.connect(dbUri)
 	.then(() => {
 		console.log('Database connected!');
 	})

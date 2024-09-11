@@ -1,5 +1,7 @@
 const { SellerDocumentsModel } = require('../../models/users/seller_model');
 const bcrypt = require('bcrypt');
+const { v4: uuidv4 } = require('uuid');
+const { cloudinaryUpload } = require('../../utils/cloudinary');
 
 async function handleStoreSetup(req, res, next) {
 	try {
@@ -7,12 +9,18 @@ async function handleStoreSetup(req, res, next) {
 			return res.status(400).json({ message: 'No file uploaded!' });
 		}
 
+		const unique_filename = `profile_${uuidv4()}`;
 		const { storeName, storeSubtitle, sellerId } = req.body;
+		const uploadResponse = await cloudinaryUpload(
+			req.file.buffer,
+			unique_filename
+		);
+
 		const storeSetup = new SellerDocumentsModel({
 			sellerId,
 			storeName,
 			storeSubtitle,
-			profileImage: req.file.filename,
+			profileImage: uploadResponse.secure_url,
 		});
 
 		const savedStoreSetup = await storeSetup.save();
@@ -68,12 +76,22 @@ async function handleNIDVerification(req, res, next) {
 		const salt = await bcrypt.genSalt(10);
 		const hashedNidNumber = await bcrypt.hash(nidNumber, salt);
 
+		const nidFront = await cloudinaryUpload(
+			req.files['nidFront'][0].buffer,
+			`nid_front_${uuidv4()}`
+		);
+
+		const nidBack = await cloudinaryUpload(
+			req.files['nidBack'][0].buffer,
+			`nid_back_${uuidv4()}`
+		);
+
 		const newNid = await SellerDocumentsModel.findOneAndUpdate(
 			{ _id: sellerDocumentId },
 			{
 				nidInformation: {
-					nidFront: req.files.nidFront[0].filename,
-					nidBack: req.files.nidBack[0].filename,
+					nidFront: nidFront.secure_url,
+					nidBack: nidBack.secure_url,
 					nidName,
 					nidNumber: hashedNidNumber,
 				},
@@ -108,11 +126,16 @@ async function handleBankDetails(req, res, next) {
 		const salt = await bcrypt.genSalt(10);
 		const hashedAccountNumber = await bcrypt.hash(accountNumber, salt);
 
+		const uploadResponse = await cloudinaryUpload(
+			req.file.buffer,
+			`bankStatement_${uuidv4()}`
+		);
+
 		const newBankDetails = await SellerDocumentsModel.findOneAndUpdate(
 			{ _id: sellerDocumentId },
 			{
 				bankInformation: {
-					bankStatement: req.file.filename,
+					bankStatement: uploadResponse.secure_url,
 					accountName,
 					accountNumber: hashedAccountNumber,
 					bankName,
