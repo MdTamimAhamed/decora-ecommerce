@@ -28,7 +28,7 @@ app.use(
 
 //db
 const isMode = process.env.NODE_ENV === 'production';
-const dbUri = !isMode
+const dbUri = isMode
 	? process.env.CONNECTION_STRING_PRODUCTION
 	: process.env.CONNECTION_STRING_DEVELOPMENT;
 
