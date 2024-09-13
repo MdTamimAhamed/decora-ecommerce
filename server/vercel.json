@@ -6,14 +6,14 @@
 			"use": "@vercel/node"
 		}
 	],
+
 	"routes": [
 		{
 			"src": "/(.*)",
 			"dest": "server.js"
 		},
 		{
-			"src": "/(.*)",
-			"dest": "index.html"
+			"rewrites": [{ "source": "/(.*)", "destination": "/" }]
 		},
 		{
 			"methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
