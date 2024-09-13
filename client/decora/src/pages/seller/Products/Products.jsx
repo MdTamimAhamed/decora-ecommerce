@@ -63,7 +63,6 @@ function Products() {
 
 				if (response.status === 200) {
 					const { verified } = response.data;
-					console.log('test', verified);
 					setIsSellerVerified(verified);
 				}
 			} catch (error) {
