@@ -53,7 +53,7 @@ const router = createBrowserRouter(
 					</PrivateRoute>
 				}
 				replace>
-				<Route path='/products' element={<Products />} />
+				<Route path='products' element={<Products />} />
 				<Route path='products/manage-products' element={<ManageProducts />} />
 				<Route path='products/add-products' element={<AddProducts />} />
 
