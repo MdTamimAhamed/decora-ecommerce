@@ -22,13 +22,13 @@ app.use(
 			'https://decora-ecommerce-client.vercel.app',
 			'http://localhost:5173',
 		],
-		methods: ['GET', 'POST', 'OPTIONS'],
+		methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
 	})
 );
 
 //db
 const isMode = process.env.NODE_ENV === 'production';
-const dbUri = isMode
+const dbUri = !isMode
 	? process.env.CONNECTION_STRING_PRODUCTION
 	: process.env.CONNECTION_STRING_DEVELOPMENT;
 

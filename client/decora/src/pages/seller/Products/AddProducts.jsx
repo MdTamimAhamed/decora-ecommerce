@@ -1,6 +1,7 @@
 import { useTheme } from '@emotion/react';
 import {
 	Box,
+	Button,
 	Paper,
 	Step,
 	StepLabel,
@@ -63,6 +64,27 @@ function AddProducts() {
 				<ProductDescription />
 				{/* ----------product description--------- */}
 				<Services />
+				<Paper
+					sx={{
+						width: '100%',
+						padding: 4,
+						mt: 8,
+
+						boxShadow: '0px 3px 10px rgba(0,0,0,0.2)',
+					}}>
+					<Paper
+						variant='outlined'
+						sx={{
+							width: '100%',
+							display: 'flex',
+							justifyContent: 'end',
+							alignItems: 'center',
+						}}>
+						<Button sx={{ py: 1, margin: 2 }} variant='contained'>
+							Publish Product
+						</Button>
+					</Paper>
+				</Paper>
 			</Box>
 
 			<Box
