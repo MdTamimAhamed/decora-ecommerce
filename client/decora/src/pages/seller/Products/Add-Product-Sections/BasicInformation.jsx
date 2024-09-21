@@ -1,6 +1,6 @@
 import { useTheme } from '@emotion/react';
 import { Box, Divider, Paper, styled, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ClearOutlined } from '@mui/icons-material';
 import InputFileUploadSmall from '../../../../components/reuseables/InputFileUploadSmall';
 import InputHandler from '../../../../components/forms/form-controllers/InputHandler';
@@ -24,7 +24,7 @@ const StyledDeleteBtn = styled(Box)(({ theme }) => ({
 	},
 }));
 
-function BasicInformation() {
+function BasicInformation({ formData }) {
 	const theme = useTheme();
 	const [cover, setCover] = useState(null);
 	const [files, setFiles] = useState([]);
@@ -35,6 +35,24 @@ function BasicInformation() {
 	const [materialName, setMaterialName] = useState('');
 
 	const [limit, setLimit] = useState(0);
+
+	useEffect(() => {
+		formData.append('cover', cover);
+		files.forEach((file) => {
+			formData.append('images', file);
+		});
+		formData.append('englishTitle', productTitle);
+		formData.append('banglaTitle', productBanglaTitle);
+		formData.append('category', productCategory);
+		formData.append('material', materialName);
+	}, [
+		cover,
+		productTitle,
+		productBanglaTitle,
+		productCategory,
+		materialName,
+		formData,
+	]);
 
 	function handleFileDelete(index) {
 		setFiles((fileArr) => fileArr.filter((_, i) => i !== index));

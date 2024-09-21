@@ -107,7 +107,7 @@ function CustomerNavbar() {
 						) : (
 							<Button
 								component={Link}
-								to='/seller/login'
+								to='/seller-login'
 								size='small'
 								color='inherit'>
 								Become a seller

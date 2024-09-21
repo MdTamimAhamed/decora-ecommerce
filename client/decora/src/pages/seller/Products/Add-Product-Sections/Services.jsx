@@ -5,17 +5,27 @@ import {
 	Paper,
 	Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InputHandler from '../../../../components/forms/form-controllers/InputHandler';
 import ItemSelector from '../../../../components/forms/form-controllers/ItemSelector';
 
-function Services() {
+function Services({ formData }) {
 	const [returnTime, setReturnTime] = useState(0);
 	const [cod, setCod] = useState(true);
-	const [warranty, setWarranty] = useState('');
-	const [warrantyYear, setWarrantyYear] = useState(0);
+	const [serviceType, setServiceType] = useState('');
+	const [serviceTime, setServiceTime] = useState(0);
 
-	console.log(returnTime, cod, warranty, warrantyYear);
+	useEffect(() => {
+		formData.delete('productReturnTime');
+		formData.delete('cashOnDelivery');
+		formData.delete('serviceType');
+		formData.delete('serviceTime');
+
+		formData.append('productReturnTime', returnTime);
+		formData.append('cashOnDelivery', cod);
+		formData.append('serviceType', serviceType);
+		formData.append('serviceTime', serviceTime);
+	}, [returnTime, cod, serviceType, serviceTime, formData]);
 
 	const option = ['Warranty', 'Guarantee', 'None'];
 	function handleCheckbox() {
@@ -72,18 +82,18 @@ function Services() {
 					}}>
 					<ItemSelector
 						size='medium'
-						label='Select Warranty/Guarantee'
-						state={warranty}
-						setState={setWarranty}
+						label='Select service type'
+						state={serviceType}
+						setState={setServiceType}
 						options={option}
 					/>
 					<InputHandler
-						size='medium'
 						type='number'
-						state={warrantyYear}
-						setState={setWarrantyYear}
-						placeholder='Enter Warranty/Guarantee Years'
-						labelName='Set Warranty/Guarantee time (years)'
+						size='medium'
+						state={serviceTime}
+						setState={setServiceTime}
+						labelName='Service time (years)'
+						placeholder='Service time (years)'
 					/>
 				</Box>
 			</Paper>

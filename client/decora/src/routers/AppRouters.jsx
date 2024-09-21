@@ -40,9 +40,9 @@ const router = createBrowserRouter(
 			</Route>
 
 			{/* seller routes */}
-			<Route path='/seller' element={<SellerRoot />} replace>
-				<Route path='login' element={<SellerLogin />} />
-				<Route path='register' element={<SellerSignup />} />
+			<Route path='/' element={<SellerRoot />} replace>
+				<Route path='seller-login' element={<SellerLogin />} />
+				<Route path='seller-register' element={<SellerSignup />} />
 			</Route>
 
 			<Route

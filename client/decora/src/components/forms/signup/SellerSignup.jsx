@@ -110,7 +110,7 @@ function SellerSignup() {
 				const { message } = response.data;
 				toast.success(message);
 				setTimeout(() => {
-					navigate('/seller/login');
+					navigate('/seller-login');
 				}, 2000);
 			}
 		} catch (error) {
@@ -206,7 +206,7 @@ function SellerSignup() {
 										},
 									}}
 									component={Link}
-									to='/seller/login'>
+									to='/seller-login'>
 									Seller login
 								</Typography>
 							</Box>

@@ -1,10 +1,14 @@
 import { Typography, Paper, Box } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Tiptap from '../../../../tiptap-text-editor/Tiptap';
-import parser from 'html-react-parser';
 
-function ProductDescription() {
+function ProductDescription({ formData }) {
 	const [editorContent, setEditorContent] = useState(``);
+
+	useEffect(() => {
+		formData.delete('productDescription');
+		formData.append('productDescription', editorContent);
+	}, [editorContent, formData]);
 
 	return (
 		<Paper
@@ -25,7 +29,6 @@ function ProductDescription() {
 						Write Product Description
 					</Typography>
 					<Tiptap setState={setEditorContent} saveBtnText='Save Description' />
-					{parser(editorContent)}
 				</Box>
 			</Paper>
 		</Paper>

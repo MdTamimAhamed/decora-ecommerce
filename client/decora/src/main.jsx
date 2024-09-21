@@ -14,9 +14,10 @@ const theme = createTheme({
 	palette: {
 		custom: {
 			dark_red: '#c30010',
+			custom_bg: '#F5F5F5',
 		},
 		primary: {
-			main: '#a06418',
+			main: '#2D3C4D',
 		},
 	},
 	typography: {

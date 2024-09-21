@@ -9,7 +9,10 @@ const {
 } = require('./middlewares/error-handler/errorHandler');
 
 const customerRoutes = require('./routes/customer/customerRoutes');
+const customerProductRoutes = require('./routes/customer/featured.productRoutes');
 const sellerRoutes = require('./routes/seller/sellerRoutes');
+const sellerProductRoutes = require('./routes/seller/seller.productRoutes');
+
 // const authRoutes = require('./routes/seller/authRoutes');
 
 const app = express();
@@ -23,14 +26,15 @@ app.use(
 			'http://localhost:5173',
 		],
 		methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+		allowedHeaders: ['Content-Type', 'Authorization'],
 	})
 );
 
 //db
-const isMode = process.env.NODE_ENV === 'production';
+const isMode = process.env.NODE_ENV === 'development';
 const dbUri = isMode
-	? process.env.CONNECTION_STRING_PRODUCTION
-	: process.env.CONNECTION_STRING_DEVELOPMENT;
+	? process.env.CONNECTION_STRING_DEVELOPMENT
+	: process.env.CONNECTION_STRING_PRODUCTION;
 
 const database = mongoose
 	.connect(dbUri)
@@ -46,8 +50,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // routes
+app.use('/api', customerProductRoutes);
 app.use('/customer', customerRoutes);
+
 app.use('/seller', sellerRoutes);
+app.use('/seller/product', sellerProductRoutes);
 // app.use('/api', authRoutes);
 
 //error handle

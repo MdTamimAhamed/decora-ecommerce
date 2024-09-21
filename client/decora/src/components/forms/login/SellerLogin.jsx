@@ -106,7 +106,7 @@ function SellerLogin() {
 						}}
 						component={Link}
 						color='primary'
-						to='/seller/register'>
+						to='/seller-register'>
 						Create a new account
 					</Typography>
 				</Box>

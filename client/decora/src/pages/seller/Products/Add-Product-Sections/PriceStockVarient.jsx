@@ -8,7 +8,7 @@ import {
 	Paper,
 	Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InputHandler from '../../../../components/forms/form-controllers/InputHandler';
 import ItemSelector from '../../../../components/forms/form-controllers/ItemSelector';
 import InputFileUpload from '../../../../components/reuseables/InputFileUpload';
@@ -17,7 +17,7 @@ import InputHandlerForMeasurement from '../../../../components/reuseables/InputH
 import { useTheme } from '@emotion/react';
 import DateHandler from '../../../../components/forms/form-controllers/DateHandler';
 
-function PriceStockVarient() {
+function PriceStockVarient({ formData }) {
 	//--------------------------hooks-------------------------------//
 	const theme = useTheme();
 
@@ -34,7 +34,7 @@ function PriceStockVarient() {
 
 	const [availableFrom, setAvailableFrom] = useState('');
 	const [availableTo, setAvailableTo] = useState('');
-	const [deliveryTime, setDeliveryTime] = useState();
+	const [deliveryTime, setDeliveryTime] = useState(0);
 
 	const [customOrderCheck, setCustomOrderCheck] = useState(false);
 	const [customMeasurements, setCustomMeasurements] = useState([
@@ -49,7 +49,45 @@ function PriceStockVarient() {
 	]);
 
 	const [customDeliveryTimeCheck, setCustomDeliveryTimeCheck] = useState(false);
-	const [customDeliveryTime, setCustomDeliveryTime] = useState();
+	const [customDeliveryTime, setCustomDeliveryTime] = useState(0);
+
+	useEffect(() => {
+		formData.append('price', productPrice);
+		formData.append('discountPrice', discountPrice);
+		if (varient) {
+			varient.forEach((item) => {
+				formData.append('varientImages', item.image);
+				formData.append('colorFamily', item.colorFamily);
+			});
+		}
+		formData.append('productQuantity', productQuantity);
+		formData.append('productMeasurement', JSON.stringify(productMeasurement));
+		formData.append('availableFrom', availableFrom);
+		formData.append('availableTo', availableTo);
+		formData.append('deliveryTime', deliveryTime);
+		formData.append('customOrderCheck', customOrderCheck);
+		formData.append(
+			'customOrderMeasurements',
+			JSON.stringify(customMeasurements)
+		);
+
+		formData.append('customDeliveryTimeCheck', customDeliveryTimeCheck);
+		formData.append('customDeliveryTime', customDeliveryTime);
+	}, [
+		productPrice,
+		discountPrice,
+		varient,
+		productQuantity,
+		productMeasurement,
+		availableFrom,
+		availableTo,
+		deliveryTime,
+		customOrderCheck,
+		customMeasurements,
+		customDeliveryTime,
+		customDeliveryTime,
+		formData,
+	]);
 
 	//-------------------------logics----------------------------//
 	function handleCheckbox(condition) {
@@ -247,19 +285,19 @@ function PriceStockVarient() {
 						labelName='Product Height'
 						size='medium'
 						setState={(value) => handleOriginalMeasurement('height', value)}
-						placeholder='Enter height (optional)'
+						placeholder='Ex.(2.5 inch)'
 					/>
 					<InputHandler
 						labelName='Product Width'
 						size='medium'
 						setState={(value) => handleOriginalMeasurement('width', value)}
-						placeholder='Enter width (optional)'
+						placeholder='Ex.(2.5 inch)'
 					/>
 					<InputHandler
 						labelName='Product Lenght'
 						size='medium'
 						setState={(value) => handleOriginalMeasurement('length', value)}
-						placeholder='Enter length (optional)'
+						placeholder='Ex.(2.5 inch)'
 					/>
 				</Box>
 				{/* ----------------------------------------------------- */}
