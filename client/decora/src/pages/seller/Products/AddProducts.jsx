@@ -16,11 +16,19 @@ import Services from './Add-Product-Sections/Services';
 import axios from 'axios';
 import { baseUrl } from '../../../utils/BaseURL';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { addValidationError } from '../../../features/seller/productSlice';
+import ErrorMessage from '../../../components/forms/form-controllers/ErrorMessage';
 
 function AddProducts() {
 	const theme = useTheme();
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [stepCounter, setStepCounter] = useState(0);
 	const formData = new FormData();
+	const [errorMsg, setError] = useState({});
 
 	const { sellerInfo } = useSelector((state) => state.auth);
 
@@ -36,11 +44,19 @@ function AddProducts() {
 					headers: { 'Content-Type': 'multipart/form-data' },
 				}
 			);
-			console.log('Response:', response.data);
+			if (response.status === 200) {
+				const { message } = response.data;
+				toast.success(message);
+				navigate('/products');
+			}
 		} catch (error) {
 			console.log('Axios error:', error);
 			if (error.response && error.response.data.errors) {
-				console.log('Server error:', error.response.data.errors);
+				dispatch(addValidationError({ message: error.response.data.errors }));
+				setError(error.response.data.errors);
+			} else {
+				dispatch(addValidationError({ message: null }));
+				toast.error('Product publish failed!');
 			}
 		}
 	}
@@ -78,14 +94,39 @@ function AddProducts() {
 			id='form-submit'
 			sx={{
 				width: '100%',
-				display: 'flex',
-				justifyContent: 'space-between',
-				gap: 5,
-				my: 5,
+				my: 15,
 			}}>
-			<Box sx={{ maxWidth: '992px' }}>
+			<Box
+				sx={{
+					my: 2,
+					position: 'fixed',
+					width: '100%',
+					top: '5%',
+					zIndex: 10,
+					maxWidth: '1008px',
+				}}>
+				<Paper
+					sx={{
+						width: '100%',
+						padding: 3,
+						boxShadow: '0px 3px 10px rgba(0,0,0,0.1)',
+					}}>
+					<Stepper activeStep={stepCounter} orientation='horizontal'>
+						{steps.map((item) => (
+							<Step key={item.label}>
+								<StepLabel>
+									<Typography variant='body2'>{item.label}</Typography>
+								</StepLabel>
+							</Step>
+						))}
+					</Stepper>
+				</Paper>
+			</Box>
+
+			<Box sx={{ maxWidth: '992px', mt: 10 }}>
 				{/* ----------basic information component--------- */}
 				<BasicInformation formData={formData} />
+				{/* <ErrorMessage check={errorMsg.englishTitle} /> */}
 				{/* ----------product price-stock-varient--------- */}
 				<PriceStockVarient formData={formData} />
 				{/* ----------product description--------- */}
@@ -115,30 +156,6 @@ function AddProducts() {
 						</Button>
 					</Paper>
 				</Box>
-			</Box>
-
-			<Box
-				sx={{
-					maxWidth: '250px',
-					position: 'fixed',
-					right: '5%',
-				}}>
-				<Paper
-					sx={{
-						padding: 3,
-						boxShadow: '0px 3px 10px rgba(0,0,0,0.1)',
-					}}>
-					<Stepper activeStep={stepCounter} orientation='vertical'>
-						{steps.map((item) => (
-							<Step key={item.label}>
-								<StepLabel>
-									<Typography></Typography>
-									{item.label}
-								</StepLabel>
-							</Step>
-						))}
-					</Stepper>
-				</Paper>
 			</Box>
 		</Box>
 	);

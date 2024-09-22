@@ -13,7 +13,7 @@ const addProduct = new mongose.Schema({
 			images: { type: [String], required: true },
 		},
 		productInfo: {
-			englishTitle: { type: String, required: true },
+			englishTitle: { type: String, required: [true, 'Title is required!'] },
 			banglaTitle: { type: String, required: true },
 			category: { type: String, required: true },
 			material: { type: String, required: true },

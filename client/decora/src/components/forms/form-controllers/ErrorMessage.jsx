@@ -1,8 +1,23 @@
 import { Typography } from '@mui/material';
 
-function ErrorMessage({ check, mt }) {
-	return (
-		<>
+function ErrorMessage({ check, mt, isEmpty }) {
+	const option = isEmpty || 'DEFAULT';
+	if (option === isEmpty) {
+		if (!isEmpty) {
+			return (
+				<Typography
+					variant='body2'
+					color='error'
+					fontWeight='400'
+					sx={{
+						mt: check && check.msg ? mt || '0px' : '0px',
+						visibility: check && check.msg ? 'visible' : 'hidden',
+					}}>{`${check ? check.msg : ''}`}</Typography>
+			);
+		} else return '';
+	}
+	if (option === 'DEFAULT') {
+		return (
 			<Typography
 				variant='body2'
 				color='error'
@@ -11,8 +26,9 @@ function ErrorMessage({ check, mt }) {
 					mt: check && check.msg ? mt || '0px' : '0px',
 					visibility: check && check.msg ? 'visible' : 'hidden',
 				}}>{`${check ? check.msg : ''}`}</Typography>
-		</>
-	);
+		);
+	}
+	return <></>;
 }
 
 export default ErrorMessage;

@@ -5,6 +5,13 @@ import { ClearOutlined } from '@mui/icons-material';
 import InputFileUploadSmall from '../../../../components/reuseables/InputFileUploadSmall';
 import InputHandler from '../../../../components/forms/form-controllers/InputHandler';
 import ItemSelector from '../../../../components/forms/form-controllers/ItemSelector';
+import ErrorMessage from '../../../../components/forms/form-controllers/ErrorMessage';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import {
+	addCoverError,
+	addFilesError,
+} from '../../../../features/seller/productSlice';
 
 const StyledDeleteBtn = styled(Box)(({ theme }) => ({
 	position: 'absolute',
@@ -26,6 +33,7 @@ const StyledDeleteBtn = styled(Box)(({ theme }) => ({
 
 function BasicInformation({ formData }) {
 	const theme = useTheme();
+	const dispatch = useDispatch();
 	const [cover, setCover] = useState(null);
 	const [files, setFiles] = useState([]);
 
@@ -36,11 +44,47 @@ function BasicInformation({ formData }) {
 
 	const [limit, setLimit] = useState(0);
 
+	const [maxUploadMsg, setMaxUploadMsg] = useState('');
+
+	const { coverErrorMessage, filesErrorMessage, validationErrors } =
+		useSelector((state) => state.products);
+
+	const allowedTypes = ['image/jpeg'];
 	useEffect(() => {
-		formData.append('cover', cover);
-		files.forEach((file) => {
-			formData.append('images', file);
-		});
+		if (cover && !allowedTypes.includes(cover.type))
+			dispatch(addCoverError({ message: 'Only .jpg/.png image supports!' }));
+		else dispatch(addCoverError({ message: null }));
+	}, [cover]);
+
+	useEffect(() => {
+		if (files) {
+			let flag = false;
+			files.forEach((file) => {
+				if (!allowedTypes.includes(file.type)) {
+					flag = true;
+				}
+			});
+			if (flag) {
+				dispatch(addFilesError({ message: 'Only .jpg/.png image supports!' }));
+			} else {
+				dispatch(addFilesError({ message: null }));
+			}
+		}
+
+		if (files && files.length >= 3) {
+			setMaxUploadMsg('You have reached maximum 3 files upload limit!');
+		} else setMaxUploadMsg('');
+	}, [files]);
+
+	useEffect(() => {
+		if (cover) {
+			formData.append('cover', cover);
+		}
+		if (files) {
+			files.forEach((file) => {
+				formData.append('images', file);
+			});
+		}
 		formData.append('englishTitle', productTitle);
 		formData.append('banglaTitle', productBanglaTitle);
 		formData.append('category', productCategory);
@@ -85,35 +129,27 @@ function BasicInformation({ formData }) {
 			</Typography>
 			<Paper variant='outlined' sx={{ padding: 3, mt: 3 }}>
 				<Typography fontWeight={600}>Product Image/Video</Typography>
-				<Typography color='#bbb'>Upload atleast 3 product image</Typography>
+				<Typography color='#bbb'>Upload maximum 3 product image</Typography>
 
 				{/*---------------- upload buttons and previews------------------ */}
-				<Box sx={{ display: 'flex', gap: 3, my: 3 }}>
-					<Box>
-						<InputFileUploadSmall setState={setCover} />
+				<Box
+					sx={{
+						maxWidth: '750px',
+						display: 'flex',
+						justifyContent: 'space-around',
+						my: 3,
+					}}>
+					<Box sx={{ flex: '0 1 100%' }}>
+						<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+							<InputFileUploadSmall setState={setCover} />
+						</Box>
 						<Typography variant='subtitle2' textAlign='center' color='#ccc'>
 							Cover image
 						</Typography>
-					</Box>
 
-					<Divider orientation='vertical' flexItem />
-
-					<Box>
-						<InputFileUploadSmall
-							maxUpload={3}
-							limit={limit}
-							setLimit={setLimit}
-							uploadType='multiple'
-							setState={setFiles}
-						/>
-						<Typography variant='subtitle2' textAlign='center' color='#ccc'>
-							Images (max-3)
-						</Typography>
-					</Box>
-
-					<Box sx={{ display: 'flex', gap: 3, mt: 1 }}>
+						{/* cover-preview */}
 						{cover ? (
-							<Paper variant='outlined' sx={{ height: 100, width: 100 }}>
+							<Paper variant='outlined' sx={{ height: 100, width: 100, mt: 4 }}>
 								<>
 									<img
 										src={URL.createObjectURL(cover)}
@@ -123,7 +159,6 @@ function BasicInformation({ formData }) {
 									<Typography
 										sx={{
 											textAlign: 'center',
-											color: `${theme.palette.custom.dark_red}`,
 											fontSize: '0.8em',
 										}}>
 										Cover image*
@@ -131,38 +166,99 @@ function BasicInformation({ formData }) {
 								</>
 							</Paper>
 						) : null}
+						{coverErrorMessage && (
+							<Typography
+								mt={5}
+								paddingX={2}
+								color={theme.palette.custom.dark_red}
+								variant='subtitle2'>
+								{coverErrorMessage}
+							</Typography>
+						)}
+						<ErrorMessage
+							isEmpty={cover}
+							mt={5}
+							check={validationErrors.cover}
+						/>
+					</Box>
 
-						{files.length > 0 ? (
-							<>
-								{files.map((item, index) => (
-									<Paper
-										key={index}
-										variant='outlined'
-										sx={{ position: 'relative', height: 100, width: 100 }}>
-										<>
-											<img
-												src={URL.createObjectURL(item)}
-												height='100%'
-												width='100%'
-											/>
-											<Typography
-												sx={{
-													textAlign: 'center',
-													fontSize: '0.8em',
-												}}>
-												{`image(${index + 1})`}
-											</Typography>
+					<Divider orientation='vertical' flexItem />
 
-											<StyledDeleteBtn onClick={() => handleFileDelete(index)}>
-												<ClearOutlined fontSize='1rem' />
-											</StyledDeleteBtn>
-										</>
-									</Paper>
-								))}
-							</>
-						) : null}
+					<Box sx={{ flex: '0 1 100%' }}>
+						<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+							<InputFileUploadSmall
+								maxUpload={3}
+								limit={limit}
+								setLimit={setLimit}
+								uploadType='multiple'
+								setState={setFiles}
+							/>
+						</Box>
+						<Typography variant='subtitle2' textAlign='center' color='#ccc'>
+							Images (max-3)
+						</Typography>
+
+						{/* image-preview */}
+						<Box sx={{ display: 'flex', gap: 3, mt: 4, paddingX: '22px' }}>
+							{files.length > 0 ? (
+								<>
+									{files.map((item, index) => (
+										<Paper
+											key={index}
+											variant='outlined'
+											sx={{ position: 'relative', height: 100, width: 100 }}>
+											<>
+												<img
+													src={URL.createObjectURL(item)}
+													height='100%'
+													width='100%'
+												/>
+												<Typography
+													sx={{
+														textAlign: 'center',
+														fontSize: '0.8em',
+													}}>
+													{`image(${index + 1})`}
+												</Typography>
+
+												<StyledDeleteBtn
+													onClick={() => handleFileDelete(index)}>
+													<ClearOutlined fontSize='1rem' />
+												</StyledDeleteBtn>
+											</>
+										</Paper>
+									))}
+								</>
+							) : null}
+						</Box>
+						{filesErrorMessage && (
+							<Typography
+								mt={5}
+								paddingX={2}
+								color={theme.palette.custom.dark_red}
+								variant='subtitle2'>
+								{filesErrorMessage}
+							</Typography>
+						)}
+						{maxUploadMsg && (
+							<Typography
+								mt={filesErrorMessage ? 0 : 4}
+								paddingX={2}
+								color={theme.palette.success.main}
+								variant='subtitle2'>
+								{maxUploadMsg}
+							</Typography>
+						)}
+						<Box ml={5}>
+							<ErrorMessage
+								isEmpty={files[0]}
+								mt={1}
+								check={validationErrors.images}
+							/>
+						</Box>
 					</Box>
 				</Box>
+
 				{/*------------------------------------------------------------- */}
 			</Paper>
 			<Paper variant='outlined' sx={{ padding: 3, mt: 5 }}>
@@ -180,31 +276,48 @@ function BasicInformation({ formData }) {
 						placeholder='Enter Product Name (English)'
 						size='medium'
 					/>
+					<ErrorMessage
+						isEmpty={productTitle}
+						check={validationErrors.englishTitle}
+					/>
 					<InputHandler
 						required
 						labelName='প্রোডাক্টের নাম'
 						state={productBanglaTitle}
 						setState={setProductBanglaTitle}
 						type='text'
-						placeholder='প্রোডাক্টের নাম (বাংলায়)'
+						placeholder='প্রোডাক্টের নাম (বাংলায়) (optional)'
 						size='medium'
 					/>
 					<Box sx={{ display: 'flex', gap: 3 }}>
-						<ItemSelector
-							label='Select product category'
-							state={productCategory}
-							setState={setProductCategory}
-							size='medium'
-							options={furnitureCategories}
-						/>
-						<InputHandler
-							labelName='Product Material'
-							state={materialName}
-							setState={setMaterialName}
-							type='text'
-							placeholder='Material name (Ex. Wood,Glass etc)'
-							size='medium'
-						/>
+						<Box sx={{ flex: '0 1 100%' }}>
+							<ItemSelector
+								label='Select product category'
+								state={productCategory}
+								setState={setProductCategory}
+								size='medium'
+								options={furnitureCategories}
+							/>
+							<ErrorMessage
+								isEmpty={productCategory}
+								check={validationErrors.category}
+							/>
+						</Box>
+
+						<Box sx={{ flex: '0 1 100%', mt: '2px' }}>
+							<InputHandler
+								labelName='Product Material'
+								state={materialName}
+								setState={setMaterialName}
+								type='text'
+								placeholder='Material name (Ex. Wood,Glass etc)'
+								size='medium'
+							/>
+							<ErrorMessage
+								isEmpty={materialName}
+								check={validationErrors.material}
+							/>
+						</Box>
 					</Box>
 				</Box>
 			</Paper>

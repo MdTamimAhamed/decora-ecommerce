@@ -40,7 +40,12 @@ function DashboardNavbar() {
 		<>
 			<Box>
 				<Box
-					sx={{ bgcolor: 'white', boxShadow: '0px 1px 0px rgba(0,0,0,0.1)' }}
+					sx={{
+						position: 'relative',
+						zIndex: 20,
+						bgcolor: 'white',
+						boxShadow: '0px 1px 0px rgba(0,0,0,0.1)',
+					}}
 					position='static'>
 					<Container maxWidth='xl'>
 						<Toolbar

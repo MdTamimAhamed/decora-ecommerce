@@ -16,6 +16,10 @@ import InputFileUploadSmall from '../../../../components/reuseables/InputFileUpl
 import InputHandlerForMeasurement from '../../../../components/reuseables/InputHandlerForMeasurement';
 import { useTheme } from '@emotion/react';
 import DateHandler from '../../../../components/forms/form-controllers/DateHandler';
+import { useSelector } from 'react-redux';
+import ErrorMessage from '../../../../components/forms/form-controllers/ErrorMessage';
+import { alpha } from '@mui/system';
+import InfoIcon from '@mui/icons-material/Info';
 
 function PriceStockVarient({ formData }) {
 	//--------------------------hooks-------------------------------//
@@ -51,6 +55,8 @@ function PriceStockVarient({ formData }) {
 	const [customDeliveryTimeCheck, setCustomDeliveryTimeCheck] = useState(false);
 	const [customDeliveryTime, setCustomDeliveryTime] = useState(0);
 
+	const { validationErrors } = useSelector((state) => state.products);
+
 	useEffect(() => {
 		formData.append('price', productPrice);
 		formData.append('discountPrice', discountPrice);
@@ -66,11 +72,12 @@ function PriceStockVarient({ formData }) {
 		formData.append('availableTo', availableTo);
 		formData.append('deliveryTime', deliveryTime);
 		formData.append('customOrderCheck', customOrderCheck);
-		formData.append(
-			'customOrderMeasurements',
-			JSON.stringify(customMeasurements)
-		);
-
+		if (customOrderCheck) {
+			formData.append(
+				'customOrderMeasurements',
+				JSON.stringify(customMeasurements)
+			);
+		}
 		formData.append('customDeliveryTimeCheck', customDeliveryTimeCheck);
 		formData.append('customDeliveryTime', customDeliveryTime);
 	}, [
@@ -162,23 +169,31 @@ function PriceStockVarient({ formData }) {
 				</Box>
 
 				<Box sx={{ display: 'flex', gap: 3, mb: 5 }}>
-					<InputHandler
-						required
-						labelName='Price'
-						type='number'
-						state={productPrice}
-						setState={setProductPrice}
-						placeholder='$ Enter price'
-						size='medium'
-					/>
-					<InputHandler
-						labelName='Discount Price (optional)'
-						type='number'
-						state={discountPrice}
-						setState={setDiscountPrice}
-						placeholder='$ Enter discount price (optional)'
-						size='medium'
-					/>
+					<Box sx={{ flex: '0 1 100%' }}>
+						<InputHandler
+							required
+							labelName='Price'
+							type='number'
+							state={productPrice}
+							setState={setProductPrice}
+							placeholder='$ Enter price'
+							size='medium'
+						/>
+						<ErrorMessage
+							isEmpty={productPrice}
+							check={validationErrors.productPrice}
+						/>
+					</Box>
+					<Box sx={{ flex: '0 1 100%' }}>
+						<InputHandler
+							labelName='Discount Price (optional)'
+							type='number'
+							state={discountPrice}
+							setState={setDiscountPrice}
+							placeholder='$ Enter discount price (optional)'
+							size='medium'
+						/>
+					</Box>
 				</Box>
 				{/* ----------------------------------------------------- */}
 
@@ -221,6 +236,12 @@ function PriceStockVarient({ formData }) {
 									}
 								/>
 							)}
+
+							<ErrorMessage
+								isEmpty={varient[0].colorFamily}
+								check={validationErrors.colorFamily}
+							/>
+
 							{item.image && (
 								<Box key={index} sx={{ height: 100, width: 100, mt: 2 }}>
 									<img
@@ -272,34 +293,57 @@ function PriceStockVarient({ formData }) {
 				<Typography mt={2} fontWeight={600}>
 					Set Quantity & Measurement
 				</Typography>
-				<Box sx={{ display: 'flex', gap: 3, mb: 5 }}>
-					<InputHandler
-						labelName='Product Quantity'
-						type='number'
-						size='medium'
-						state={productQuantity}
-						setState={setProductQuantity}
-						placeholder='Enter quantity'
-					/>
-					<InputHandler
-						labelName='Product Height'
-						size='medium'
-						setState={(value) => handleOriginalMeasurement('height', value)}
-						placeholder='Ex.(2.5 inch)'
-					/>
-					<InputHandler
-						labelName='Product Width'
-						size='medium'
-						setState={(value) => handleOriginalMeasurement('width', value)}
-						placeholder='Ex.(2.5 inch)'
-					/>
-					<InputHandler
-						labelName='Product Lenght'
-						size='medium'
-						setState={(value) => handleOriginalMeasurement('length', value)}
-						placeholder='Ex.(2.5 inch)'
-					/>
+				<Box mb={5}>
+					{validationErrors.height && (
+						<Box bgcolor={alpha(theme.palette.warning.light, 1)}>
+							<Box
+								sx={{
+									display: 'flex',
+									alignItems: 'start',
+									gap: 1,
+									height: 'auto',
+									padding: 1,
+									my: 1,
+								}}>
+								<InfoIcon />
+								<Typography variant='subtitle2'>
+									Note: Please ensure that you provide the size parameters{' '}
+									<b>(mm, cm, m, ft, inch)</b> for the product's height, width,
+									and length.
+								</Typography>
+							</Box>
+						</Box>
+					)}
+					<Box sx={{ display: 'flex', gap: 3 }}>
+						<InputHandler
+							labelName='Product Quantity'
+							type='number'
+							size='medium'
+							state={productQuantity}
+							setState={setProductQuantity}
+							placeholder='Enter quantity'
+						/>
+						<InputHandler
+							labelName='Product Height'
+							size='medium'
+							setState={(value) => handleOriginalMeasurement('height', value)}
+							placeholder='Ex- 2.5 inch'
+						/>
+						<InputHandler
+							labelName='Product Width'
+							size='medium'
+							setState={(value) => handleOriginalMeasurement('width', value)}
+							placeholder='Ex- 2.5 inch'
+						/>
+						<InputHandler
+							labelName='Product Lenght'
+							size='medium'
+							setState={(value) => handleOriginalMeasurement('length', value)}
+							placeholder='Ex- 2.5 inch'
+						/>
+					</Box>
 				</Box>
+
 				{/* ----------------------------------------------------- */}
 
 				<Divider />
