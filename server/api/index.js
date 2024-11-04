@@ -23,22 +23,12 @@ const app = express();
 
 const port = process.env.PORT;
 
-const whitelist = [
-	'*', 'https://decora-ecommerce-client.vercel.app'
-];
-
-app.use((req, res, next) => {
-	const origin = req.get('referer');
-	const isWhitelisted = whitelist.find((w) => origin && origin.includes(w));
-	if (isWhitelisted) {
-		res.setHeader('Access-Control-Allow-Origin', '*');
-		res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-		res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Authorization');
-		res.setHeader('Access-Control-Allow-Credentials', true);
-	}
-	if (req.method === 'OPTIONS') res.sendStatus(200);
-	else next();
-});
+app.use(cors({
+	origin: 'https://decora-ecommerce-client.vercel.app',
+	methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+	credentials: true,
+	allowedHeaders: "Content-Type, Authorization"
+}));
 
 
 
@@ -71,6 +61,9 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/seller', sellerRoutes);
 app.use('/api/products', sellerProductRoutes);
 
+app.use('/api', (req, res) => {
+	res.send('Project is running');
+});
 
 //error handle
 app.use(notFoundErrorHandler);
