@@ -36,7 +36,7 @@ function NIDVerification() {
 
 		try {
 			const response = await axios.post(
-				`${baseUrl}/seller/products/nid-verification`,
+				`${baseUrl}/api/seller/products/nid-verification`,
 				formData,
 				{ headers: { 'Content-Type': 'multipart/form-data' } }
 			);

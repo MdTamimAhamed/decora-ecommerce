@@ -40,7 +40,7 @@ function BankDetails({ setState }) {
 
 		try {
 			const response = await axios.post(
-				`${baseUrl}/seller/products/bank-details`,
+				`${baseUrl}/api/seller/products/bank-details`,
 				formData,
 				{ headers: { 'Content-Type': 'multipart/form-data' } }
 			);

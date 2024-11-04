@@ -12,6 +12,7 @@ function InputHandlerForMeasurement({
 	autoComplete,
 	required,
 	setMetrics,
+	fetchedMetric,
 }) {
 	const metricArr = ['ft', 'mm', 'cm', 'm', 'Inch'];
 	const [metric, setMetric] = useState('');
@@ -50,7 +51,7 @@ function InputHandlerForMeasurement({
 			<Box sx={{ minWidth: '100px' }}>
 				<ItemSelector
 					size='medium'
-					state={metric}
+					state={metric || fetchedMetric}
 					setState={(value) => handleMetricsValue(value)}
 					label='Metric'
 					options={metricArr}

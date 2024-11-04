@@ -6,12 +6,8 @@ import InputFileUploadSmall from '../../../../components/reuseables/InputFileUpl
 import InputHandler from '../../../../components/forms/form-controllers/InputHandler';
 import ItemSelector from '../../../../components/forms/form-controllers/ItemSelector';
 import ErrorMessage from '../../../../components/forms/form-controllers/ErrorMessage';
-import { useDispatch } from 'react-redux';
+
 import { useSelector } from 'react-redux';
-import {
-	addCoverError,
-	addFilesError,
-} from '../../../../features/seller/productSlice';
 
 const StyledDeleteBtn = styled(Box)(({ theme }) => ({
 	position: 'absolute',
@@ -33,7 +29,7 @@ const StyledDeleteBtn = styled(Box)(({ theme }) => ({
 
 function BasicInformation({ formData }) {
 	const theme = useTheme();
-	const dispatch = useDispatch();
+
 	const [cover, setCover] = useState(null);
 	const [files, setFiles] = useState([]);
 
@@ -43,39 +39,18 @@ function BasicInformation({ formData }) {
 	const [materialName, setMaterialName] = useState('');
 
 	const [limit, setLimit] = useState(0);
-
 	const [maxUploadMsg, setMaxUploadMsg] = useState('');
 
-	const { coverErrorMessage, filesErrorMessage, validationErrors } =
-		useSelector((state) => state.products);
+	const { validationErrors } = useSelector((state) => state.products);
 
-	const allowedTypes = ['image/jpeg'];
+	//--------for product images(files)-------//
 	useEffect(() => {
-		if (cover && !allowedTypes.includes(cover.type))
-			dispatch(addCoverError({ message: 'Only .jpg/.png image supports!' }));
-		else dispatch(addCoverError({ message: null }));
-	}, [cover]);
-
-	useEffect(() => {
-		if (files) {
-			let flag = false;
-			files.forEach((file) => {
-				if (!allowedTypes.includes(file.type)) {
-					flag = true;
-				}
-			});
-			if (flag) {
-				dispatch(addFilesError({ message: 'Only .jpg/.png image supports!' }));
-			} else {
-				dispatch(addFilesError({ message: null }));
-			}
-		}
-
 		if (files && files.length >= 3) {
 			setMaxUploadMsg('You have reached maximum 3 files upload limit!');
 		} else setMaxUploadMsg('');
 	}, [files]);
 
+	//-----------formData---------------//
 	useEffect(() => {
 		if (cover) {
 			formData.append('cover', cover);
@@ -156,6 +131,7 @@ function BasicInformation({ formData }) {
 										height='100%'
 										width='100%'
 									/>
+
 									<Typography
 										sx={{
 											textAlign: 'center',
@@ -166,15 +142,7 @@ function BasicInformation({ formData }) {
 								</>
 							</Paper>
 						) : null}
-						{coverErrorMessage && (
-							<Typography
-								mt={5}
-								paddingX={2}
-								color={theme.palette.custom.dark_red}
-								variant='subtitle2'>
-								{coverErrorMessage}
-							</Typography>
-						)}
+
 						<ErrorMessage
 							isEmpty={cover}
 							mt={5}
@@ -231,18 +199,10 @@ function BasicInformation({ formData }) {
 								</>
 							) : null}
 						</Box>
-						{filesErrorMessage && (
-							<Typography
-								mt={5}
-								paddingX={2}
-								color={theme.palette.custom.dark_red}
-								variant='subtitle2'>
-								{filesErrorMessage}
-							</Typography>
-						)}
+
 						{maxUploadMsg && (
 							<Typography
-								mt={filesErrorMessage ? 0 : 4}
+								mt={4}
 								paddingX={2}
 								color={theme.palette.success.main}
 								variant='subtitle2'>

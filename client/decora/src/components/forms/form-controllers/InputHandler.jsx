@@ -2,6 +2,7 @@ import { MenuItem, MenuList, TextField } from '@mui/material';
 import React from 'react';
 
 function InputHandler({
+	value,
 	labelName,
 	type,
 	state,
@@ -25,7 +26,7 @@ function InputHandler({
 				size={size || 'small'}
 				fullWidth
 				margin='dense'
-				value={state}
+				value={state || ''}
 				onChange={(e) => setState(e.target.value)}
 				autoComplete={autoComplete}
 				InputLabelProps={{

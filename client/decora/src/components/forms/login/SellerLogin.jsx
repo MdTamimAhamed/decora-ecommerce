@@ -26,7 +26,7 @@ function SellerLogin() {
 
 		try {
 			const response = await axios.post(
-				`${baseUrl}/seller/login`,
+				`${baseUrl}/api/seller/login`,
 				{ email, password },
 				{ headers: { 'Content-Type': 'application/json' } }
 			);

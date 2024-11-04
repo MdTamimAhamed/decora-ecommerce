@@ -8,6 +8,8 @@ import {
 import React, { useEffect, useState } from 'react';
 import InputHandler from '../../../../components/forms/form-controllers/InputHandler';
 import ItemSelector from '../../../../components/forms/form-controllers/ItemSelector';
+import { useSelector } from 'react-redux';
+import ErrorMessage from '../../../../components/forms/form-controllers/ErrorMessage';
 
 function Services({ formData }) {
 	const [returnTime, setReturnTime] = useState(0);
@@ -15,16 +17,13 @@ function Services({ formData }) {
 	const [serviceType, setServiceType] = useState('');
 	const [serviceTime, setServiceTime] = useState(0);
 
-	useEffect(() => {
-		formData.delete('productReturnTime');
-		formData.delete('cashOnDelivery');
-		formData.delete('serviceType');
-		formData.delete('serviceTime');
+	const { validationErrors } = useSelector((state) => state.products);
 
-		formData.append('productReturnTime', returnTime);
-		formData.append('cashOnDelivery', cod);
-		formData.append('serviceType', serviceType);
-		formData.append('serviceTime', serviceTime);
+	useEffect(() => {
+		if (returnTime) formData.append('productReturnTime', returnTime);
+		if (cod) formData.append('cashOnDelivery', cod);
+		if (serviceType) formData.append('serviceType', serviceType);
+		if (serviceTime) formData.append('serviceTime', serviceTime);
 	}, [returnTime, cod, serviceType, serviceTime, formData]);
 
 	const option = ['Warranty', 'Guarantee', 'None'];
@@ -96,6 +95,7 @@ function Services({ formData }) {
 						placeholder='Service time (years)'
 					/>
 				</Box>
+				<ErrorMessage check={validationErrors.serviceType} />
 			</Paper>
 		</Paper>
 	);

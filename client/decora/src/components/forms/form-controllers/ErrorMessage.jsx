@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 
-function ErrorMessage({ check, mt, isEmpty }) {
+function ErrorMessage({ check, mt, isEmpty, color }) {
 	const option = isEmpty || 'DEFAULT';
 	if (option === isEmpty) {
 		if (!isEmpty) {
@@ -20,7 +20,7 @@ function ErrorMessage({ check, mt, isEmpty }) {
 		return (
 			<Typography
 				variant='body2'
-				color='error'
+				color={color || 'error'}
 				fontWeight='400'
 				sx={{
 					mt: check && check.msg ? mt || '0px' : '0px',

@@ -16,21 +16,21 @@ import Services from './Add-Product-Sections/Services';
 import axios from 'axios';
 import { baseUrl } from '../../../utils/BaseURL';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { addValidationError } from '../../../features/seller/productSlice';
-import ErrorMessage from '../../../components/forms/form-controllers/ErrorMessage';
+import ReactLoading from 'react-loading';
 
 function AddProducts() {
 	const theme = useTheme();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [stepCounter, setStepCounter] = useState(0);
-	const formData = new FormData();
-	const [errorMsg, setError] = useState({});
+	const [loading, setLoading] = useState(false);
 
 	const { sellerInfo } = useSelector((state) => state.auth);
+	const formData = new FormData();
 
 	async function handleFormSubmit(e) {
 		e.preventDefault();
@@ -38,7 +38,7 @@ function AddProducts() {
 
 		try {
 			const response = await axios.post(
-				`${baseUrl}/seller/product/add`,
+				`${baseUrl}/api/products/add`,
 				formData,
 				{
 					headers: { 'Content-Type': 'multipart/form-data' },
@@ -47,17 +47,19 @@ function AddProducts() {
 			if (response.status === 200) {
 				const { message } = response.data;
 				toast.success(message);
+
 				navigate('/products');
 			}
 		} catch (error) {
 			console.log('Axios error:', error);
 			if (error.response && error.response.data.errors) {
 				dispatch(addValidationError({ message: error.response.data.errors }));
-				setError(error.response.data.errors);
 			} else {
 				dispatch(addValidationError({ message: null }));
 				toast.error('Product publish failed!');
 			}
+		} finally {
+			setLoading(false);
 		}
 	}
 
@@ -124,6 +126,13 @@ function AddProducts() {
 			</Box>
 
 			<Box sx={{ maxWidth: '992px', mt: 10 }}>
+				<Box>
+					<Typography
+						variant='h5'
+						sx={{ my: 2, fontWeight: 700, color: theme.palette.primary.main }}>
+						+ Add New Product
+					</Typography>
+				</Box>
 				{/* ----------basic information component--------- */}
 				<BasicInformation formData={formData} />
 				{/* <ErrorMessage check={errorMsg.englishTitle} /> */}
@@ -151,8 +160,17 @@ function AddProducts() {
 							justifyContent: 'end',
 							alignItems: 'center',
 						}}>
-						<Button type='submit' sx={{ py: 1, margin: 2 }} variant='contained'>
-							Publish Product
+						<Button
+							onClick={() => setLoading(true)}
+							type='submit'
+							sx={{ py: 1, margin: 2, gap: 2 }}
+							variant='contained'>
+							<Typography sx={{ textTransform: 'capitalize' }}>
+								{loading ? 'Publishing Product...' : 'Publish Product'}
+							</Typography>
+							{loading && (
+								<ReactLoading type='spin' height='20px' width='20px' />
+							)}
 						</Button>
 					</Paper>
 				</Box>

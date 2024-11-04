@@ -10,18 +10,19 @@ import {
 	styled,
 	Typography,
 } from '@mui/material';
-import { useTheme } from '@mui/material';
-import { useSelector } from 'react-redux';
 import StoreSetup from '../../../components/forms/seller-product-forms/StoreSetup';
 import AddressVerification from '../../../components/forms/seller-product-forms/AddressVerification';
 import NIDVerification from '../../../components/forms/seller-product-forms/NIDVerification';
 import BankDetails from '../../../components/forms/seller-product-forms/BankDetails';
-import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { baseUrl } from '../../../utils/BaseURL';
-
 import AddProducts from './AddProducts';
 import ReactLoading from 'react-loading';
+import PublishedProducts from './PublishedProducts';
+
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { baseUrl } from '../../../utils/BaseURL';
+import { useTheme } from '@mui/material';
 import { toast } from 'react-toastify';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 
@@ -57,7 +58,7 @@ function Products() {
 			const token = localStorage.getItem('sellerToken');
 			try {
 				const response = await axios.get(
-					`${baseUrl}/seller/confirm-verification`,
+					`${baseUrl}/api/seller/confirm-verification`,
 					{ headers: { Authorization: `Bearer ${token}` } }
 				);
 
@@ -189,21 +190,31 @@ function Products() {
 								minHeight: '150px',
 								borderStyle: 'dashed',
 								borderWidth: '2px',
-								bgcolor: alpha(theme.palette.primary.main, 0.1),
-								borderColor: alpha(theme.palette.primary.main, 0.5),
+								bgcolor: alpha(theme.palette.warning.light, 0.1),
+								borderColor: alpha(theme.palette.warning.light, 0.8),
 								mt: 3,
 							}}>
 							<Button
 								variant='outlined'
-								sx={{ padding: '10px' }}
+								sx={{
+									padding: '10px',
+									borderColor: theme.palette.warning.light,
+									color: theme.palette.warning.light,
+									':hover': { borderColor: theme.palette.warning.light },
+								}}
 								onClick={handleAddProductsClick}>
 								Add Products +
 							</Button>
 						</Paper>
 					</Box>
 
-					<Box sx={{ height: '200px' }}>
+					{/* <Box sx={{ height: '200px' }}>
 						<Outlet />
+					</Box> */}
+
+					<Box mt={5}>
+						<Typography variant='h6'>Published Products</Typography>
+						<PublishedProducts />
 					</Box>
 				</>
 			)}

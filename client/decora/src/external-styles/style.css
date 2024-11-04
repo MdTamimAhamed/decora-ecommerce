@@ -10,3 +10,8 @@
 .ProseMirror:focus {
 	outline: none;
 }
+.tiptap-editor {
+	white-space: pre-wrap;
+}
+
+

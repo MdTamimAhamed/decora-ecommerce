@@ -39,7 +39,7 @@ function StoreSetup() {
 
 		try {
 			const response = await axios.post(
-				`${baseUrl}/seller/products/store-setup`,
+				`${baseUrl}/api/seller/products/store-setup`,
 				formData,
 				{ headers: { 'Content-Type': 'multipart/form-data' } }
 			);

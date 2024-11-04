@@ -32,9 +32,8 @@ function DashboardNavbar() {
 
 	function handleLogout() {
 		dispatch(sellerLogout());
-		setTimeout(() => {
-			navigate('/seller-login');
-		}, 1000);
+
+		navigate('/seller-login');
 	}
 	return (
 		<>

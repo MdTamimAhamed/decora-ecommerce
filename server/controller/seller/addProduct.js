@@ -8,7 +8,8 @@ async function addProduct(req, res, next) {
 			return res.status(400).json({ message: 'No file uploaded!' });
 		}
 
-		const { englishTitle, banglaTitle, category, material } = req.body;
+		const { englishTitle, banglaTitle, category, material, productPrice } =
+			req.body;
 
 		//cover image
 		let coverUrl = '';
@@ -58,13 +59,56 @@ async function addProduct(req, res, next) {
 			colorVarients.push(colorVarient);
 		}
 
-		const { value } = req.body;
-
-		console.log(value);
-
+		//product unique code
 		const productCode = `PROD-id-${uuidv4()}`;
 
-		const measurements = JSON.parse(req.body.customOrderMeasurements);
+		//custom oder measurements
+		let addCustomOrderMeasurements = {};
+		if (
+			req.body.customOrderCheck === 'true' &&
+			req.body.customOrderMeasurements
+		) {
+			const measurements = JSON.parse(req.body.customOrderMeasurements);
+			addCustomOrderMeasurements = {
+				minHeight: {
+					value: measurements.minHeight.value,
+					metric: measurements.minHeight.metric,
+				},
+				minWidth: {
+					value: measurements.minWidth.value,
+					metric: measurements.minWidth.metric,
+				},
+				minLength: {
+					value: measurements.minLength.value,
+					metric: measurements.minLength.metric,
+				},
+				maxHeight: {
+					value: measurements.maxHeight.value,
+					metric: measurements.maxHeight.metric,
+				},
+				maxWidth: {
+					value: measurements.maxWidth.value,
+					metric: measurements.maxWidth.metric,
+				},
+				maxLength: {
+					value: measurements.maxLength.value,
+					metric: measurements.maxLength.metric,
+				},
+			};
+		} else {
+			console.log('No custom order!');
+		}
+
+		//custom delivery update based on check or userinput
+		let updatedDeliveryTime = 0;
+		if (
+			req.body.customOrderCheck === 'true' &&
+			req.body.customDeliveryTimeCheck === 'true'
+		) {
+			updatedDeliveryTime = req.body.deliveryTime * 2;
+		} else {
+			updatedDeliveryTime = req.body.customDeliveryTime;
+		}
 
 		const newProduct = new sellerProductModel({
 			sellerId: req.body.sellerId,
@@ -82,10 +126,8 @@ async function addProduct(req, res, next) {
 				},
 			},
 			productPriceStockAndVarient: {
-				productPrice: {
-					price: req.body.price,
-					discountPrice: req.body.discountPrice,
-				},
+				productPrice: productPrice,
+				discountPrice: req.body.discountPrice,
 				productQuantity: req.body.productQuantity,
 				productMeasurement: JSON.parse(req.body.productMeasurement),
 				colorVarient: colorVarients,
@@ -97,34 +139,9 @@ async function addProduct(req, res, next) {
 				deliveryTime: req.body.deliveryTime,
 				customOrder: {
 					check: req.body.customOrderCheck,
-					customOrderMeasurements: {
-						minHeight: {
-							value: measurements.minHeight.value,
-							metric: measurements.minHeight.metric,
-						},
-						minWidth: {
-							value: measurements.minWidth.value,
-							metric: measurements.minWidth.metric,
-						},
-						minLength: {
-							value: measurements.minLength.value,
-							metric: measurements.minLength.metric,
-						},
-						maxHeight: {
-							value: measurements.maxHeight.value,
-							metric: measurements.maxHeight.metric,
-						},
-						maxWidth: {
-							value: measurements.maxWidth.value,
-							metric: measurements.maxWidth.metric,
-						},
-						maxLength: {
-							value: measurements.maxLength.value,
-							metric: measurements.maxLength.metric,
-						},
-					},
+					customOrderMeasurements: addCustomOrderMeasurements,
 					customOrderDeliveryTimeCheck: req.body.customDeliveryTimeCheck,
-					customOerderDeliveryTime: req.body.customDeliveryTime,
+					customOrderDeliveryTime: updatedDeliveryTime,
 				},
 			},
 			productDescription: req.body.productDescription,
@@ -144,29 +161,3 @@ async function addProduct(req, res, next) {
 }
 
 module.exports = { addProduct };
-
-// const {
-// 	englishTitle,
-// 	banglaTitle,
-// 	category,
-// 	material,
-
-// 	price,
-// 	discountPrice,
-// 	productQuantity,
-// 	productMeasurement,
-// 	availableFrom,
-// 	availableTo,
-// 	deliveryTime,
-// 	customOrderCheck,
-// 	customOrderMeasurements,
-// 	customOrderDeliveryTimeCheck,
-// 	customOrderDeliveryTime,
-
-// 	productDescription,
-
-// 	productReturnTime,
-// 	cashOnDelivery,
-// 	setWarranty,
-// 	warrantyTime,
-// } = req.body;

@@ -28,7 +28,11 @@ function ProductDescription({ formData }) {
 					<Typography mb={1} fontWeight={600}>
 						Write Product Description
 					</Typography>
-					<Tiptap setState={setEditorContent} saveBtnText='Save Description' />
+					<Tiptap
+						content={editorContent}
+						isError={true}
+						setState={setEditorContent}
+					/>
 				</Box>
 			</Paper>
 		</Paper>

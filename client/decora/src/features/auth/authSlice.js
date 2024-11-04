@@ -14,8 +14,8 @@ const authSlice = createSlice({
 			localStorage.setItem('customerToken', action.payload.token);
 		},
 		sellerLogin: (state, action) => {
-			(state.isSellerAuthenticated = true),
-				localStorage.setItem('sellerToken', action.payload.sellerToken);
+			state.isSellerAuthenticated = true;
+			localStorage.setItem('sellerToken', action.payload.sellerToken);
 		},
 
 		userLogout: (state) => {

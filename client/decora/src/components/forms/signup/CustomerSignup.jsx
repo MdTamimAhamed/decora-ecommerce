@@ -40,7 +40,7 @@ function CustomerSignup() {
 
 		try {
 			const response = await axios.post(
-				`${baseUrl}/customer/signup`,
+				`${baseUrl}/api/customer/signup`,
 				formData,
 				{
 					headers: {

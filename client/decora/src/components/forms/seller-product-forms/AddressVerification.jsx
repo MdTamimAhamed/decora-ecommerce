@@ -40,7 +40,7 @@ function AddressVerification() {
 
 		try {
 			const response = await axios.post(
-				`${baseUrl}/seller/products/address-verification`,
+				`${baseUrl}/api/seller/products/address-verification`,
 				{ country, district, area, postCode, address, sellerDocumentId },
 				{ headers: { 'Content-Type': 'application/json' } }
 			);

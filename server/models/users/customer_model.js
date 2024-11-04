@@ -26,6 +26,50 @@ const customerSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	address: {
+		type: String,
+	},
+	cart: [
+		{
+			productId: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'SellerProduct',
+			},
+			sellerId: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'SellerDocument',
+			},
+			quantity: {
+				type: Number,
+			},
+			colorFamily: {
+				type: String,
+			},
+			price: {
+				type: Number,
+			},
+
+			customOrder: {
+				measurements: {
+					height: {
+						type: Number,
+					},
+					width: {
+						type: Number,
+					},
+					length: {
+						type: Number,
+					},
+					unit: {
+						type: String,
+					},
+				},
+				quantity: {
+					type: Number,
+				},
+			},
+		},
+	],
 });
 
 const CustomerModel = mongoose.model('customer', customerSchema);

@@ -11,47 +11,51 @@ import { Auth0Provider } from '@auth0/auth0-react';
 import { ToastContainer } from 'react-toastify';
 
 const theme = createTheme({
-	palette: {
-		custom: {
-			dark_red: '#c30010',
-			custom_bg: '#F5F5F5',
-		},
-		primary: {
-			main: '#2D3C4D',
-		},
-	},
-	typography: {
-		allVariants: {
-			fontFamily: "'Inter','Caveat', 'cursive', 'sans-serif'",
-		},
-	},
+  palette: {
+    custom: {
+      dark_red: '#c30010',
+      custom_bg: '#F5F5F5',
+    },
+    primary: {
+      main: '#0e0d0d',
+    },
+    secondary: {
+      main: '#de2d2d',
+    },
+  },
+  typography: {
+    allVariants: {
+      fontFamily: "'Inter','Caveat', 'cursive', 'sans-serif'",
+    },
+  },
 });
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-	<React.StrictMode>
-		<ThemeProvider theme={theme}>
-			<Provider store={store}>
-				<Auth0Provider
-					domain='dev-f0rg24fwovsf4did.us.auth0.com'
-					clientId='IL9fr6fLPdaoPeWhO6FNCEJ0yI2s9Z7P'
-					authorizationParams={{
-						redirect_uri: window.location.origin,
-					}}>
-					<AppRouters />
-					<ToastContainer
-						position='top-center'
-						autoClose={2500}
-						hideProgressBar
-						newestOnTop={false}
-						closeOnClick
-						rtl={false}
-						pauseOnFocusLoss
-						draggable={false}
-						pauseOnHover
-						theme='dark'
-					/>
-				</Auth0Provider>
-			</Provider>
-		</ThemeProvider>
-	</React.StrictMode>
+  <React.StrictMode>
+    <ThemeProvider theme={theme}>
+      <Provider store={store}>
+        <Auth0Provider
+          domain="dev-f0rg24fwovsf4did.us.auth0.com"
+          clientId="IL9fr6fLPdaoPeWhO6FNCEJ0yI2s9Z7P"
+          authorizationParams={{
+            redirect_uri: window.location.origin,
+          }}
+        >
+          <AppRouters />
+          <ToastContainer
+            position="top-center"
+            autoClose={2500}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable={false}
+            pauseOnHover
+            theme="dark"
+          />
+        </Auth0Provider>
+      </Provider>
+    </ThemeProvider>
+  </React.StrictMode>
 );

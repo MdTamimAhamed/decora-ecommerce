@@ -45,7 +45,7 @@ function SellerSignup() {
 		e.preventDefault();
 
 		try {
-			const response = await axios.post(`${baseUrl}/seller/verify-email`, {
+			const response = await axios.post(`${baseUrl}/api/seller/verify-email`, {
 				email,
 			});
 			if (response.status === 200) {
@@ -73,7 +73,7 @@ function SellerSignup() {
 	async function handleResendOTP(e) {
 		e.preventDefault();
 		try {
-			const response = await axios.post(`${baseUrl}/seller/reset-otp`, {
+			const response = await axios.post(`${baseUrl}/api/seller/reset-otp`, {
 				email: successEmail,
 			});
 			if (response.status === 200) {
@@ -97,7 +97,7 @@ function SellerSignup() {
 	async function handleRegistration(e) {
 		e.preventDefault();
 		try {
-			const response = await axios.post(`${baseUrl}/seller/register`, {
+			const response = await axios.post(`${baseUrl}/api/seller/register`, {
 				email: successEmail,
 				otpValue: otp,
 				accountType: businessType,

@@ -1,17 +1,17 @@
 import {
-	alpha,
-	AppBar,
-	Badge,
-	Box,
-	Button,
-	Container,
-	IconButton,
-	InputBase,
-	Menu,
-	MenuItem,
-	styled,
-	Toolbar,
-	Typography,
+  alpha,
+  AppBar,
+  Badge,
+  Box,
+  Button,
+  Container,
+  IconButton,
+  InputBase,
+  Menu,
+  MenuItem,
+  styled,
+  Toolbar,
+  Typography,
 } from '@mui/material';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -21,207 +21,238 @@ import { useSelector } from 'react-redux';
 import { useAuth0 } from '@auth0/auth0-react';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { userLogout } from '../../features/auth/authSlice';
-
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useTheme } from '@emotion/react';
 
 const Search = styled('div')(({ theme }) => ({
-	position: 'relative',
-	borderRadius: theme.shape.borderRadius,
-	backgroundColor: alpha(theme.palette.common.white, 0.3),
-	width: '60%',
+  position: 'relative',
+  borderRadius: '50px',
+  backgroundColor: alpha(theme.palette.common.white, 0.1),
+  width: '40%',
 }));
 
 const StyledSearchIconWrapper = styled('div')(({ theme }) => ({
-	height: '100%',
-	padding: theme.spacing(0, 2),
-	position: 'absolute',
-	display: 'flex',
-	justifyContent: 'center',
-	alignItems: 'center',
+  height: '100%',
+  padding: theme.spacing(0, 2),
+  position: 'absolute',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-	width: '100%',
-	color: 'inherit',
-	'& .MuiInputBase-input': {
-		padding: theme.spacing(1.5, 1, 1.5, 6),
-	},
+  width: '100%',
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1.5, 1, 1.5, 6),
+  },
 }));
 
-function CustomerNavbar() {
-	const [anchorEl, setAnchorEl] = useState(null);
-	const open = Boolean(anchorEl);
-	const handleClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
+function CustomerNavbar({ cartLength }) {
+  const theme = useTheme();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-	const { isAuthenticated, user, logout } = useAuth0();
-	const { isUserAuthenticated, isSellerAuthenticated, userInfo } = useSelector(
-		(state) => state.auth
-	);
+  const { isAuthenticated, user, logout } = useAuth0();
+  const { isUserAuthenticated, isSellerAuthenticated, userInfo } = useSelector(
+    (state) => state.auth
+  );
 
-	const navigate = useNavigate();
-	const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-	function handleLogout() {
-		if (isAuthenticated) {
-			logout({ logoutParams: { returnTo: window.location.origin } });
-			toast.success('Auth0: You logged out!');
-		} else {
-			dispatch(userLogout());
-			toast.success('You logged out!');
-			setTimeout(() => {
-				navigate('/');
-			}, 2000);
-		}
-	}
+  function handleLogout() {
+    if (isAuthenticated) {
+      logout({ logoutParams: { returnTo: window.location.origin } });
+      toast.success('Auth0: You logged out!');
+    } else {
+      dispatch(userLogout());
+      toast.success('You logged out!');
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+    }
+  }
 
-	return (
-		<Box>
-			<AppBar position='static'>
-				<Container maxWidth='xl'>
-					<Box
-						sx={{
-							display: 'flex',
-							justifyContent: 'end',
-							pt: '10px',
-							gap: 2,
-						}}>
-						<Button size='small' color='inherit'>
-							Help & Support
-						</Button>
-						{isSellerAuthenticated ? (
-							<Button
-								component={Link}
-								to='/products'
-								size='small'
-								color='inherit'>
-								Become a seller
-							</Button>
-						) : (
-							<Button
-								component={Link}
-								to='/seller-login'
-								size='small'
-								color='inherit'>
-								Become a seller
-							</Button>
-						)}
+  function handleCartLink() {
+    if (isAuthenticated || isUserAuthenticated) {
+      navigate('/cart');
+    } else {
+      navigate('/login');
+      toast.error('Please login to view cart');
+    }
+  }
 
-						{isUserAuthenticated || (isAuthenticated && user) ? (
-							<>
-								<Button
-									onClick={handleClick}
-									variant='outlined'
-									color='inherit'
-									sx={{
-										gap: 1,
-										textTransform: 'capitalize',
-									}}>
-									{(isUserAuthenticated && userInfo.userName) ||
-										(isAuthenticated && user && user.name)}
-									<AccountCircleIcon />
-								</Button>
-								<Box>
-									<Menu
-										id='basic-menu'
-										anchorEl={anchorEl}
-										open={open}
-										onClose={handleClose}
-										MenuListProps={{
-											'aria-labelledby': 'basic-button',
-										}}>
-										<MenuItem>Profile</MenuItem>
-										<MenuItem>My account</MenuItem>
-										<MenuItem>Orders</MenuItem>
-										<MenuItem>Wishlist</MenuItem>
-										<MenuItem>My reviews</MenuItem>
-										<MenuItem>Cancel orders</MenuItem>
-										<MenuItem
-											onClick={handleLogout}
-											variant='text'
-											size='small'>
-											<LogoutIcon color='error' />
-											<Typography
-												variant='body2'
-												color='error'
-												fontWeight='600'
-												ml='5px'>
-												Logout
-											</Typography>
-										</MenuItem>
-									</Menu>
-								</Box>
-							</>
-						) : (
-							<>
-								<Button
-									component={Link}
-									to='/login'
-									variant='outlined'
-									size='small'
-									color='inherit'>
-									Login
-								</Button>
+  return (
+    <Box pb={8}>
+      <AppBar>
+        <Container maxWidth="xl">
+          <Toolbar
+            disableGutters
+            sx={{
+              py: '10px',
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Box sx={{ textAlign: 'center' }}>
+              <Typography
+                onClick={() => navigate('/')}
+                mb={2}
+                sx={{ cursor: 'pointer' }}
+                variant="h5"
+                color="white"
+                fontWeight="400"
+              >
+                Decora
+                <Typography
+                  fontWeight={200}
+                  fontSize={12}
+                  component="p"
+                  lineHeight="5px"
+                  letterSpacing={1}
+                >
+                  E-commerce
+                </Typography>
+              </Typography>
+            </Box>
+            <Search>
+              <StyledSearchIconWrapper>
+                <SearchIcon />
+              </StyledSearchIconWrapper>
+              <StyledInputBase placeholder="Search..." />
+            </Search>
 
-								<Button
-									component={Link}
-									to='/signup'
-									variant='outlined'
-									size='small'
-									color='inherit'>
-									Signup
-								</Button>
-							</>
-						)}
-					</Box>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'end',
+                pt: '10px',
+                gap: 2,
+              }}
+            >
+              {isSellerAuthenticated ? (
+                <Button
+                  component={Link}
+                  to="/seller-login"
+                  size="small"
+                  sx={{
+                    color: theme.palette.common.white,
+                    bgcolor: theme.palette.secondary.main,
+                    px: 3,
+                  }}
+                >
+                  Become a seller
+                </Button>
+              ) : (
+                <Button
+                  component={Link}
+                  to="/seller-login"
+                  size="small"
+                  sx={{
+                    color: theme.palette.common.white,
+                    bgcolor: theme.palette.secondary.main,
+                    px: 2,
+                  }}
+                >
+                  Become a seller
+                </Button>
+              )}
 
-					<Toolbar
-						disableGutters
-						sx={{
-							py: '10px',
-							display: 'flex',
-							justifyContent: 'space-between',
-						}}>
-						<Box sx={{ textAlign: 'center' }}>
-							<Typography
-								mb={2}
-								sx={{ fontFamily: 'Caveat' }}
-								variant='h2'
-								color='white'
-								fontWeight='800'>
-								Decora
-								<Typography component='p' lineHeight='5px'>
-									E-commerce
-								</Typography>
-							</Typography>
-						</Box>
+              {isUserAuthenticated || (isAuthenticated && user) ? (
+                <>
+                  <Button
+                    onClick={handleClick}
+                    variant="outlined"
+                    color="inherit"
+                    sx={{
+                      gap: 1,
+                      textTransform: 'capitalize',
+                    }}
+                  >
+                    {(isUserAuthenticated && userInfo.userName) ||
+                      (isAuthenticated && user && user.name)}
+                    <AccountCircleIcon />
+                  </Button>
+                  <Box>
+                    <Menu
+                      id="basic-menu"
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                      }}
+                    >
+                      <MenuItem>Profile</MenuItem>
+                      <MenuItem>My account</MenuItem>
+                      <MenuItem>Orders</MenuItem>
+                      <MenuItem>Wishlist</MenuItem>
+                      <MenuItem>My reviews</MenuItem>
+                      <MenuItem>Cancel orders</MenuItem>
+                      <MenuItem
+                        onClick={handleLogout}
+                        variant="text"
+                        size="small"
+                      >
+                        <LogoutIcon color="error" />
+                        <Typography
+                          variant="body2"
+                          color="error"
+                          fontWeight="600"
+                          ml="5px"
+                        >
+                          Logout
+                        </Typography>
+                      </MenuItem>
+                    </Menu>
+                  </Box>
+                  <Box>
+                    <IconButton color="inherit">
+                      <Badge badgeContent={cartLength} color="error">
+                        <ShoppingCartOutlinedIcon onClick={handleCartLink} />
+                      </Badge>
+                    </IconButton>
+                  </Box>
+                </>
+              ) : (
+                <>
+                  <Button
+                    component={Link}
+                    to="/login"
+                    variant="outlined"
+                    size="small"
+                    color="inherit"
+                  >
+                    Login
+                  </Button>
 
-						<Search>
-							<StyledSearchIconWrapper>
-								<SearchIcon />
-							</StyledSearchIconWrapper>
-							<StyledInputBase placeholder='Search...' />
-						</Search>
-
-						<Box>
-							<IconButton color='inherit'>
-								<Badge badgeContent={1} color='error'>
-									<ShoppingCartOutlinedIcon />
-								</Badge>
-							</IconButton>
-						</Box>
-					</Toolbar>
-				</Container>
-			</AppBar>
-		</Box>
-	);
+                  <Button
+                    component={Link}
+                    to="/signup"
+                    variant="outlined"
+                    size="small"
+                    color="inherit"
+                  >
+                    Signup
+                  </Button>
+                </>
+              )}
+            </Box>
+          </Toolbar>
+        </Container>
+      </AppBar>
+    </Box>
+  );
 }
 
 export default CustomerNavbar;

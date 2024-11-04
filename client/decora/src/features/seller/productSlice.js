@@ -3,16 +3,17 @@ import { createSlice } from '@reduxjs/toolkit';
 const productSlice = createSlice({
 	name: 'products',
 	initialState: {
-		coverErrorMessage: null,
-		filesErrorMessage: null,
+		prodId: null,
 		validationErrors: {},
+		cartLength: localStorage.getItem('_total_cart_items') || 0,
 	},
 	reducers: {
-		addCoverError: (state, action) => {
-			state.coverErrorMessage = action.payload.message;
+		addProdId: (state, action) => {
+			state.prodId = action.payload.id;
 		},
-		addFilesError: (state, action) => {
-			state.filesErrorMessage = action.payload.message;
+		addCartLength: (state, action) => {
+			state.cartLength = action.payload.length;
+			localStorage.setItem('_total_cart_items', action.payload.length);
 		},
 		addValidationError: (state, action) => {
 			state.validationErrors = action.payload.message;
@@ -20,6 +21,6 @@ const productSlice = createSlice({
 	},
 });
 
-export const { addCoverError, addFilesError, addValidationError } =
+export const { addProdId, addCartLength, addValidationError } =
 	productSlice.actions;
 export default productSlice.reducer;

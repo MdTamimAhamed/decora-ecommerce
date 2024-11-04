@@ -20,6 +20,7 @@ import { useSelector } from 'react-redux';
 import ErrorMessage from '../../../../components/forms/form-controllers/ErrorMessage';
 import { alpha } from '@mui/system';
 import InfoIcon from '@mui/icons-material/Info';
+import dayjs from 'dayjs';
 
 function PriceStockVarient({ formData }) {
 	//--------------------------hooks-------------------------------//
@@ -36,8 +37,8 @@ function PriceStockVarient({ formData }) {
 		{ height: '', width: '', length: '' },
 	]);
 
-	const [availableFrom, setAvailableFrom] = useState('');
-	const [availableTo, setAvailableTo] = useState('');
+	const [availableFrom, setAvailableFrom] = useState(dayjs());
+	const [availableTo, setAvailableTo] = useState(dayjs());
 	const [deliveryTime, setDeliveryTime] = useState(0);
 
 	const [customOrderCheck, setCustomOrderCheck] = useState(false);
@@ -56,9 +57,10 @@ function PriceStockVarient({ formData }) {
 	const [customDeliveryTime, setCustomDeliveryTime] = useState(0);
 
 	const { validationErrors } = useSelector((state) => state.products);
+	console.log('varient:', varient);
 
 	useEffect(() => {
-		formData.append('price', productPrice);
+		if (productPrice) formData.append('productPrice', productPrice);
 		formData.append('discountPrice', discountPrice);
 		if (varient) {
 			varient.forEach((item) => {
@@ -68,9 +70,9 @@ function PriceStockVarient({ formData }) {
 		}
 		formData.append('productQuantity', productQuantity);
 		formData.append('productMeasurement', JSON.stringify(productMeasurement));
-		formData.append('availableFrom', availableFrom);
-		formData.append('availableTo', availableTo);
-		formData.append('deliveryTime', deliveryTime);
+		formData.append('availableFrom', availableFrom.format('MM-DD-YYYY'));
+		formData.append('availableTo', availableTo.format('MM-DD-YYYY'));
+		if (deliveryTime) formData.append('deliveryTime', deliveryTime);
 		formData.append('customOrderCheck', customOrderCheck);
 		if (customOrderCheck) {
 			formData.append(
@@ -78,8 +80,10 @@ function PriceStockVarient({ formData }) {
 				JSON.stringify(customMeasurements)
 			);
 		}
-		formData.append('customDeliveryTimeCheck', customDeliveryTimeCheck);
-		formData.append('customDeliveryTime', customDeliveryTime);
+		if (customOrderCheck && !customDeliveryTime)
+			formData.append('customDeliveryTimeCheck', customDeliveryTimeCheck);
+		if (customOrderCheck && customDeliveryTime && !customDeliveryTimeCheck)
+			formData.append('customDeliveryTime', customDeliveryTime);
 	}, [
 		productPrice,
 		discountPrice,
@@ -127,10 +131,9 @@ function PriceStockVarient({ formData }) {
 	}
 
 	function handleOriginalMeasurement(field, value) {
-		setProductMeasurement((initialValue) => ({
-			...initialValue,
-			[field]: value,
-		}));
+		setProductMeasurement((initialValue) => {
+			return [{ ...initialValue[0], [field]: value }];
+		});
 	}
 
 	function handleMeasurementValue(field, value) {
@@ -252,7 +255,7 @@ function PriceStockVarient({ formData }) {
 								</Box>
 							)}
 
-							{item.image && (
+							{item.image || item.colorFamily ? (
 								<Button
 									size='small'
 									onClick={() => handleDeleteVarient(index)}
@@ -264,7 +267,7 @@ function PriceStockVarient({ formData }) {
 									}}>
 									Delete
 								</Button>
-							)}
+							) : null}
 						</Paper>
 					))}
 
@@ -294,7 +297,7 @@ function PriceStockVarient({ formData }) {
 					Set Quantity & Measurement
 				</Typography>
 				<Box mb={5}>
-					{validationErrors.height && (
+					{validationErrors && (
 						<Box bgcolor={alpha(theme.palette.warning.light, 1)}>
 							<Box
 								sx={{
@@ -307,13 +310,14 @@ function PriceStockVarient({ formData }) {
 								}}>
 								<InfoIcon />
 								<Typography variant='subtitle2'>
-									Note: Please ensure that you provide the size parameters{' '}
+									Note: Please ensure that you provide the size Units
 									<b>(mm, cm, m, ft, inch)</b> for the product's height, width,
 									and length.
 								</Typography>
 							</Box>
 						</Box>
 					)}
+
 					<Box sx={{ display: 'flex', gap: 3 }}>
 						<InputHandler
 							labelName='Product Quantity'
@@ -326,18 +330,21 @@ function PriceStockVarient({ formData }) {
 						<InputHandler
 							labelName='Product Height'
 							size='medium'
+							state={productMeasurement[0]?.height}
 							setState={(value) => handleOriginalMeasurement('height', value)}
 							placeholder='Ex- 2.5 inch'
 						/>
 						<InputHandler
 							labelName='Product Width'
 							size='medium'
+							state={productMeasurement[0]?.width}
 							setState={(value) => handleOriginalMeasurement('width', value)}
 							placeholder='Ex- 2.5 inch'
 						/>
 						<InputHandler
 							labelName='Product Lenght'
 							size='medium'
+							state={productMeasurement[0]?.length}
 							setState={(value) => handleOriginalMeasurement('length', value)}
 							placeholder='Ex- 2.5 inch'
 						/>
@@ -354,30 +361,39 @@ function PriceStockVarient({ formData }) {
 				</Typography>
 				<Box
 					sx={{
-						display: 'flex',
 						justifyContent: 'space-between',
 						gap: 3,
 						mb: 5,
 					}}>
-					<Box sx={{ flex: '0 1 100%' }}>
-						<Box>
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'space-between',
+							alignItems: 'start',
+							gap: 3,
+						}}>
+						<Box sx={{ flex: '0 1 100%' }}>
 							<Typography variant='subtitle2'>Available From</Typography>
 							<DateHandler setState={setAvailableFrom} margin={0} />
 						</Box>
-						<Box mt={2}>
+						<Box sx={{ flex: '0 1 100%' }}>
 							<Typography variant='subtitle2'>To</Typography>
 							<DateHandler setState={setAvailableTo} margin={0} />
 						</Box>
 					</Box>
 					<InputHandler
 						required
-						labelName='Delivery Days'
+						labelName='Delivery time (days)'
 						size='medium'
 						state={deliveryTime}
 						setState={setDeliveryTime}
 						margin={22}
 						type='number'
-						placeholder='Enter Delivery Time (Days)'
+						placeholder='Enter Delivery Time'
+					/>
+					<ErrorMessage
+						isEmpty={deliveryTime}
+						check={validationErrors.deliveryTime}
 					/>
 				</Box>
 				{/* ----------------------------------------------------- */}

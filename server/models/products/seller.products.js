@@ -20,10 +20,8 @@ const addProduct = new mongose.Schema({
 		},
 	},
 	productPriceStockAndVarient: {
-		productPrice: {
-			price: { type: Number, required: true },
-			discountPrice: Number,
-		},
+		productPrice: Number,
+		discountPrice: Number,
 		colorVarient: [
 			{
 				colorFamily: String,
@@ -73,7 +71,7 @@ const addProduct = new mongose.Schema({
 			},
 
 			customOrderDeliveryTimeCheck: Boolean,
-			customOerderDeliveryTime: Number,
+			customOrderDeliveryTime: Number,
 		},
 	},
 	productDescription: { type: String, required: true },
@@ -82,6 +80,13 @@ const addProduct = new mongose.Schema({
 		cashOnDelivery: Boolean,
 		serviceType: String,
 		serviceTime: Number,
+	},
+	ratings: {
+		totalRating: { type: Number, default: 0 },
+		avgRating: { type: Number, default: 0 },
+	},
+	reviews: {
+		totalReview: { type: Number, default: 0 },
 	},
 });
 

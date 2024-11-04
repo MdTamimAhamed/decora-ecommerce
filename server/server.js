@@ -10,6 +10,9 @@ const {
 
 const customerRoutes = require('./routes/customer/customerRoutes');
 const customerProductRoutes = require('./routes/customer/featured.productRoutes');
+
+const cartRoutes = require('./routes/customer/cartRoutes');
+
 const sellerRoutes = require('./routes/seller/sellerRoutes');
 const sellerProductRoutes = require('./routes/seller/seller.productRoutes');
 
@@ -51,10 +54,12 @@ app.use(express.static('public'));
 
 // routes
 app.use('/api', customerProductRoutes);
-app.use('/customer', customerRoutes);
+app.use('/api/customer', customerRoutes);
 
-app.use('/seller', sellerRoutes);
-app.use('/seller/product', sellerProductRoutes);
+app.use('/api/cart', cartRoutes);
+
+app.use('/api/seller', sellerRoutes);
+app.use('/api/products', sellerProductRoutes);
 // app.use('/api', authRoutes);
 
 //error handle

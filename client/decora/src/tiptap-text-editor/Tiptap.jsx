@@ -12,6 +12,11 @@ import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import { alpha } from '@mui/system';
+import { useSelector } from 'react-redux';
+import ErrorMessage from '../components/forms/form-controllers/ErrorMessage';
+import { useEffect, useState } from 'react';
+import { useTheme } from '@emotion/react';
+import parse from 'html-react-parser';
 
 const StyledButton = styled(Button)(({ theme }) => ({
 	color: alpha(theme.palette.common.black, 0.6),
@@ -30,9 +35,9 @@ const extensions = [
 	CharacterCount.configure({ limit }),
 ];
 
-const content = ``;
-
-const Tiptap = ({ setState, saveBtnText }) => {
+const Tiptap = ({ setState, isError, content, fetchedData }) => {
+	const theme = useTheme();
+	const { validationErrors } = useSelector((state) => state.products);
 	const editor = useEditor({
 		editorProps: {
 			attributes: {
@@ -40,14 +45,22 @@ const Tiptap = ({ setState, saveBtnText }) => {
 			},
 		},
 		extensions,
-		content,
+		content: content || '',
+		onUpdate: ({ editor }) => {
+			setState(editor.getHTML() || '');
+		},
 	});
+
+	useEffect(() => {
+		if (editor && fetchedData) {
+			editor.commands.setContent(fetchedData?.productDescription);
+		} else {
+			editor.commands.setContent('');
+		}
+	}, [editor, fetchedData]);
 
 	if (!editor) return null;
 
-	function handleOnSaveEditorContent() {
-		setState(editor.getHTML());
-	}
 	return (
 		<Box>
 			<Paper
@@ -155,16 +168,17 @@ const Tiptap = ({ setState, saveBtnText }) => {
 					style={{ height: '200px', overflow: 'auto' }}
 					editor={editor}
 				/>
+
 				<Box sx={{ position: 'absolute', bottom: 2, right: 10, color: '#aaa' }}>
 					{editor.storage.characterCount.characters()} / {limit} characters
 				</Box>
 			</Paper>
-			<Button
-				onClick={handleOnSaveEditorContent}
-				variant='outlined'
-				sx={{ mt: 2 }}>
-				{saveBtnText || 'Save'}
-			</Button>
+			{isError && (
+				<ErrorMessage
+					isEmpty={content}
+					check={validationErrors.productDescription}
+				/>
+			)}
 		</Box>
 	);
 };
