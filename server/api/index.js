@@ -6,15 +6,15 @@ const dotenv = require('dotenv');
 const {
 	notFoundErrorHandler,
 	defaultErrorHandler,
-} = require('./middlewares/error-handler/errorHandler');
+} = require('../middlewares/error-handler/errorHandler');
 
-const customerRoutes = require('./routes/customer/customerRoutes');
-const customerProductRoutes = require('./routes/customer/featured.productRoutes');
+const customerRoutes = require('../routes/customer/customerRoutes');
+const customerProductRoutes = require('../routes/customer/featured.productRoutes');
 
-const cartRoutes = require('./routes/customer/cartRoutes');
+const cartRoutes = require('../routes/customer/cartRoutes');
 
-const sellerRoutes = require('./routes/seller/sellerRoutes');
-const sellerProductRoutes = require('./routes/seller/seller.productRoutes');
+const sellerRoutes = require('../routes/seller/sellerRoutes');
+const sellerProductRoutes = require('../routes/seller/seller.productRoutes');
 
 // const authRoutes = require('./routes/seller/authRoutes');
 
@@ -23,12 +23,22 @@ const app = express();
 
 const port = process.env.PORT;
 
-app.use(cors({
-	origin: 'https://decora-ecommerce-client.vercel.app',
-	methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-	credentials: true,
-	allowedHeaders: "Content-Type, Authorization"
-}));
+const whitelist = [
+	'*', 'https://decora-ecommerce-client.vercel.app'
+];
+
+app.use((req, res, next) => {
+	const origin = req.get('referer');
+	const isWhitelisted = whitelist.find((w) => origin && origin.includes(w));
+	if (isWhitelisted) {
+		res.setHeader('Access-Control-Allow-Origin', '*');
+		res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+		res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Authorization');
+		res.setHeader('Access-Control-Allow-Credentials', true);
+	}
+	if (req.method === 'OPTIONS') res.sendStatus(200);
+	else next();
+});
 
 
 
@@ -61,9 +71,6 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/seller', sellerRoutes);
 app.use('/api/products', sellerProductRoutes);
 
-app.use('/api', (req, res) => {
-	res.send('Project is running');
-});
 
 //error handle
 app.use(notFoundErrorHandler);
