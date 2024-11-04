@@ -45,12 +45,9 @@ function SellerSignup() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL_PRODUCTION}/api/seller/verify-email`,
-        {
-          email,
-        }
-      );
+      const response = await axios.post(`${baseUrl}/api/seller/verify-email`, {
+        email,
+      });
       if (response.status === 200) {
         const { message, email, otpExpire } = response.data;
         toast.success(message);

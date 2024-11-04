@@ -18,20 +18,25 @@ const sellerProductRoutes = require('./routes/seller/seller.productRoutes');
 
 // const authRoutes = require('./routes/seller/authRoutes');
 
-const app = express();
 dotenv.config();
-const port = process.env.PORT;
+const app = express();
 
-app.use(
-	cors({
-		origin: [
-			'https://decora-ecommerce-client.vercel.app',
-			'http://localhost:5173',
-		],
-		methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-		allowedHeaders: ['Content-Type', 'Authorization'],
-	})
-);
+const port = process.env.PORT;
+const allowedOrigins = ['https://decora-ecommerce-client.vercel.app'];
+
+app.use(cors({
+	origin: function (origin, callback) {
+		if (!origin) return callback(null, true);
+		if (allowedOrigins.includes(origin)) {
+			callback(null, true);
+		} else {
+			callback(new Error('Not allowed by CORS'));
+		}
+	},
+	methods: "GET,POST,PUT,DELETE,OPTIONS",
+	credentials: true,
+	allowedHeaders: "Content-Type,Authorization"
+}));
 
 //db
 const isMode = process.env.NODE_ENV === 'development';
@@ -53,6 +58,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // routes
+app.use('/', (req, res) => {
+	res.send('Project is running');
+})
 app.use('/api', customerProductRoutes);
 app.use('/api/customer', customerRoutes);
 
