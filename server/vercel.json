@@ -9,11 +9,13 @@
 			"use": "@vercel/static"
 		}
 	],
+
 	"routes": [
 		{
-			"src": "/(.*)",
-			"dest": "/"
-
+			"src": "/api/(.*)",
+			"dest": "api/$1"
 		}
 	]
+
+
 }
