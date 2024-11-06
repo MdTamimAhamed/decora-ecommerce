@@ -101,6 +101,7 @@ const getCartItems = async (req, res, next) => {
 		if (!cart || cart.length === 0) {
 			return res.status(404).json({ message: 'Cart not found' });
 		}
+
 		const isSellerId = cart.map((item) => item.sellerId);
 		const isProductId = cart.map((item) => item.productId);
 
@@ -118,4 +119,28 @@ const getCartItems = async (req, res, next) => {
 	}
 };
 
-module.exports = { addToCart, getCartItems };
+const deleteCartItem = async (req, res, next) => {
+	try {
+		const {cart_item_ids, customer_id} = req.query;
+
+		const customer = await CustomerModel.findById(customer_id);
+		if (!customer) {
+			return res.status(404).json({message: 'Customer not found'});
+		}
+
+		customer.cart = customer.cart.filter(
+			(item) => !cart_item_ids.includes(item._id.toString())
+		);
+
+		await customer.save();
+
+		res.status(200).json({message: 'Selected items deleted successfully'});
+	} catch (error) {
+		next(error);
+	}
+};
+
+
+
+
+module.exports = { addToCart, getCartItems, deleteCartItem };

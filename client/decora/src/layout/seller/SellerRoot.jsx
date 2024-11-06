@@ -11,7 +11,7 @@ const StyledBackgroundImage = styled(Box)(() => ({
   left: 0,
   width: '100%',
   height: '600px',
-  backgroundImage: 'url(/src/assets/seller_hero.jpg)',
+  backgroundImage: 'url(/seller_hero.jpg)',
   backgroundSize: 'cover',
   backgroundPositionY: ' 40%',
   backgroundRepeat: 'no-repeat',
@@ -23,8 +23,7 @@ const Overlay = styled(Box)(() => ({
   left: 0,
   width: '100%',
   height: '100%',
-  backgroundImage:
-    'linear-gradient(45deg, rgba(222, 45, 45, 0.5), rgba(222, 45, 45, 0.4))',
+  backgroundImage: 'linear-gradient(45deg, rgba(0,0,0, 0.5), rgba(0,0,0, 0.4))',
 }));
 
 function SellerRoot() {
@@ -48,7 +47,7 @@ function SellerRoot() {
                   <Box
                     position="relative"
                     component="img"
-                    src="/src/assets/seller_hero_illustration.png"
+                    src="/seller_hero_illustration.png"
                     height="450px"
                     sx={{ zIndex: 1, mt: 5 }}
                   />
@@ -75,10 +74,7 @@ function SellerRoot() {
         </Box>
         <Box>
           <Container maxWidth="xl">
-            <Typography variant="h3" fontWeight="500" sx={{ mt: 15 }}>
-              Why sell on Decora?
-              <Box></Box>
-            </Typography>
+            {/*will complete this static part in the end*/}
           </Container>
         </Box>
       </Box>

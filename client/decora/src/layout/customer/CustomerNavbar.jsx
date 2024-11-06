@@ -26,6 +26,7 @@ import { useNavigate } from 'react-router-dom';
 import { userLogout } from '../../features/auth/authSlice';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useTheme } from '@emotion/react';
+import CloseIcon from '@mui/icons-material/Close';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -51,8 +52,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-function CustomerNavbar({ cartLength }) {
+function CustomerNavbar() {
   const theme = useTheme();
+  const [close, setClose] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -66,6 +68,7 @@ function CustomerNavbar({ cartLength }) {
   const { isUserAuthenticated, isSellerAuthenticated, userInfo } = useSelector(
     (state) => state.auth
   );
+  const { cartLength } = useSelector((state) => state.products);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -95,6 +98,24 @@ function CustomerNavbar({ cartLength }) {
   return (
     <Box pb={8}>
       <AppBar>
+        {/*{!close ? (*/}
+        {/*  <Box*/}
+        {/*    sx={{*/}
+        {/*      display: 'flex',*/}
+        {/*      justifyContent: 'center',*/}
+        {/*      items: 'center',*/}
+        {/*      width: '100%',*/}
+        {/*      bgcolor: theme.palette.warning.main,*/}
+        {/*    }}*/}
+        {/*  >*/}
+        {/*    <Typography sx={{ fontSize: '12px' }}>working on it...</Typography>*/}
+        {/*    <CloseIcon*/}
+        {/*      sx={{ fontSize: '14px', cursor: 'pointer', mt: '2px' }}*/}
+        {/*      onClick={() => setClose(true)}*/}
+        {/*    />*/}
+        {/*  </Box>*/}
+        {/*) : null}*/}
+
         <Container maxWidth="xl">
           <Toolbar
             disableGutters
@@ -218,7 +239,7 @@ function CustomerNavbar({ cartLength }) {
                   </Box>
                   <Box>
                     <IconButton color="inherit">
-                      <Badge badgeContent={cartLength} color="error">
+                      <Badge badgeContent={cartLength || 0} color="error">
                         <ShoppingCartOutlinedIcon onClick={handleCartLink} />
                       </Badge>
                     </IconButton>

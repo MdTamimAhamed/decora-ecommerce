@@ -17,7 +17,6 @@ function Home() {
   const [filters, setFilters] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  console.log('filters:', filters);
 
   const { isUserAuthenticated } = useSelector((state) => state.auth);
   const { cartLength } = useSelector((state) => state.products);

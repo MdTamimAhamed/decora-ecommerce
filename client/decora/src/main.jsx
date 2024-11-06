@@ -35,10 +35,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <ThemeProvider theme={theme}>
       <Provider store={store}>
         <Auth0Provider
-          domain="dev-f0rg24fwovsf4did.us.auth0.com"
-          clientId="IL9fr6fLPdaoPeWhO6FNCEJ0yI2s9Z7P"
+          domain={import.meta.env.VITE_AUTH0_DOMAIN}
+          clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
           authorizationParams={{
-            redirect_uri: window.location.origin,
+            redirect_uri:
+              import.meta.env.NODE_ENV === 'development'
+                ? import.meta.env.VITE_AUTH0_CALLBACK_URL_DEV
+                : import.meta.env.VITE_AUTH0_CALLBACK_URL_PROD,
           }}
         >
           <AppRouters />

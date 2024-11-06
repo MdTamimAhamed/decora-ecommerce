@@ -4,9 +4,6 @@ import {
   Box,
   Skeleton,
   Paper,
-  Divider,
-  styled,
-  Checkbox,
   Button,
 } from '@mui/material';
 import CustomerNavbar from '../../../layout/customer/CustomerNavbar';
@@ -17,9 +14,8 @@ import { useEffect, useState } from 'react';
 import { useTheme } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import { addCartLength } from '../../../features/seller/productSlice';
-import PriceFormatter from '../../reuseables/PriceFormatter.jsx';
-import CartItem from './CartTile.jsx';
 import CartTile from './CartTile.jsx';
+import { toast } from 'react-toastify';
 
 const Cart = () => {
   const theme = useTheme();
@@ -34,10 +30,6 @@ const Cart = () => {
   const { cartLength } = useSelector((state) => state.products);
 
   const cart = cartItems[0]?.cart;
-
-  const StyledBox = styled(Box)({
-    fontSize: 14,
-  });
 
   useEffect(() => {
     async function getCartItems() {
@@ -62,6 +54,43 @@ const Cart = () => {
     dispatch(addCartLength({ length: cart?.length }));
   }, [cart?.length, dispatch]);
 
+  const handleCheckboxChange = (id) => {
+    if (selectedItems.includes(id)) {
+      const updatedSelectedItems = selectedItems.filter((item) => item !== id);
+      setSelectedItems(updatedSelectedItems);
+    } else {
+      const updatedSelectedItems = [...selectedItems, id];
+      setSelectedItems(updatedSelectedItems);
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    try {
+      const response = await axios.delete(
+        `${baseUrl}/api/cart/delete-cart-item`,
+        {
+          params: { cart_item_ids: selectedItems, customer_id: userInfo._id },
+        }
+      );
+      if (response.status === 200) {
+        const { message } = response.data;
+        toast.success(message);
+        const updatedCartItems = cartItems.filter(
+          (item) => !selectedItems.includes(item._id)
+        );
+        setCartItems(updatedCartItems);
+        setSelectedItems([]);
+        dispatch(addCartLength({ length: updatedCartItems.length }));
+        window.location.reload();
+      } else {
+        toast.error('Something went wrong!');
+      }
+    } catch (error) {
+      toast.error('Error deleting selected items');
+      console.log('cart error', error);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -75,7 +104,7 @@ const Cart = () => {
         <Typography mt={2} variant="h6">
           Cart Items
         </Typography>
-        <Box sx={{ width: '100%', display: 'flex', jusetifyContent: 'end' }}>
+        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
           <Button
             variant="contained"
             color="error"

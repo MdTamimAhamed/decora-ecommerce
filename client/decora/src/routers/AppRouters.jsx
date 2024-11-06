@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import '../index.css';
 
 import Product from '../pages/customer/Product.jsx';
@@ -26,64 +26,80 @@ import Home from '../pages/customer/Home.jsx';
 import PrivateRoute from '../components/authGuard/PrivateRoute.jsx';
 
 import {
-	createBrowserRouter,
-	RouterProvider,
-	createRoutesFromElements,
-	Route,
-	Navigate,
+  createBrowserRouter,
+  RouterProvider,
+  createRoutesFromElements,
+  Route,
+  Navigate,
 } from 'react-router-dom';
 import Cart from '../components/ui/product/Cart.jsx';
+import Loader from '../components/reuseables/Loader.jsx';
 
 const router = createBrowserRouter(
-	createRoutesFromElements(
-		<>
-			<Route path='/' element={<Home />} />
-			<Route path='/cart' element={<Cart />} />
-			<Route path='/product' element={<Product />} />
-			<Route path='/product/:prod_id' element={<ProductDetails />} />
+  createRoutesFromElements(
+    <>
+      <Route
+        path="/"
+        element={
+          <Suspense fallback={<Loader size={'md'} />}>
+            <Home />
+          </Suspense>
+        }
+      />
+      <Route path="/cart" element={<Cart />} />
+      <Route
+        path="/product"
+        element={
+          <Suspense fallback={<Loader size={'md'} />}>
+            <Product />
+          </Suspense>
+        }
+      />
+      <Route path="/product/:prod_id" element={<ProductDetails />} />
 
-			<Route element={<CustomerRoot />} replace>
-				<Route path='/login' element={<CustomerLogin />} />
-				<Route path='/signup' element={<CustomerSignup />} />
-			</Route>
+      <Route element={<CustomerRoot />} replace>
+        <Route path="/login" element={<CustomerLogin />} />
+        <Route path="/signup" element={<CustomerSignup />} />
+      </Route>
 
-			{/* seller routes */}
-			<Route path='/' element={<SellerRoot />} replace>
-				<Route path='seller-login' element={<SellerLogin />} />
-				<Route path='seller-register' element={<SellerSignup />} />
-			</Route>
+      {/* seller routes */}
+      <Route path="/" element={<SellerRoot />} replace>
+        <Route path="seller-login" element={<SellerLogin />} />
+        <Route path="seller-register" element={<SellerSignup />} />
+      </Route>
 
-			<Route
-				path='/'
-				element={
-					<PrivateRoute>
-						<SellerDashboardRoot />
-					</PrivateRoute>
-				}
-				replace>
-				<Route path='products' element={<Products />} />
-				<Route path='products/add-products' element={<AddProducts />} />
+      <Route
+        path="/"
+        element={
+          <PrivateRoute>
+            <SellerDashboardRoot />
+          </PrivateRoute>
+        }
+        replace
+      >
+        <Route path="products" element={<Products />} />
+        <Route path="products/add-products" element={<AddProducts />} />
 
-				<Route path='manage-products' element={<ManageProducts />} />
-				<Route
-					path='/manage-products/edit/:prod_id'
-					element={<EditProducts />}
-				/>
+        <Route path="manage-products" element={<ManageProducts />} />
+        <Route
+          path="/manage-products/edit/:prod_id"
+          element={<EditProducts />}
+        />
 
-				<Route path='/store/:prod_id' element={<ProductPreview />} />
+        <Route path="/store/:prod_id" element={<ProductPreview />} />
 
-				<Route path='orders' element={<Orders />}>
-					<Route path='manage-orders' element={<ManageOrders />} />
-				</Route>
-				<Route path='store' element={<MyStore />} />
-				<Route path='dashboard' element={<Dashboard />} />
-			</Route>
-		</>
-	)
+        <Route path="orders" element={<Orders />}>
+          <Route path="manage-orders" element={<ManageOrders />} />
+        </Route>
+        <Route path="store" element={<MyStore />} />
+        <Route path="dashboard" element={<Dashboard />} />
+      </Route>
+    </>
+  )
 );
 
 function AppRouters() {
-	return <RouterProvider router={router} />;
+  return <RouterProvider router={router} />;
 }
 
 export default AppRouters;

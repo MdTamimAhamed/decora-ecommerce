@@ -24,7 +24,7 @@ const app = express();
 const port = process.env.PORT;
 
 app.use(cors({
-	origin: 'https://decora-ecommerce-client.vercel.app',
+	origin: ['https://decora-ecommerce-client.vercel.app', 'http://localhost:5173'],
 	methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
 	credentials: true,
 	allowedHeaders: "Content-Type, Authorization"
@@ -61,9 +61,6 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/seller', sellerRoutes);
 app.use('/api/products', sellerProductRoutes);
 
-app.use('/api', (req, res) => {
-	res.send('Project is running');
-});
 
 //error handle
 app.use(notFoundErrorHandler);

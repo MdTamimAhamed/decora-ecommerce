@@ -8,12 +8,10 @@ import {
   Slider,
   RadioGroup,
   FormControl,
-  FormLabel,
   Radio,
   useTheme,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { color } from '@mui/system';
 
 const furnitureCategories = [
   'Living Room Furniture',
