@@ -1,14 +1,15 @@
 import { useTheme } from '@emotion/react';
 import { baseUrl } from '../../../utils/BaseURL';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import ProductPreviewCard from '../../../components/ui/product/ProductPreviewCard';
-import { useSelector } from 'react-redux';
 import ProductCardSidebar from '../../../components/ui/product/ProductCardSidebar';
 import { Box, Container } from '@mui/material';
 import CustomerNavbar from '../../../layout/customer/CustomerNavbar';
-import CustomerOrderMeasurements from './CustomerOrderMeasurements';
+import Loader from '../../reuseables/Loader.jsx';
+const ProductPreviewCard = React.lazy(
+  () => import('../../../components/ui/product/ProductPreviewCard')
+);
 
 const ProductDetails = () => {
   const theme = useTheme();
@@ -40,8 +41,26 @@ const ProductDetails = () => {
       <CustomerNavbar />
       <Container maxWidth="xl">
         <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2 }}>
-          <ProductPreviewCard data={data} sellerData={sellerData} />
-          <ProductCardSidebar data={data} sellerData={sellerData} />
+          <Suspense
+            fallback={
+              <>
+                <Loader size={'xs'} type="spin" color={'gray'} />
+                Loading...
+              </>
+            }
+          >
+            <ProductPreviewCard data={data} sellerData={sellerData} />
+          </Suspense>
+          <Suspense
+            fallback={
+              <>
+                <Loader size={'xs'} type="spin" color={'gray'} />
+                Loading...
+              </>
+            }
+          >
+            <ProductCardSidebar data={data} sellerData={sellerData} />
+          </Suspense>
         </Box>
       </Container>
     </>

@@ -23,8 +23,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import StoreIcon from '@mui/icons-material/Store';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import { useNavigate } from 'react-router-dom';
-import { ExpandLess, ExpandMore, Visibility } from '@mui/icons-material';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { alpha } from '@mui/system';
+import { useSelector } from 'react-redux';
 
 function Sidebar() {
   const theme = useTheme();
@@ -32,6 +33,8 @@ function Sidebar() {
   const [activeNav, setActiveNav] = useState(null);
   const [activeSubNav, setActiveSubNav] = useState(null);
   const [open, setOpen] = useState(false);
+
+  const { isSellerVerified } = useSelector((state) => state.sellerVerify);
 
   const navOptions = [
     { id: 0, name: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
@@ -66,12 +69,17 @@ function Sidebar() {
         },
       ],
     },
-    { id: 5, name: 'Customers', icon: <PeopleIcon /> },
-    { id: 6, name: 'Analytics', icon: <BarChartIcon /> },
-    { id: 7, name: 'Reports', icon: <FlagIcon /> },
-    { id: 8, name: 'Content Management', icon: <ManageAccountsIcon /> },
-    { id: 9, name: 'Supports', icon: <SupportAgentIcon /> },
-    { id: 10, name: 'Settings', icon: <SettingsIcon /> },
+    { id: 5, name: 'Customers', icon: <PeopleIcon />, path: '/*' },
+    { id: 6, name: 'Analytics', icon: <BarChartIcon />, path: '/*' },
+    { id: 7, name: 'Reports', icon: <FlagIcon />, path: '/*' },
+    {
+      id: 8,
+      name: 'Content Management',
+      icon: <ManageAccountsIcon />,
+      path: '/*',
+    },
+    { id: 9, name: 'Supports', icon: <SupportAgentIcon />, path: '/*' },
+    { id: 10, name: 'Settings', icon: <SettingsIcon />, path: '/*' },
   ];
 
   useEffect(() => {
@@ -107,7 +115,11 @@ function Sidebar() {
   }
 
   function subCategoryHandleClick(id, path) {
-    navigate(path);
+    if (isSellerVerified) {
+      navigate(path);
+    } else {
+      navigate('/products');
+    }
     setActiveSubNav(id);
   }
   return (

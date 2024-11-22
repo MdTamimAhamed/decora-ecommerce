@@ -96,25 +96,32 @@ function CustomerNavbar() {
   }
 
   return (
-    <Box pb={8}>
+    <Box sx={{ position: 'relative' }} pb={8}>
       <AppBar>
-        {/*{!close ? (*/}
-        {/*  <Box*/}
-        {/*    sx={{*/}
-        {/*      display: 'flex',*/}
-        {/*      justifyContent: 'center',*/}
-        {/*      items: 'center',*/}
-        {/*      width: '100%',*/}
-        {/*      bgcolor: theme.palette.warning.main,*/}
-        {/*    }}*/}
-        {/*  >*/}
-        {/*    <Typography sx={{ fontSize: '12px' }}>working on it...</Typography>*/}
-        {/*    <CloseIcon*/}
-        {/*      sx={{ fontSize: '14px', cursor: 'pointer', mt: '2px' }}*/}
-        {/*      onClick={() => setClose(true)}*/}
-        {/*    />*/}
-        {/*  </Box>*/}
-        {/*) : null}*/}
+        {!close ? (
+          <Box
+            sx={{
+              position: 'absolute',
+              left: '0%',
+              top: '0%',
+              zIndex: 50,
+              py: 1,
+              display: 'flex',
+              justifyContent: 'center',
+              items: 'center',
+              width: '200px',
+              bgcolor: alpha(theme.palette.error.main, 1),
+            }}
+          >
+            <Typography sx={{ fontSize: '12px' }}>
+              ! Site Under development
+            </Typography>
+            <CloseIcon
+              sx={{ fontSize: '14px', cursor: 'pointer', mt: '2px' }}
+              onClick={() => setClose(true)}
+            />
+          </Box>
+        ) : null}
 
         <Container maxWidth="xl">
           <Toolbar
@@ -214,12 +221,8 @@ function CustomerNavbar() {
                         'aria-labelledby': 'basic-button',
                       }}
                     >
-                      <MenuItem>Profile</MenuItem>
                       <MenuItem>My account</MenuItem>
                       <MenuItem>Orders</MenuItem>
-                      <MenuItem>Wishlist</MenuItem>
-                      <MenuItem>My reviews</MenuItem>
-                      <MenuItem>Cancel orders</MenuItem>
                       <MenuItem
                         onClick={handleLogout}
                         variant="text"

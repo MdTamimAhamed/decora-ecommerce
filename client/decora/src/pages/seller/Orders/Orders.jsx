@@ -3,12 +3,12 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 
 function Orders() {
-	return (
-		<Box>
-			<Typography>Order page</Typography>
-			<Outlet />
-		</Box>
-	);
+  return (
+    <Box>
+      <Typography>Order page!</Typography>
+      <Outlet />
+    </Box>
+  );
 }
 
 export default Orders;

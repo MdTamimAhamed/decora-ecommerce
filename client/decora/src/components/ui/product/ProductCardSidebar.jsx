@@ -30,9 +30,7 @@ const ProductCardSidebar = ({ sellerData, data }) => {
         toast.success(message);
         navigate('/cart');
       }
-    } catch (error) {
-      // console.log('Error:', error);
-    }
+    } catch (error) {}
   }
 
   return (
@@ -52,8 +50,9 @@ const ProductCardSidebar = ({ sellerData, data }) => {
           </Button>
         </Paper>
         <Paper variant="outlined" sx={{ padding: 2, mt: 2 }}>
-          <Typography variant="subtitle2">
-            House #1, Block-D, Zoo-road, Mirpur-Dhaka
+          <Typography sx={{ color: 'gray' }} variant="subtitle2">
+            Delivery time: {data?.productPriceStockAndVarient?.deliveryTime}{' '}
+            days
           </Typography>
         </Paper>
 

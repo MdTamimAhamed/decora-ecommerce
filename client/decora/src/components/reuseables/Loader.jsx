@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactLoading from 'react-loading';
 
-const Loader = ({ type, size }) => {
+const Loader = ({ type, size, color }) => {
   let loaderSize;
   switch (size) {
     case 'xs':
@@ -23,10 +23,10 @@ const Loader = ({ type, size }) => {
 
   return (
     <ReactLoading
-      className="flex justify-start items-center"
       type={type || 'bubbles'}
       height={loaderSize}
       width={loaderSize}
+      color={color}
     />
   );
 };
