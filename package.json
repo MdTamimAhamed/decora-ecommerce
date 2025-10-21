@@ -12,6 +12,6 @@
   "dependencies": {
     "e-commerce-decora": "file:",
     "express": "^4.19.2",
-    "vite": "^5.3.5"
+    "vite": "^5.4.21"
   }
 }
